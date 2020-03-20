@@ -36,6 +36,39 @@ var goal = false;
 var quarter = 1;
 var overtime = false;
 var defenderInterval = 500;
+var mousedownID = -1;
+const dpadElems = ["topDpad","leftDpad","botDpad","rightDpad","topDpadsplitL","topDpadsplitR","botDpadsplitL","botDpadsplitR","leftDpadsplit","rightDpadsplit"];
+const dpadDx = [0,-1,0,1,0,0,0,0,-1,1];
+const dpadDy = [-1,0,1,0,-1,-1,1,1,0,0];
+
+function mousedown(event,dx,dy) {
+	if (mousedownID == -1) {
+		mousedownID = setInterval(function() { whilemousedown(dx,dy); }, 100);
+	}
+}
+
+function mouseup(event,dx,dy) {
+	if(mousedownID != -1) {
+		clearInterval(mousedownID);
+		mousedownID=-1;
+	}
+}
+
+function whilemousedown(dx,dy) {
+	if (gameGoing == true) {
+		moveRB(dx,dy);
+	}
+}
+
+function setup() {
+	for (var i = 0; i < dpadElems.length; i++) {
+		(function(i) {
+			document.getElementById(dpadElems[i]).addEventListener("mousedown",function(){ mousedown(event,dpadDx[i],dpadDy[i]); });
+			document.getElementById(dpadElems[i]).addEventListener("mouseup",function(){ mouseup(event,dpadDx[i],dpadDy[i]); });
+			document.getElementById(dpadElems[i]).addEventListener("mouseout",function(){ mouseup(event,dpadDx[i],dpadDy[i]); });
+		}(i));
+	}
+}
 
 function chooseControls(opt) {
 	var list = document.getElementsByClassName("boxControl");
@@ -112,12 +145,6 @@ function chooseControls(opt) {
 		homeTo.style.right = "60px";
 		awayTo.style.top = "400px";
 		homeTo.style.top = "400px";
-	}
-}
-
-function dpadMove(dx,dy) {
-	if (gameGoing == true) {
-		move(dx,dy);
 	}
 }
 
