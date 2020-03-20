@@ -40,6 +40,13 @@ var mousedownID = -1;
 const dpadElems = ["topDpad","leftDpad","botDpad","rightDpad","topDpadsplitL","topDpadsplitR","botDpadsplitL","botDpadsplitR","leftDpadsplit","rightDpadsplit"];
 const dpadDx = [0,-1,0,1,0,0,0,0,-1,1];
 const dpadDy = [-1,0,1,0,-1,-1,1,1,0,0];
+var controlStyle = 0;
+const diagrams = ["KeyboardControls","LeftControls","RightControls","SplitControls"];
+
+function advance() {
+	document.getElementById("setupCont").style.display = "none";
+	document.getElementById("explainControls").style.display = "block";
+}
 
 function mousedown(event,dx,dy) {
 	if (mousedownID == -1) {
@@ -71,11 +78,17 @@ function setup() {
 }
 
 function chooseControls(opt) {
+	controlStyle = opt;
 	var list = document.getElementsByClassName("boxControl");
 	var full = document.getElementById("fullDpad");
 	var halves = document.getElementsByClassName("halfDpad");
 	var awayTo = document.getElementById("awayTimeout");
 	var homeTo = document.getElementById("homeTimeout");
+	var awayCon = document.getElementById("awayControls");
+	var homeCon = document.getElementById("homeControls");
+	var awayMet = document.getElementById("awayMethod");
+	var homeMet = document.getElementById("homeMethod");
+	document.getElementById("controlDiagram").src = diagrams[opt] + ".png";
 	for (var i = 0; i < list.length; i++) {
 		list[i].classList.remove("selectedBox");
 	}
@@ -100,11 +113,19 @@ function chooseControls(opt) {
 		univ.style.left = "";
 		awayTo.style.display = "none";
 		homeTo.style.display = "none";
+		awayCon.innerHTML = "- WASD to move";
+		homeCon.innerHTML = "- IJKL to move";
+		awayMet.innerHTML = "- T to call a timeout";
+		homeMet.innerHTML = "- P to call a timeout";
 	}
 	if (opt == 1 || opt == 2 || opt == 3) {
 		//show timeout buttons
 		awayTo.style.display = "block";
 		homeTo.style.display = "block";
+		awayCon.innerHTML = "- D-pad to move";
+		homeCon.innerHTML = "- D-pad to move";
+		awayMet.innerHTML = "- Double click TO to call a timeout";
+		homeMet.innerHTML = "- Double click TO to call a timeout";
 	}
 	if (opt !== 0) {
 		//shorten univ
@@ -913,14 +934,27 @@ function resetField() {
 //
 function startGame() {
 	document.getElementById("initCont").style.display = "none";
+	var signal = document.getElementById("countdown");
+	signal.style.display = "block";
 	var periodLength = document.getElementById('quarterTime').value;
 	gameClock = periodLength;
 	document.getElementById("gameClock").innerHTML = toMins(gameClock);
 	resetField();
-	runGameClock();
-	runPlayClock();
 	updateDownDisplay();
-	gameGoing = true;
+	var counter = 3;
+	var counting = setInterval(function() {
+		counter--;
+		signal.innerHTML = counter;
+		if (counter == 0) {
+			signal.innerHTML = "GO";
+		} else if (counter == -1) {
+			runGameClock();
+			runPlayClock();
+			clearInterval(counting);
+			gameGoing = true;
+			signal.style.display = "none";
+		}
+	}, 1000);
 }
 
 function updateFieldPos() {
