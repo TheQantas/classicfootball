@@ -485,6 +485,7 @@ body {
 #fullDpad {
 	height: 300px;
 	width: 300px;
+	top: 10px;
 	display: none;
 	position: absolute;
 }
@@ -524,6 +525,30 @@ body {
 	left: 100px;
 }
 #rightDpad {
+	top: 100px;
+	right: 0;
+}
+#topDpadsplitL {
+	top: 0;
+	right: 0;
+}
+#botDpadsplitL {
+	bottom: 0;
+	right: 0;
+}
+#leftDpadsplit {
+	top: 100px;
+	left: 0;
+}
+#topDpadsplitR {
+	top: 0;
+	left: 0;
+}
+#botDpadsplitR {
+	bottom: 0;
+	left: 0;
+}
+#rightDpadsplit {
 	top: 100px;
 	right: 0;
 }
