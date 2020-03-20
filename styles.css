@@ -153,8 +153,8 @@ body {
 }
 .field { background-color: #090; }
 #message {
-	height: 100vh;
-	width: 100vw;
+	height: 100%;
+	width: 100%;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -480,4 +480,58 @@ body {
 	position: absolute;
 	top: 0;
 	left: 0;
+	background-color: #8e8;
+}
+#fullDpad {
+	height: 300px;
+	width: 300px;
+	display: none;
+	position: absolute;
+}
+.halfDpad {
+	height: 300px;
+	width: 200px;
+	display: none;
+	position: absolute;
+	top: 10px;
+}
+.buttonDpad {
+	height: 100px;
+	width: 100px;
+	background-color: #333;
+	position: absolute;
+	border-radius: 5%;
+	line-height: 100px;
+	text-align: center;
+	font-size: 60px;
+	font-family: 'Roboto',sans-serif;
+	color: #eee;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+#topDpad {
+	top: 0;
+	left: 100px;
+}
+#leftDpad {
+	top: 100px;
+	left: 0;
+}
+#botDpad {
+	bottom: 0;
+	left: 100px;
+}
+#rightDpad {
+	top: 100px;
+	right: 0;
+}
+#awayTimeout {
+	top: 100px;
+	right: 10px;
+}
+#homeTimeout {
+	top: 300px;
+	right: 10px;
 }
