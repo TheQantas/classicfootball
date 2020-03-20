@@ -1,1 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Classic Football Game</title>
+	<link rel="shortcut icon" href="fav.png"/>
+	<link rel="stylesheet" href="styles.css"/>
+	<link rel="stylesheet" href="colors.css"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="script.js"></script>
+</head>
+<body>
 
+<div id="initCont"><div class="relConv">
+	<div id="setupCont">
+		<div id="topSetup">
+			<div id="splitCont">
+				<div class="veil" style="border-radius:5px 0 0 0;display:none;"></div>
+				<input class="nameInput" placeholder="TEAM NAME (AWAY)" spellcheck="false"/>
+				<div style="height:5px;width:100%;"></div>
+				<div class="colorChoose">
+					<div class="colorRow">
+						<div class="colorCircle maroon" onclick="chooseColor('a',0)"></div>
+						<div class="colorCircle red" onclick="chooseColor('a',1)"></div>
+						<div class="colorCircle orange" onclick="chooseColor('a',2)"></div>
+						<div class="colorCircle maize" onclick="chooseColor('a',3)"></div>
+						<div class="colorCircle green" onclick="chooseColor('a',4)"></div>
+					</div>
+					<div class="colorRow">
+						<div class="colorCircle lightBlue" onclick="chooseColor('a',5)"></div>
+						<div class="colorCircle blue" onclick="chooseColor('a',6)"></div>
+						<div class="colorCircle indigo" onclick="chooseColor('a',7)"></div>
+						<div class="colorCircle lavender" onclick="chooseColor('a',8)"></div>
+						<div class="colorCircle purple" onclick="chooseColor('a',9)"></div>
+					</div>
+					<div class="colorRow">
+						<div class="colorCircle magenta" onclick="chooseColor('a',10)"></div>
+						<div class="colorCircle brown" onclick="chooseColor('a',11)"></div>
+						<div class="colorCircle grey" onclick="chooseColor('a',12)"></div>
+						<div class="colorCircle black" onclick="chooseColor('a',13)"></div>
+						<div class="colorCircle mystery" onclick="chooseColor('a',Math.floor(Math.random() * 14))">?</div>
+					</div>
+				</div>
+				<div style="height:5px;width:100%;"></div>
+				<button class="confirm" onclick="confirmTeam(0)">CONFIRM</button>
+				<div class="error"></div>
+			</div>
+			<div id="splitCont">
+				<div class="veil" style="border-radius:0 5px 0 0"></div>
+				<input class="nameInput" placeholder="TEAM NAME (HOME)" spellcheck="false"/>
+				<div style="height:5px;width:100%;"></div>
+				<div class="colorChoose">
+					<div class="colorRow">
+						<div class="colorCircle maroon" onclick="chooseColor('h',0)"></div>
+						<div class="colorCircle red" onclick="chooseColor('h',1)"></div>
+						<div class="colorCircle orange" onclick="chooseColor('h',2)"></div>
+						<div class="colorCircle maize" onclick="chooseColor('h',3)"></div>
+						<div class="colorCircle green" onclick="chooseColor('h',4)"></div>
+					</div>
+					<div class="colorRow">
+						<div class="colorCircle lightBlue" onclick="chooseColor('h',5)"></div>
+						<div class="colorCircle blue" onclick="chooseColor('h',6)"></div>
+						<div class="colorCircle indigo" onclick="chooseColor('h',7)"></div>
+						<div class="colorCircle lavender" onclick="chooseColor('h',8)"></div>
+						<div class="colorCircle purple" onclick="chooseColor('h',9)"></div>
+					</div>
+					<div class="colorRow">
+						<div class="colorCircle magenta" onclick="chooseColor('h',10)"></div>
+						<div class="colorCircle brown" onclick="chooseColor('h',11)"></div>
+						<div class="colorCircle grey" onclick="chooseColor('h',12)"></div>
+						<div class="colorCircle black" onclick="chooseColor('h',13)"></div>
+						<div class="colorCircle mystery" onclick="chooseColor('h',Math.floor(Math.random() * 14))">?</div>
+					</div>
+				</div>
+				<div style="height:5px;width:100%;"></div>
+				<button class="confirm" onclick="confirmTeam(1)">CONFIRM</button>
+				<div class="error"></div>
+			</div>
+		</div>
+		<div id="botSetup">
+			<div id="botVeil"></div>
+			<div id="botLeftCont">
+				<div style="height:20px;width:100%;"></div>
+				<div class="selectRow">
+					<div class="selectBox boxLevel" onclick="setDifficulty(0)">Easy</div>
+					<div class="selectBox boxLevel selectedBox" onclick="setDifficulty(1)">Medium</div>
+					<div class="selectBox boxLevel" onclick="setDifficulty(2)">Hard</div>
+					<div class="selectBox boxLevel" onclick="setDifficulty(3)">Impossible</div>
+				</div>
+				<div style="height:20px;width:100%;"></div>
+				<div class="selectRow">
+					<div class="selectBox boxControl selectedBox" onclick="chooseControls(0)">Keyboard</div>
+					<div class="selectBox boxControl" onclick="chooseControls(1)">Left D-pad</div>
+					<div class="selectBox boxControl" onclick="chooseControls(2)">Right D-pad</div>
+					<div class="selectBox boxControl" onclick="chooseControls(3)">Split D-pad</div>
+				</div>
+			</div>
+			<div id="botRightCont">
+				<div style="height:20px;width:100%;"></div>
+				<select id="quarterTime">
+					<option value="60">1:00</option>
+					<option value="90">1:30</option>
+					<option value="120">2:00</option>
+					<option value="150">2:30</option>
+					<option value="180" selected="selected">3:00</option>
+					<option value="240">4:00</option>
+					<option value="300">5:00</option>
+					<option value="480">8:00</option>
+					<option value="600">10:00</option>
+				</select>
+				<div style="height:20px;width:100%;"></div>
+				<button id="startGame" onclick="startGame()">START GAME</button>
+			</div>
+		</div>
+	</div>
+</div></div>
+
+<div id="gameCont">
+<div id="fieldCont">
+	<div class="sideLine"></div>
+	<div id="field">
+		<div class="column">
+			<div class="cell field">0 | (0,0)</div>
+			<div class="cell field">1 | (0,1)</div>
+			<div class="cell field">2 | (0,2)</div>
+		</div>
+		<div class="column">
+			<div class="cell field">3 | (1,0)</div>
+			<div class="cell field">4 | (1,1)</div>
+			<div class="cell field">5 | (1,2)</div>
+		</div>
+		<div class="column">
+			<div class="cell field">6 | (2,0)</div>
+			<div class="cell field">7 | (2,1)</div>
+			<div class="cell field">8 | (2,2)</div>
+		</div>
+		<div class="column">
+			<div class="cell field">9 | (3,0)</div>
+			<div class="cell field">10 | (3,1)</div>
+			<div class="cell field">11 | (3,2)</div>
+		</div>
+		<div class="column">
+			<div class="cell field">12 (4,0)</div>
+			<div class="cell field">13 (4,1)</div>
+			<div class="cell field">14 (4,2)</div>
+		</div>
+		<div class="column">
+			<div class="cell field">15 | (5,0)</div>
+			<div class="cell field">16 | (5,1)</div>
+			<div class="cell field">17 | (5,2)</div>
+		</div>
+		<div class="column">
+			<div class="cell field">18 | (6,0)</div>
+			<div class="cell field">19 | (6,1)</div>
+			<div class="cell field">20 | (6,2)</div>
+		</div>
+		<div class="column">
+			<div class="cell field">21 | (7,0)</div>
+			<div class="cell field">22 | (7,1)</div>
+			<div class="cell field">23 | (7,2)</div>
+		</div>
+		<div class="column">
+			<div class="cell field">24 | (8,0)</div>
+			<div class="cell field">25 | (8,1)</div>
+			<div class="cell field">26 | (8,2)</div>
+		</div>
+		<div class="column">
+			<div class="cell field">27 | (9,0)</div>
+			<div class="cell field">28 | (9,1)</div>
+			<div class="cell field">29 | (9,2)</div>
+		</div>
+		<div class="column">
+			<div class="cell field">30 | (10,0)</div>
+			<div class="cell field">31 | (10,1)</div>
+			<div class="cell field">32 | (10,2)</div>
+		</div>
+		<div class="column">
+			<div class="cell field">33 | (11,0)</div>
+			<div class="cell field">34 | (11,1)</div>
+			<div class="cell field">35 | (11,2)</div>
+		</div>
+		<div id="los"></div>
+		<div id="ltm"></div>
+	</div>
+	<div class="sideLine"></div>
+	<div id="yardLine">
+		<div class="lineCell">36</div>
+		<div class="lineCell">35</div>
+		<div class="lineCell">34</div>
+		<div class="lineCell">33</div>
+		<div class="lineCell">32</div>
+		<div class="lineCell">31</div>
+		<div class="lineCell">30 &#9654;</div>
+		<div class="lineCell">29</div>
+		<div class="lineCell">28</div>
+		<div class="lineCell">27</div>
+		<div class="lineCell">26</div>
+		<div class="lineCell">25</div>
+	</div>
+</div>
+
+<div id="message"><div class="relConv">
+	<div class="messageBox" id="messFourth">
+		<div class="congratsTont">It's Fourth Down!</div>
+		<div class="promptTont">Would you like to...</div>
+		<div class="optionCont" id="puntOption" onclick="punt()">
+			<div class="optionTitle">Punt</div>
+			<div class="optionDesc">This pins back your opponent a random amount.</div>
+		</div>
+		<div class="optionCont" id="fieldOption" onclick="fieldGoal()">
+			<div class="optionTitle">Go For a Field Goal</div>
+			<div class="optionDesc" id="fgChance">Your chance is: 0.00%</div>
+		</div>
+		<div class="optionCont" onclick="goforit()">
+			<div class="optionTitle">Go For It</div>
+			<div class="optionDesc">Just hope you convert.</div>
+		</div>
+	</div>
+	<div class="messageBox" id="messTD">
+		<div class="congratsTont">Congrats!</div>
+		<div class="promptTont">Would you like to...</div>
+		<div class="optionCont" id="extraOption" onclick="extrapoint()">
+			<div class="optionTitle">Go For 1</div>
+			<div class="optionDesc">This adds one point to your score.</div>
+		</div>
+		<div class="optionCont" onclick="twoPoint()">
+			<div class="optionTitle">Go For 2</div>
+			<div class="optionDesc" id="fgChance">This is a mini-touchdown from the <b>5</b> yard line.</div>
+		</div>
+	</div>
+	<div class="messageBox" id="messWinner">
+		<div class="congratsTont" id="winnerMessage">Congrats!</div>
+		<div class="promptTont">You won the game!</div>
+		<div id="final">FINAL</div>
+		<div class="finalBar">
+			<div class="finalName">AWAY TEAM</div>
+			<div class="finalScore">10</div>
+		</div>
+		<div class="finalBar">
+			<div class="finalName">HOME TEAM</div>
+			<div class="finalScore">0</div>
+		</div>
+		<div style="height:5px;width:100%"></div>
+		<div class="optionCont" style="height:50px" onclick="location.reload()">
+			<div class="optionTitle">Play Again?</div>
+		</div>
+	</div>
+	
+	<div class="messageBox" id="messOvertime">
+		<div class="congratsTont">We're going to overtime!</div>
+		<div class="promptTont">Here are the rules of overtime.</div>
+		<p class="rules">
+		- Each team will get 2 possessions from the opponent's 25-yard line.<br>
+		- There is no game clock, but there is a play clock.<br>
+		- The home team will start with the ball.<br>
+		- You cannot punt the football.<br>
+		- If after one overtime period the game is still tied, the game goes to double overtime.
+		</p>
+		<div class="optionCont" style="height:50px" onclick="launchOvertime();">
+			<div class="optionTitle">Okay</div>
+		</div>
+	</div>
+	
+	<div class="messageBox" id="messDoubleOvertime">
+		<div class="congratsTont">To double overtime!</div>
+		<div class="promptTont">Here are the rules of double overtime.</div>
+		<p class="rules">
+		- All of the rules of single overtime.<br>
+		- There are no extra points; you must go for 2.
+		</p>
+		<div class="optionCont" style="height:50px" onclick="launchOvertime();">
+			<div class="optionTitle">Okay</div>
+		</div>
+	</div>
+	
+	<div class="messageBox" id="messTripleOvertime">
+		<div class="congratsTont">To triple overtime!</div>
+		<div class="promptTont">Here are the rules of triple overtime.</div>
+		<p class="rules">
+		- All of the rules of single and double overtime.<br>
+		- There are no field goals; you must go for touchdowns.<br>
+		- If the game is still tied after triple overtime, a "coin" will be "flipped" to decide the winner.
+		</p>
+		<div class="optionCont" style="height:50px" onclick="launchOvertime();">
+			<div class="optionTitle">Okay</div>
+		</div>
+	</div>
+	
+	<div class="messageBox" id="messCoinFlip">
+		<div class="congratsTont">Time to flip a coin!</div>
+		<div class="promptTont" id="coinPrompt">What is the away team's call?</div>
+		<div class="optionCont" style="height:50px" onclick="flipCoin(0)">
+			<div class="optionTitle">Heads</div>
+		</div>
+		<div class="optionCont" style="height:50px" onclick="flipCoin(1)">
+			<div class="optionTitle">Tails</div>
+		</div>
+	</div>
+</div></div>
+
+<div id="scoreboard">
+	<div id="top">
+		<div class="quarter">
+			<div class="teamInfo teamName green">AWAY TEAM</div>
+			<div class="teamInfo teamScore greens">0</div>
+		</div>
+		<div class="quarter">
+			<div class="teamInfo teamName maroon">HOME TEAM</div>
+			<div class="teamInfo teamScore maroons">0</div>
+		</div>
+		<div class="quarter">
+			<div class="teamInfo" id="period">1st</div>
+			<div class="teamInfo" id="gameClock">5:00</div>
+			<div class="teamInfo" id="playClock" style="background-color:#242424">7</div>
+		</div>
+		<div class="quarter">
+			<div class="teamInfo down blue" id="downBox">&#9664; 1st & 10</div><!-- &#9664; -->
+		</div>
+	</div>
+	<div id="bottom">
+		<div class="timeout"></div>
+		<div class="timeout"></div>
+		<div class="timeout"></div>
+		<div class="timeout"></div>
+		<div class="timeout"></div>
+		<div class="timeout"></div>
+	</div>
+</div>
+<div id="scoring">2PT CONVERSION</div>
+</div>
+
+<audio id="whistleSound"><source src="whistle.mp3" type="audio/ogg"></audio>
+
+</body>
+</html>
