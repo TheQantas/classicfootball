@@ -692,8 +692,11 @@ function changePeriod() {
 			quarter++;
 			display.innerHTML = ordinal(quarter);
 			gameClock = periodLength;
+			clearInterval(runPlayClock);
+			resetPlayClock();
 			runGameClock();
 			updateDownDisplay();
+			resetField();
 		}, 2000);
 	}
 	if (quarter == 2) {
@@ -893,7 +896,7 @@ function startGame() {
 	document.getElementById("initCont").style.display = "none";
 	var signal = document.getElementById("countdown");
 	signal.style.display = "block";
-	var periodLength = document.getElementById('quarterTime').value;
+	periodLength = document.getElementById('quarterTime').value;
 	gameClock = periodLength;
 	document.getElementById("gameClock").innerHTML = toMins(gameClock);
 	resetField();
