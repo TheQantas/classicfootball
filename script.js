@@ -37,11 +37,11 @@ var quarter = 1;
 var overtime = false;
 var defenderInterval = 500;
 var mousedownID = -1;
-const dpadElems = ["topDpad","leftDpad","botDpad","rightDpad","topDpadsplitL","topDpadsplitR","botDpadsplitL","botDpadsplitR","leftDpadsplit","rightDpadsplit"];
-const dpadDx = [0,-1,0,1,0,0,0,0,-1,1];
-const dpadDy = [-1,0,1,0,-1,-1,1,1,0,0];
+const dpadElems = ["topDpad","leftDpad","botDpad","rightDpad"];
+const dpadDx = [0,-1,0,1];
+const dpadDy = [-1,0,1,0];
 var controlStyle = 0;
-const diagrams = ["KeyboardControls","LeftControls","RightControls","SplitControls"];
+const diagrams = ["KeyboardControls","LeftControlsMod","RightControlsMod"];
 
 function advance() {
 	document.getElementById("setupCont").style.display = "none";
@@ -70,102 +70,51 @@ function whilemousedown(dx,dy) {
 function setup() {
 	for (var i = 0; i < dpadElems.length; i++) {
 		(function(i) {
-			document.getElementById(dpadElems[i]).addEventListener("mousedown",function(){ mousedown(event,dpadDx[i],dpadDy[i]); });
-			document.getElementById(dpadElems[i]).addEventListener("mouseup",function(){ mouseup(event,dpadDx[i],dpadDy[i]); });
-			document.getElementById(dpadElems[i]).addEventListener("mouseout",function(){ mouseup(event,dpadDx[i],dpadDy[i]); });
+			document.getElementById(dpadElems[i]).addEventListener("ontouchstart",function(){ mousedown(event,dpadDx[i],dpadDy[i]); });
+			document.getElementById(dpadElems[i]).addEventListener("ontouchend",function(){ mouseup(event,dpadDx[i],dpadDy[i]); });
+			//document.getElementById(dpadElems[i]).addEventListener("mouseout",function(){ mouseup(event,dpadDx[i],dpadDy[i]); });
 		}(i));
 	}
 }
 
 function chooseControls(opt) {
-	controlStyle = opt;
 	var list = document.getElementsByClassName("boxControl");
-	var full = document.getElementById("fullDpad");
-	var halves = document.getElementsByClassName("halfDpad");
-	var awayTo = document.getElementById("awayTimeout");
-	var homeTo = document.getElementById("homeTimeout");
-	var awayCon = document.getElementById("awayControls");
-	var homeCon = document.getElementById("homeControls");
-	var awayMet = document.getElementById("awayMethod");
-	var homeMet = document.getElementById("homeMethod");
-	document.getElementById("controlDiagram").src = diagrams[opt] + ".png";
-	for (var i = 0; i < list.length; i++) {
-		list[i].classList.remove("selectedBox");
-	}
+	list[controlStyle].classList.remove("selectedBox");
 	list[opt].classList.add("selectedBox");
+	controlStyle = opt;
 	var univ = document.getElementById("gameCont");
-	//0 keyboard 1 left 2 right 3 split
-	if (opt == 0 || opt == 3) {
-		//hide full dpad stuff
-		full.style.display = "none";
-	}
-	if (opt == 0 || opt == 1 || opt == 2) {
-		//hide split dpad stuff
-		halves[0].style.display = "none";
-		halves[1].style.display = "none";
-	}
-	if (opt == 1 || opt == 2) {
-		full.style.display = "block";
-	}
+	var dpad = document.getElementById("fullDpad");
+	var away = document.getElementById("awayTimeout");
+	var home = document.getElementById("homeTimeout");
+	document.getElementById("controlDiagram").src = diagrams[opt] + ".png";
 	if (opt == 0) {
-		//go to keyboard
 		univ.style.width = "100vw";
-		univ.style.left = "";
-		awayTo.style.display = "none";
-		homeTo.style.display = "none";
-		awayCon.innerHTML = "- WASD to move";
-		homeCon.innerHTML = "- IJKL to move";
-		awayMet.innerHTML = "- T to call a timeout";
-		homeMet.innerHTML = "- P to call a timeout";
-	}
-	if (opt == 1 || opt == 2 || opt == 3) {
-		//show timeout buttons
-		awayTo.style.display = "block";
-		homeTo.style.display = "block";
-		awayCon.innerHTML = "- D-pad to move";
-		homeCon.innerHTML = "- D-pad to move";
-		awayMet.innerHTML = "- Double click TO to call a timeout";
-		homeMet.innerHTML = "- Double click TO to call a timeout";
-	}
-	if (opt !== 0) {
-		//shorten univ
-		univ.style.width = "calc(100vw - 360px)";
-	}
-	if (opt == 1) {
-		//to left dpad
-		univ.style.left = "260px";
-		full.style.right = "";
-		full.style.left = "10px";
-		awayTo.style.left = "";
-		homeTo.style.left = "";
-		awayTo.style.right = "10px";
-		homeTo.style.right = "10px";
-		awayTo.style.top = "10px";
-		homeTo.style.top = "100px";
-	}
-	if (opt == 2) {
-		//to right dpad
-		univ.style.left = "100px";
-		full.style.left = "";
-		full.style.right = "10px";
-		awayTo.style.right = "";
-		homeTo.style.right = "";
-		awayTo.style.left = "10px";
-		homeTo.style.left = "10px";
-		awayTo.style.top = "10px";
-		homeTo.style.top = "100px";
-	}
-	if (opt == 3) {
-		//to split dpad
-		halves[0].style.display = "block";
-		halves[1].style.display = "block";
-		univ.style.left = "180px";
-		awayTo.style.right = "";
-		homeTo.style.left = "";
-		awayTo.style.left = "50px";
-		homeTo.style.right = "50px";
-		awayTo.style.top = "260px";
-		homeTo.style.top = "260px";
+		univ.style.left = "0px";
+		dpad.style.display = "none";
+		away.style.display = "none";
+		home.style.display = "none";
+	} else {
+		univ.style.width = "calc(100vw - 260px)";
+		dpad.style.display = "block";
+		away.style.display = "block";
+		home.style.display = "block";
+		if (opt == 1) {
+			away.style.right = "";
+			home.style.right = "";
+			away.style.left = "33px";
+			home.style.left = "147px";
+			dpad.style.right = "";
+			dpad.style.left = "10px";
+			univ.style.left = "260px";
+		} else {
+			away.style.left = "";
+			home.style.left = "";
+			away.style.right = "147px";
+			home.style.right = "33px";
+			dpad.style.left = "";
+			dpad.style.right = "10px";
+			univ.style.left = "0px";
+		}
 	}
 }
 
@@ -425,7 +374,7 @@ function moveDefenders() {
 		amountMoved++;
 	}, defenderInterval);
 }
-//
+
 function timeout(team) {
 	activeTimeout = true;
 	var list = document.getElementsByClassName("timeout");
