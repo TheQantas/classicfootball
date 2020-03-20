@@ -419,13 +419,18 @@ body {
 	border-radius: 5px;
 }
 .selectBox {
-	width: 25%;
 	height: 40px;
 	line-height: 40px;
 	font-family: 'Roboto',sans-serif;
 	color: #eee;
 	font-size: 20px;
 	text-align: center;
+}
+.boxLevel {
+	width: 25%;
+}
+.boxControl {
+	width: calc(100% /3);
 }
 .selectBox:hover {
 	background-color: #484848;
@@ -434,14 +439,19 @@ body {
 .selectBox:nth-of-type(1) {
 	border-radius: 5px 0 0 5px;
 }
-.selectBox:nth-of-type(4) {
+.selectBox:last-of-type {
 	border-radius: 0 5px 5px 0;
 }
 .selectedBox {
-	width: calc(25% - 4px);
 	height: 36px;
 	line-height: 36px;
 	border: 2px solid red;
+}
+.selectedBox.boxLevel {
+	width: calc(25% - 4px);
+}
+.selectedBox.boxControl {
+	width: calc((100% / 3) - 4px);
 }
 #quarterTime {
 	padding: 5px;
@@ -529,36 +539,12 @@ body {
 	top: 80px;
 	right: 0;
 }
-#topDpadsplitL {
-	top: 0;
-	right: 0;
-}
-#botDpadsplitL {
-	bottom: 0;
-	right: 0;
-}
-#leftDpadsplit {
-	top: 80px;
-	left: 0;
-}
-#topDpadsplitR {
-	top: 0;
-	left: 0;
-}
-#botDpadsplitR {
-	bottom: 0;
-	left: 0;
-}
-#rightDpadsplit {
-	top: 80px;
-	right: 0;
-}
 #awayTimeout {
-	top: 100px;
+	top: 260px;
 	right: 10px;
 }
 #homeTimeout {
-	top: 300px;
+	top: 260px;
 	right: 10px;
 }
 #controlDiagram {
