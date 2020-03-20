@@ -656,12 +656,20 @@ function fieldGoal() {
 				score('a',3,false);
 			}
 			setTimeout(function() {
-				if (poss == "home") {
+				if (poss == "home" && overtime == false) {
 					changePoss(-25);
 					downDisplay.innerHTML = decodeEntities("1st & 10 &#9654;");
 					downDisplay.style.backgroundColor = awayColor;
-				} else {
+				} else if (poss == "away" && overtime == false) {
 					changePoss(25);
+					downDisplay.innerHTML = decodeEntities("&#9664; 1st & 10");
+					downDisplay.style.backgroundColor = homeColor;
+				} else if (poss == "home" && overtime == false) {
+					changePoss(25);
+					downDisplay.innerHTML = decodeEntities("1st & 10 &#9654;");
+					downDisplay.style.backgroundColor = awayColor;
+				} else if (poss == "away" && overtime == false) {
+					changePoss(-25);
 					downDisplay.innerHTML = decodeEntities("&#9664; 1st & 10");
 					downDisplay.style.backgroundColor = homeColor;
 				}
