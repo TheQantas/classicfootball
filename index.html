@@ -5,30 +5,31 @@
 	<link rel="shortcut icon" href="fav.png"/>
 	<link rel="stylesheet" href="styles.css"/>
 	<link rel="stylesheet" href="colors.css"/>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="script.js"></script>
 	<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'/>
 </head>
 <body onload="setup()">
 
 <div id="fullDpad"><div class="relConv">
-	<div class="buttonDpad" id="topDpad"></div>
-	<div class="buttonDpad" id="leftDpad"></div>
-	<div class="buttonDpad" id="botDpad"></div>
-	<div class="buttonDpad" id="rightDpad"></div>
+	<button class="buttonDpad" id="topDpad"></button>
+	<button class="buttonDpad" id="leftDpad"></button>
+	<button class="buttonDpad" id="botDpad"></button>
+	<button class="buttonDpad" id="rightDpad"></button>
 </div></div>
 <div class="halfDpad" style="left:10px"><div class="relConv">
-	<div class="buttonDpad" id="topDpadsplitL"></div>
-	<div class="buttonDpad" id="leftDpadsplit"></div>
-	<div class="buttonDpad" id="botDpadsplitL"></div>
+	<button class="buttonDpad" id="topDpadsplitL"></button>
+	<button class="buttonDpad" id="leftDpadsplit"></button>
+	<button class="buttonDpad" id="botDpadsplitL"></button>
 </div></div>
 <div class="halfDpad" style="right:10px"><div class="relConv">
-	<div class="buttonDpad" id="topDpadsplitR"></div>
-	<div class="buttonDpad" id="botDpadsplitR"></div>
-	<div class="buttonDpad" id="rightDpadsplit"></div>
+	<button class="buttonDpad" id="topDpadsplitR"></button>
+	<button class="buttonDpad" id="botDpadsplitR"></button>
+	<button class="buttonDpad" id="rightDpadsplit"></button>
 </div></div>
-<div class="buttonDpad" id="awayTimeout" ondblclick="timeout('a')">TO</div>
-<div class="buttonDpad" id="homeTimeout" ondblclick="timeout('h')">TO</div>
+<button class="buttonDpad" id="awayTimeout" ondblclick="timeout('a')">TO</button>
+<button class="buttonDpad" id="homeTimeout" ondblclick="timeout('h')">TO</button>
+
+<div id="countdown">3</div>
 
 <div id="initCont"><div class="relConv">
 	<div id="setupCont">
@@ -128,9 +129,25 @@
 					<option value="600">10:00</option>
 				</select>
 				<div style="height:20px;width:100%;"></div>
-				<button id="startGame" onclick="startGame()">START GAME</button>
+				<button id="startGame" onclick="advance()">NEXT</button>
 			</div>
 		</div>
+	</div>
+	<div id="explainControls" style="display:none">
+		<img id="controlDiagram" src="KeyboardControls.png">
+		<div id="explainCont">
+			<div class="explainSplit">
+				<span class="explainTitle">AWAY TEAM</span><br>
+				<span class="explainDesc" id="awayControls">- WASD to move</span><br>
+				<span class="explainDesc" id="awayMethod">- T to call a timeout</span>
+			</div>
+			<div class="explainSplit">
+				<span class="explainTitle">HOME TEAM</span><br>
+				<span class="explainDesc" id="homeControls">- IJKL to move</span><br>
+				<span class="explainDesc" id="homeMethod">- P to call a timeout</span>
+			</div>
+		</div>
+		<button id="launchGame" onclick="startGame()">Launch Game</button>
 	</div>
 </div></div>
 
@@ -139,64 +156,64 @@
 	<div class="sideLine"></div>
 	<div id="field">
 		<div class="column">
-			<div class="cell field">0 | (0,0)</div>
-			<div class="cell field">1 | (0,1)</div>
-			<div class="cell field">2 | (0,2)</div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
 		</div>
 		<div class="column">
-			<div class="cell field">3 | (1,0)</div>
-			<div class="cell field">4 | (1,1)</div>
-			<div class="cell field">5 | (1,2)</div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
 		</div>
 		<div class="column">
-			<div class="cell field">6 | (2,0)</div>
-			<div class="cell field">7 | (2,1)</div>
-			<div class="cell field">8 | (2,2)</div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
 		</div>
 		<div class="column">
-			<div class="cell field">9 | (3,0)</div>
-			<div class="cell field">10 | (3,1)</div>
-			<div class="cell field">11 | (3,2)</div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
 		</div>
 		<div class="column">
-			<div class="cell field">12 (4,0)</div>
-			<div class="cell field">13 (4,1)</div>
-			<div class="cell field">14 (4,2)</div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
 		</div>
 		<div class="column">
-			<div class="cell field">15 | (5,0)</div>
-			<div class="cell field">16 | (5,1)</div>
-			<div class="cell field">17 | (5,2)</div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
 		</div>
 		<div class="column">
-			<div class="cell field">18 | (6,0)</div>
-			<div class="cell field">19 | (6,1)</div>
-			<div class="cell field">20 | (6,2)</div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
 		</div>
 		<div class="column">
-			<div class="cell field">21 | (7,0)</div>
-			<div class="cell field">22 | (7,1)</div>
-			<div class="cell field">23 | (7,2)</div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
 		</div>
 		<div class="column">
-			<div class="cell field">24 | (8,0)</div>
-			<div class="cell field">25 | (8,1)</div>
-			<div class="cell field">26 | (8,2)</div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
 		</div>
 		<div class="column">
-			<div class="cell field">27 | (9,0)</div>
-			<div class="cell field">28 | (9,1)</div>
-			<div class="cell field">29 | (9,2)</div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
 		</div>
 		<div class="column">
-			<div class="cell field">30 | (10,0)</div>
-			<div class="cell field">31 | (10,1)</div>
-			<div class="cell field">32 | (10,2)</div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
 		</div>
 		<div class="column">
-			<div class="cell field">33 | (11,0)</div>
-			<div class="cell field">34 | (11,1)</div>
-			<div class="cell field">35 | (11,2)</div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
+			<div class="cell field"></div>
 		</div>
 		<div id="los"></div>
 		<div id="ltm"></div>
