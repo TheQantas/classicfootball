@@ -48,6 +48,23 @@ function advance() {
 	document.getElementById("explainControls").style.display = "block";
 }
 
+function blink(elem) {
+	var m = 0;
+	var blinking = setInterval(function() {
+		if (m % 2 == 0) {
+			elem.style.backgroundColor = fieldColor;
+		} else if (m % 2 == 1 && poss == "home") {
+			elem.style.backgroundColor = awayColor;
+		} else if (m % 2 == 1 && poss == "away") {
+			elem.style.backgroundColor = homeColor;
+		}
+		if (m == 3) {
+			clearInterval(blinking);
+		}
+		m++;
+	}, 300);
+}
+
 function mousedown(event,dx,dy) {
 	if (mousedownID == -1) {
 		mousedownID = setInterval(function() { whilemousedown(dx,dy); }, 100);
@@ -70,8 +87,8 @@ function whilemousedown(dx,dy) {
 function setup() {
 	for (var i = 0; i < dpadElems.length; i++) {
 		(function(i) {
-			document.getElementById(dpadElems[i]).addEventListener("ontouchstart",function(){ mousedown(event,dpadDx[i],dpadDy[i]); });
-			document.getElementById(dpadElems[i]).addEventListener("ontouchend",function(){ mouseup(event,dpadDx[i],dpadDy[i]); });
+			document.getElementById(dpadElems[i]).addEventListener("touchstart",function(){ mousedown(event,dpadDx[i],dpadDy[i]); });
+			document.getElementById(dpadElems[i]).addEventListener("touchend",function(){ mouseup(event,dpadDx[i],dpadDy[i]); });
 			//document.getElementById(dpadElems[i]).addEventListener("mouseout",function(){ mouseup(event,dpadDx[i],dpadDy[i]); });
 		}(i));
 	}
@@ -202,7 +219,6 @@ function launchOvertime() {
 	changePoss(-25);
 	gameGoing = true;
 	gameClock = 4;
-	console.log("GC: " + gameClock);
 	updateDownDisplay();
 	runPlayClock();
 }
@@ -249,7 +265,6 @@ function extrapoint() {
 function goforit() {
 	console.log('Going for it');
 	document.getElementById("message").style.display = "none";
-	console.log(document.getElementById("message").style.display);
 	document.getElementById("messFourth").style.display = "none";
 	resetforFourth();
 	runGameClock();
@@ -324,22 +339,10 @@ function moveDefenders() {
 		} else if ((moveTostate == awayColor && poss == "away") || (moveTostate == homeColor && poss == "home")) {
 			if (pat == false) {
 				tackled();
-				var m = 0;
-				var blinking = setInterval(function() {
-					if (m % 2 == 0) {
-						list[tacklePos].style.backgroundColor = fieldColor;
-					} else if (m % 2 == 1 && poss == "home") {
-						list[tacklePos].style.backgroundColor = awayColor;
-					} else if (m % 2 == 1 && poss == "away") {
-						list[tacklePos].style.backgroundColor = homeColor;
-					}
-					if (m == 3) {
-						clearInterval(blinking);
-					}
-					m++;
-				}, 300);
+				blink(list[tacklePos]);
 			} else {
 				console.log('Failed two point Def');
+				blink(list[tacklePos]);
 				firstMove = true;
 				gameGoing = false;
 				clearInterval(moveTackles);
@@ -452,10 +455,8 @@ function moveRB(dx,dy) {
 			pat = false;
 			setTimeout(function() {
 				if (overtime == false) {
-					console.log('Home & No OT');
 					changePoss(-25);
 				} else {
-					console.log('Home & OT');
 					changePoss(25);
 				}
 				gameGoing = true;
@@ -482,10 +483,8 @@ function moveRB(dx,dy) {
 			firstMove = true;
 			setTimeout(function() {
 				if (overtime == false) {
-					console.log('Away & No OT');
 					changePoss(25);
 				} else {
-					console.log('Away & OT');
 					changePoss(-25);
 				}
 				gameGoing = true;
@@ -521,20 +520,7 @@ function moveRB(dx,dy) {
 				updateDownDisplay();
 			}, 2000);
 		}
-		var m = 0;
-		var blinking = setInterval(function() {
-			if (m % 2 == 0) {
-				list[moveTo].style.backgroundColor = fieldColor;
-			} else if (m % 2 == 1 && poss == "home") {
-				list[moveTo].style.backgroundColor = awayColor;
-			} else if (m % 2 == 1 && poss == "away") {
-				list[moveTo].style.backgroundColor = homeColor;
-			}
-			if (m == 3) {
-				clearInterval(blinking);
-			}
-			m++;
-		}, 300);
+		blink(list[moveTo]);
 	}
 }
 
@@ -693,6 +679,7 @@ function changePeriod() {
 			display.innerHTML = ordinal(quarter);
 			gameClock = periodLength;
 			clearInterval(runPlayClock);
+			gameGoing = true;
 			resetPlayClock();
 			runGameClock();
 			updateDownDisplay();
@@ -707,7 +694,9 @@ function changePeriod() {
 			display.innerHTML = ordinal(quarter);
 			gameClock = periodLength;
 			poss = "home";
+			console.log("ORIG: " + poss);
 			changePoss(-25);
+			console.log("KICK: " + poss);
 			runGameClock();
 			updateDownDisplay();
 		}, 2000);
@@ -751,16 +740,13 @@ function changePeriod() {
 }
 
 function flipCoin(call) {
-	console.log('Flipping');
 	var flip = Math.floor(Math.random() * 2);
-	console.log(flip + ":" + call);
 	if (flip == call) {
 		awayScore++;
 	} else {
 		homeScore++;
 	}
 	document.getElementById("messCoinFlip").style.display = "none";
-	console.log(document.getElementById("messCoinFlip").style.display);
 	finalScore();
 }
 
@@ -891,7 +877,7 @@ function resetField() {
 	}
 	updateFieldPos();
 }
-//
+
 function startGame() {
 	document.getElementById("initCont").style.display = "none";
 	var signal = document.getElementById("countdown");
@@ -930,9 +916,7 @@ function updateFieldPos() {
 	var scrim = document.getElementById("los");
 	var toMak = document.getElementById("ltm");
 	var leftToShow;
-	console.log('ADJ: ' + adjustment);
 	if (adjustment == 0) {
-		console.log('Standard');
 		los.style.display = "block";
 		toMak.style.display = "block";
 		if (poss == "home") {
@@ -952,7 +936,6 @@ function updateFieldPos() {
 		}
 	} else {
 		scrim.style.display = "none";
-		console.log('Looped');
 		leftToShow = toGo - adjustment;
 		if (leftToShow > 0) {
 			toMak.style.display = "block";
