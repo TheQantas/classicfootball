@@ -1,0 +1,483 @@
+body {
+	margin: 0;
+	padding: 0;
+	height: 100vh;
+	width: 100vw;
+	background-color: #666;
+}
+#scoreboard {
+	margin-top: 20px;
+	margin-left: 20px;
+	width: calc(100% - 40px);
+	height: 70px;
+	background-color: #333;
+}
+#scoring {
+	position: absolute;
+	left: 20px;
+	bottom: 20px;
+	width: calc(100% - 40px);
+	height: 70px;
+	z-index: 6;
+	letter-spacing: 1px;
+	line-height: 70px;
+	font-family: 'Roboto', sans-serif;
+	text-align: center;
+	font-size: 50px;
+	color: #eee;
+	font-weight: bold;
+	display: none;
+}
+#top {
+	height: 60px;
+	width: 100%;
+	display: flex;
+}
+#bottom {
+	height: 10px;
+	width: 100%;
+	display: flex;
+}
+.quarter {
+	width: 25%;
+	height: 60px;
+	display: flex;
+}
+.teamName {
+	width: calc(80% - 10px);
+	color: #eee;
+	font-size: 35px;
+}
+.teamScore {
+	width: calc(20% - 10px);
+	color: #fff;
+	font-size: 40px;
+}
+.teamInfo {
+	line-height: 50px;
+	padding: 5px;
+	height: 50px;
+	font-family: 'Roboto',sans-serif;
+	text-align: center;
+	font-weight: bold;
+}
+.down {
+	width: calc(100% - 10px);
+	color: #eee;
+	font-size: 40px;
+}
+#period {
+	width: calc(40% - 10px);
+	color: #ffbf27;
+	font-size: 40px;
+}
+#gameClock {
+	width: calc(40% - 10px);
+	color: #eee;
+	font-size: 40px;
+}
+#playClock {
+	width: calc(20% - 10px);
+	color: #ddd;
+	font-size: 35px;
+}
+.timeout {
+	width: calc((25% / 3) - 6px);
+	margin: 3px;
+	height: 4px;
+	background-color: #fff;
+	border-radius: 2px;
+}
+#fieldCont {
+	background-color: #eee;
+	width: 100%;
+	height: calc(100vh - 110px);
+}
+.sideLine {
+	background-color: #fff;
+	height: 3px;
+	width: 100%;
+}
+#yardLine {
+	background-color: #0a0;
+	height: 150px;
+	width: 100%;
+	display: flex;
+}
+#field {
+	height: calc(100% - 156px);
+	width: 100%;
+	background-color: #0a0;
+	display: flex;
+	position: relative;
+}
+.column {
+	width: calc(100% / 12);
+	height: 100%;
+}
+.lineCell {
+	width: calc(100% / 12);
+	height: 150px;
+	line-height: 150px;
+	text-align: center;
+	color: #eee;
+	font-family: 'Roboto', sans-serif;
+	font-size: 30px;
+	font-weight: bold;
+}
+.cell {
+	height: calc((100% - 20px) / 3);
+	width: calc(100% - 10px);
+	margin-top: 5px;
+	margin-left: 5px;
+}
+.redPlay {
+	background-color: #d00 !important;
+	font-size: 50px !important;
+}
+#los {
+	background-color: yellow;
+	height: 100%;
+	position: absolute;
+	width: 4px;
+	top: 0;
+	left: calc((100% / 12 * 11) - 2px);
+}
+#ltm {
+	background-color: red;
+	height: 100%;
+	position: absolute;
+	width: 4px;
+	top: 0;
+	left: calc((100% / 12 * 1) - 2px);
+}
+.field { background-color: #090; }
+#message {
+	height: 100vh;
+	width: 100vw;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 8;
+	background-color: #eeea;
+	display: none;
+}
+.relConv {
+	height: 100%;
+	width: 100%;
+	position: relative;
+}
+.messageBox {
+	height: 422px;
+	width: 790px;
+	background-color: #333;
+	border-radius: 10px;
+	padding: 5px;
+	position: absolute;
+	top: calc(50% - 216px);
+	left: calc(50% - 400px);
+	display: none;
+}
+.congratsTont {
+	height: 70px;
+	line-height: 70px;
+	color: #ffbf27;
+	font-family: 'Roboto',sans-serif;
+	width: 100%;
+	font-size: 50px;
+}
+.promptTont {
+	height: 60px;
+	line-height: 60px;
+	color: #ccc;
+	font-family: 'Roboto',sans-serif;
+	width: 100%;
+	font-size: 40px;
+}
+.optionCont {
+	height: 80px;
+	width: calc(100% - 14px);
+	padding: 5px;
+	border: 2px solid #ccc;
+	border-radius: 5px;
+	margin-bottom: 5px;
+}
+.optionCont:hover {
+	cursor: pointer;
+	background-color: #444;
+}
+.optionTitle {
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	font-family: 'Roboto',sans-serif;
+	color: #ccc;
+	font-size: 40px;
+}
+.optionDesc {
+	width: 100%;
+	height: 30px;
+	line-height: 30px;
+	font-family: 'Roboto',sans-serif;
+	color: #bbb;
+	font-size: 25px;
+}
+.rules {
+	font-family: 'Roboto',sans-serif;
+	color: #bbb;
+	font-size: 20px;
+}
+#final {
+	width: calc(100% - 20px);
+	height: 20px;
+	line-height: 20px;
+	color: #ffbf27;
+	padding: 10px;
+	font-family: 'Roboto', sans-serif;
+	font-size: 20px;
+	font-weight: bold;
+}
+.finalBar {
+	height: 80px;
+	width: 100%;
+	display: flex;
+}
+.finalName {
+	height: 60px;
+	line-height: 60px;
+	width: calc((100% - 40px) * 0.8);
+	color: #eee;
+	padding: 10px;
+	background-color: #008;
+	font-size: 60px;
+	font-family: 'Roboto', sans-serif;
+}
+.finalScore {
+	height: 60px;
+	line-height: 60px;
+	width: calc((100% - 40px) * 0.2);
+	color: #eee;
+	padding: 10px;
+	background-color: #007;
+	font-size: 60px;
+	font-family: 'Roboto', sans-serif;
+	text-align: center;
+	font-weight: bold;
+}
+#initCont {
+	height: 100vh;
+	width: 100vw;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 12;
+	background-color: #eeea;
+}
+#setupCont {
+	height: 390px;
+	width: 790px;
+	background-color: #333;
+	border-radius: 10px;
+	padding: 5px;
+	position: absolute;
+	top: calc(50% - 200px);
+	left: calc(50% - 400px);
+}
+#topSetup {
+	height: 250px;
+	width: 100%;
+	display: flex;
+}
+#botSetup {
+	height: 140px;
+	width: 100%;
+	display: flex;
+	position: relative;
+}
+#splitCont {
+	width: 50%;
+	height: 100%;
+	position: relative;
+}
+.nameInput {
+	display: block;
+	margin: auto;
+	padding: 5px;
+	background-color: #444;
+	font-family: 'Roboto',sans-serif;
+	height: 40px;
+	width: 290px;
+	font-size: 30px;
+	border-radius: 5px;
+	border: none;
+	text-transform: uppercase;
+	color: #eee;
+}
+.nameInput:hover {
+	background-color: #484848;
+}
+.nameInput:focus {
+	outline: none;
+}
+.colorChoose {
+	height: 120px;
+	width: 300px;
+	background-color: #444;
+	display: block;
+	margin: auto;
+	border-radius: 5px;
+}
+.colorRow {
+	height: 40px;
+	width: 300px;
+	display: flex;
+}
+.colorCircle {
+	height: 30px;
+	width: 30px;
+	border-radius: 25%;
+	margin-top: 5px;
+	margin-left: 25px;
+	cursor: pointer;
+}
+.colorHighlight {
+	height: 24px;
+	width: 24px;
+	border: 3px solid red;
+}
+.mystery {
+	line-height: 30px;
+	text-align: center;
+	background-color: #fff;
+	color: #730974;
+	font-family: 'Roboto', sans-serif;
+	font-size: 28px;
+	font-weight: bold;
+}
+.confirm {
+	height: 50px;
+	padding: 5px;
+	display: block;
+	margin: auto;
+	background-color: #444;
+	width: 300px;
+	border: none;
+	border-radius: 5px;
+	font-size: 30px;
+	color: #eee;
+	font-family: 'Roboto',sans-serif;
+}
+.confirm:hover, #startGame:hover {
+	cursor: pointer;
+	background-color: #484848;
+}
+.confirm:focus, #startGame:focus {
+	outline: none;
+}
+.veil {
+	height: 100%;
+	width: 100%;
+	background-color: #eeea;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 16;
+}
+#botVeil {
+	height: 100%;
+	width: 100%;
+	background-color: #eeea;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 15;
+	border-radius: 0 0 5px 5px;
+}
+.error {
+	height: 20px;
+	width: 100%;
+	text-align: center;
+	color: #c00;
+	font-weight: bold;
+	font-family: 'Roboto',sans-serif;
+	font-size: 16px;
+	line-height: 20px;
+}
+#botLeftCont {
+	height: 100%;
+	width: 65%;
+}
+#botRightCont {
+	height: 100%;
+	width: 35%;
+}
+.selectRow {
+	width: 100%;
+	height: 40px;
+	display: flex;
+	background-color: #444;
+	border-radius: 5px;
+}
+.selectBox {
+	width: 25%;
+	height: 40px;
+	line-height: 40px;
+	font-family: 'Roboto',sans-serif;
+	color: #eee;
+	font-size: 20px;
+	text-align: center;
+}
+.selectBox:hover {
+	background-color: #484848;
+	cursor: pointer;
+}
+.selectBox:nth-of-type(1) {
+	border-radius: 5px 0 0 5px;
+}
+.selectBox:nth-of-type(4) {
+	border-radius: 0 5px 5px 0;
+}
+.selectedBox {
+	width: calc(25% - 4px);
+	height: 36px;
+	line-height: 36px;
+	border: 2px solid red;
+}
+#quarterTime {
+	padding: 5px;
+	width: calc(100% - 15px);
+	margin-left: 5px;
+	background-color: #444;
+	outline: none;
+	border-radius: 5px;
+	border: none;
+	height: 40px;
+	font-family: 'Roboto',sans-serif;
+	color: #eee;
+	font-size: 20px;
+}
+#quarterTime:hover {
+	background-color: #484848;
+}
+#quarterTime:focus {
+	outline: none;
+}
+#startGame {
+	height: 40px;
+	padding: 5px;
+	margin-left: 5px;
+	background-color: #444;
+	width: calc(100% - 15px);
+	border: none;
+	border-radius: 5px;
+	font-size: 20px;
+	color: #eee;
+	font-family: 'Roboto',sans-serif;
+}
+#gameCont {
+	height: 100vh;
+	width: 100vw;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
