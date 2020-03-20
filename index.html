@@ -8,23 +8,23 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="script.js"></script>
 </head>
-<body>
+<body onload="setup()">
 
 <div id="fullDpad"><div class="relConv">
-	<div class="buttonDpad" id="topDpad" onclick="dpadMove(0,-1)"></div>
-	<div class="buttonDpad" id="leftDpad" onclick="dpadMove(-1,0)"></div>
-	<div class="buttonDpad" id="botDpad" onclick=" dpadMove(0,1)"></div>
-	<div class="buttonDpad" id="rightDpad" onclick="dpadMove(1,0)"></div>
+	<div class="buttonDpad" id="topDpad"></div>
+	<div class="buttonDpad" id="leftDpad"></div>
+	<div class="buttonDpad" id="botDpad"></div>
+	<div class="buttonDpad" id="rightDpad"></div>
 </div></div>
 <div class="halfDpad" style="left:10px"><div class="relConv">
-	<div class="buttonDpad" id="topDpad" onclick="dpadMove(0,-1)"></div>
-	<div class="buttonDpad" id="leftDpad" onclick="dpadMove(-1,0)"></div>
-	<div class="buttonDpad" id="botDpad" onclick=" dpadMove(0,1)"></div>
+	<div class="buttonDpad" id="topDpadsplitL"></div>
+	<div class="buttonDpad" id="leftDpadsplit"></div>
+	<div class="buttonDpad" id="botDpadsplitL"></div>
 </div></div>
 <div class="halfDpad" style="right:10px"><div class="relConv">
-	<div class="buttonDpad" id="topDpad" style="left:0" onclick="dpadMove(0,-1)"></div>
-	<div class="buttonDpad" id="botDpad" style="left:0" onclick=" dpadMove(0,1)"></div>
-	<div class="buttonDpad" id="rightDpad" onclick="dpadMove(1,0)"></div>
+	<div class="buttonDpad" id="topDpadsplitR"></div>
+	<div class="buttonDpad" id="botDpadsplitR"></div>
+	<div class="buttonDpad" id="rightDpadsplit"></div>
 </div></div>
 <div class="buttonDpad" id="awayTimeout" ondblclick="timeout('a')">TO</div>
 <div class="buttonDpad" id="homeTimeout" ondblclick="timeout('h')">TO</div>
