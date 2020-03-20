@@ -108,43 +108,43 @@ function chooseControls(opt) {
 	}
 	if (opt !== 0) {
 		//shorten univ
-		univ.style.width = "calc(100vw - 440px)";
+		univ.style.width = "calc(100vw - 360px)";
 	}
 	if (opt == 1) {
 		//to left dpad
-		univ.style.left = "320px";
+		univ.style.left = "260px";
 		full.style.right = "";
 		full.style.left = "10px";
 		awayTo.style.left = "";
 		homeTo.style.left = "";
 		awayTo.style.right = "10px";
 		homeTo.style.right = "10px";
-		awayTo.style.top = "100px";
-		homeTo.style.top = "300px";
+		awayTo.style.top = "10px";
+		homeTo.style.top = "100px";
 	}
 	if (opt == 2) {
 		//to right dpad
-		univ.style.left = "120px";
+		univ.style.left = "100px";
 		full.style.left = "";
 		full.style.right = "10px";
 		awayTo.style.right = "";
 		homeTo.style.right = "";
 		awayTo.style.left = "10px";
 		homeTo.style.left = "10px";
-		awayTo.style.top = "100px";
-		homeTo.style.top = "300px";
+		awayTo.style.top = "10px";
+		homeTo.style.top = "100px";
 	}
 	if (opt == 3) {
 		//to split dpad
 		halves[0].style.display = "block";
 		halves[1].style.display = "block";
-		univ.style.left = "220px";
+		univ.style.left = "180px";
 		awayTo.style.right = "";
 		homeTo.style.left = "";
-		awayTo.style.left = "60px";
-		homeTo.style.right = "60px";
-		awayTo.style.top = "400px";
-		homeTo.style.top = "400px";
+		awayTo.style.left = "50px";
+		homeTo.style.right = "50px";
+		awayTo.style.top = "260px";
+		homeTo.style.top = "260px";
 	}
 }
 
