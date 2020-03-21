@@ -4,13 +4,13 @@ const RUNTIME = 'runtime';
 const PRECACHE_URLS = [
   '/classicfootball/index.html',
   '/classicfootball/styles.css',
-  '/classicfootball/script.js',
+  '/classicfootball/mobilestyles.css',
+  '/classicfootball/code.min.js',
   '/classicfootball/colors.css',
   '/classicfootball/KeyboardControls.png',
   '/classicfootball/LeftControlsMod.png',
   '/classicfootball/RightControlsMod.png',
-  '/classicfootball/fav.png',
-  '/classicfootball/whistle.mp3'
+  '/classicfootball/fav.png'
 ];
 
 self.addEventListener('install', event => {
