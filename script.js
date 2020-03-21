@@ -181,7 +181,7 @@ function toMobile() {
 	document.getElementById("scoring").classList.add("scoringMobile");
 	var list = document.getElementsByClassName("messageBox");
 	for (var i = 0; i < list.length; i++) {
-		list.classList.add("messageBoxMobile");
+		list[i].classList.add("messageBoxMobile");
 	}
 }
 
@@ -193,7 +193,7 @@ function toDesktop() {
 	document.getElementById("scoring").classList.remove("scoringMobile");
 	var list = document.getElementsByClassName("messageBox");
 	for (var i = 0; i < list.length; i++) {
-		list.classList.remove("messageBoxMobile");
+		list[i].classList.remove("messageBoxMobile");
 	}
 }
 
