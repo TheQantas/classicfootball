@@ -141,6 +141,7 @@ function chooseControls(opt) {
 	var home = document.getElementById("homeTimeout");
 	document.getElementById("controlDiagram").src = diagrams[opt] + ".png";
 	if (opt == 0) {
+		toDesktop();
 		univ.style.width = "100vw";
 		univ.style.left = "0px";
 		dpad.style.display = "none";
@@ -178,6 +179,14 @@ function toMobile() {
 	document.getElementById("field").classList.add("fieldMobile");
 	document.getElementById("fieldCont").classList.add("fieldContMobile");
 	document.getElementById("scoring").classList.add("scoringMobile");
+}
+
+function toDesktop() {
+	document.getElementById("scoreboard").classList.remove("scoreboardMobile");
+	document.getElementById("yardLine").classList.remove("yardLineMobile");
+	document.getElementById("field").classList.remove("fieldMobile");
+	document.getElementById("fieldCont").classList.remove("fieldContMobile");
+	document.getElementById("scoring").classList.remove("scoringMobile");
 }
 
 function setDifficulty(level) {
