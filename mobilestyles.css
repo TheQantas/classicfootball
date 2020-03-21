@@ -16,6 +16,12 @@
 .scoreboardMobile > #top > .quarter > .down {
 	font-size: 20px !important;
 }
+.scoreboardMobile > #top > .quarter > .teamScore {
+	width: calc(30% - 10px) !important;
+}
+.scoreboardMobile > #top > .quarter > .teamName {
+	width: calc(70% - 10px) !important;
+}
 .scoreboardMobile > #top > .quarter > div {
 	height: 30px !important;
 	line-height: 30px !important;
