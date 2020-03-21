@@ -178,7 +178,6 @@ function toMobile() {
 	document.getElementById("field").classList.add("fieldMobile");
 	document.getElementById("fieldCont").classList.add("fieldContMobile");
 	document.getElementById("scoring").classList.add("scoringMobile");
-	alert('To Mobile');
 }
 
 function setDifficulty(level) {
