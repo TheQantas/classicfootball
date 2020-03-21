@@ -16,6 +16,10 @@
 .scoreboardMobile > #top > .quarter > .redPlay {
 	font-size: 40px !important;
 }
+.scoreboardMobile > #top > .quarter > div {
+	height: 30px !important;
+	line-height: 30px !important;
+}
 #yardLineMobile {
 	height:	70px !important;
 }
