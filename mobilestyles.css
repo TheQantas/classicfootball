@@ -1,15 +1,34 @@
 .scoreboardMobile {
 	margin-top: 10px !important;
 	margin-left: 10px !important;
-	width: calc(100% - 40px) !important;
+	width: calc(100% - 20px) !important;
 	height: 70px !important;
 }
 .yardLineMobile {
-	height: 50px !important;
+	height: 90px !important;
+}
+.yardLineMobile > .lineCell {
+	line-height: 90px !important;
+	height: 90px !important;
+	font-size: 20px !important;
 }
 .fieldMobile {
 	height: calc(100% - 96px) !important;
 }
 .fieldContMobile {
 	height: calc(100vh - 90px) !important;
+}
+.scoringMobile {
+	left: 10px !important;
+	bottom: 10px !important;
+	width: calc(100% - 20px) !important;
+	height: 70px !important;
+	z-index: 6 !important;
+	font-size: 40px !important;
+}
+.scoreboardMobile > #top > .quarter > #period, .scoreboardMobile > #top > .quarter > .teamScore, .scoreboardMobile > #top > .quarter > #gameClock, .scoreboardMobile > #top > .quarter > #down {
+	font-size: 30px !important;
+}
+.scoreboardMobile > #top > .quarter > .teamName {
+	font-size: 25px !important;
 }
