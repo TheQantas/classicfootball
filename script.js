@@ -147,6 +147,7 @@ function chooseControls(opt) {
 		away.style.display = "none";
 		home.style.display = "none";
 	} else {
+		toMobile();
 		univ.style.width = "calc(100vw - 260px)";
 		dpad.style.display = "block";
 		away.style.display = "block";
@@ -169,6 +170,13 @@ function chooseControls(opt) {
 			univ.style.left = "0px";
 		}
 	}
+}
+
+function toMobile() {
+	document.getElementById("scoreboard").classList.add("scoreboardMobile");
+	document.getElementById("yardLine").classList.add("yardLineMobile");
+	document.getElementById("field").classList.add("fieldMobile");
+	document.getElementById("fieldCont").classList.add("fieldContMobile");
 }
 
 function setDifficulty(level) {
