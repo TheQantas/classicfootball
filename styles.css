@@ -522,6 +522,9 @@ body {
 	user-select: none;
 	border: none;
 }
+.buttonDpad:focus {
+	outline: none;
+}
 #topDpad {
 	top: 0;
 	left: 80px;
