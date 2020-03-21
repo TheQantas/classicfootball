@@ -177,6 +177,7 @@ function toMobile() {
 	document.getElementById("yardLine").classList.add("yardLineMobile");
 	document.getElementById("field").classList.add("fieldMobile");
 	document.getElementById("fieldCont").classList.add("fieldContMobile");
+	alert('To Mobile');
 }
 
 function setDifficulty(level) {
