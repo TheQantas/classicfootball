@@ -1,4 +1,4 @@
-const PRECACHE = 'classicfootball-cache-v5';
+const PRECACHE = 'classicfootball-cache-v6';
 const RUNTIME = 'runtime';
 
 const PRECACHE_URLS = [
