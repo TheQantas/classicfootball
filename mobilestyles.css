@@ -61,12 +61,12 @@
 .messageBoxMobile > .optionCont {
 	height: 50px !important;
 }
-.messageBoxMobile > .optionTitle {
+.messageBoxMobile > .optionCont > .optionTitle {
 	height: 35px !important;
 	line-height: 35px !important;
 	font-size: 30px !important;
 }
-.messageBoxMobile > .optionDesc {
+.messageBoxMobile > .optionCont > .optionDesc {
 	height: 15px !important;
 	line-height: 15px !important;
 	font-size: 10px !important;
