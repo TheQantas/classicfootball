@@ -7,7 +7,7 @@
 .scoreboardMobile > #top, .scoreboardMobile > #top > .quarter {
 	height: 40px !important;
 }
-.scoreboardMobile > #top > .quarter > .teamScore, .scoreboardMobile > #top > .quarter > #playClock {
+.scoreboardMobile > #top > .quarter > .teamName {
 	font-size: 20px !important;
 }
 .scoreboardMobile > #top > .quarter > .size1 {
