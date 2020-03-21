@@ -54,12 +54,12 @@
 	font-size: 30px !important;
 }
 .messageBoxMobile > .promptTont {
-	height: 30px !important;
-	line-height: 30px !important;
-	font-size: 25px !important;
+	height: 25px !important;
+	line-height: 25px !important;
+	font-size: 22px !important;
 }
 .messageBoxMobile > .optionCont {
-	height: 45px !important;
+	height: 50px !important;
 }
 .messageBoxMobile > .optionCont > .optionTitle {
 	height: 30px !important;
@@ -67,7 +67,7 @@
 	font-size: 25px !important;
 }
 .messageBoxMobile > .optionCont > .optionDesc {
-	height: 15px !important;
-	line-height: 15px !important;
-	font-size: 12px !important;
+	height: 20px !important;
+	line-height: 20px !important;
+	font-size: 18px !important;
 }
