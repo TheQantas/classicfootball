@@ -39,3 +39,9 @@
 .fieldMobile {
 	height: calc(100% - 76px) !important;
 }
+.messageBoxMobile {
+	height: 222px;
+	width: 590px;
+	top: calc(50% - 116px);
+	left: calc(50% - 300px);
+}
