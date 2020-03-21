@@ -18,7 +18,7 @@
 	<link rel="stylesheet" href="styles.css"/>
 	<link rel="stylesheet" href="mobilestyles.css"/>
 	<link rel="stylesheet" href="colors.css"/>
-	<script src="code.min.js"></script>
+	<script src="script.js"></script>
 	<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'/>
 	<link rel="manifest" href="manifest.json"/>
 </head>
@@ -104,14 +104,14 @@
 		<div id="botSetup">
 			<div id="botVeil"></div>
 			<div id="botLeftCont">
-				<div style="height:20px;width:100%;"></div>
+				<div style="height:5px;width:100%;"></div>
 				<div class="selectRow">
 					<div class="selectBox boxLevel" onclick="setDifficulty(3)">Easy</div>
 					<div class="selectBox boxLevel selectedBox" onclick="setDifficulty(2)">Medium</div>
 					<div class="selectBox boxLevel" onclick="setDifficulty(1)">Hard</div>
 					<div class="selectBox boxLevel" onclick="setDifficulty(0)">Impossible</div>
 				</div>
-				<div style="height:20px;width:100%;"></div>
+				<div style="height:5px;width:100%;"></div>
 				<div class="selectRow">
 					<div class="selectBox boxControl selectedBox" onclick="chooseControls(0)">Keyboard</div>
 					<div class="selectBox boxControl" onclick="chooseControls(1)">Left D-pad</div>
@@ -119,7 +119,7 @@
 				</div>
 			</div>
 			<div id="botRightCont">
-				<div style="height:20px;width:100%;"></div>
+				<div style="height:5px;width:100%;"></div>
 				<select id="quarterTime">
 					<option value="60">1:00</option>
 					<option value="90">1:30</option>
@@ -131,7 +131,7 @@
 					<option value="420">7:00</option>
 					<option value="540">9:00</option>
 				</select>
-				<div style="height:20px;width:100%;"></div>
+				<div style="height:5px;width:100%;"></div>
 				<button id="startGame" onclick="advance()">NEXT</button>
 			</div>
 		</div>
