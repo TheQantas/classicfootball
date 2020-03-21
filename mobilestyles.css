@@ -80,3 +80,20 @@
 .messageBoxMobile > .rules {
 	font-size: 10px !important;
 }
+.messageBoxMobile > .finalBar {
+	height: 47px !important;
+}
+.messageBoxMobile > .finalName, .messageBoxMobile > .finalScore {
+	height: 37px !important;
+	line-height: 37px !important;
+	padding: 5px !important;
+	width: calc((100% - 20px) * 0.8);
+}
+.messageBoxMobile > .finalName {
+	width: calc((100% - 20px) * 0.8) !important;
+	font-size: 32px !important;
+}
+.messageBoxMobile > .finalName {
+	width: calc((100% - 20px) * 0.2) !important;
+	font-size: 37px !important;
+}
