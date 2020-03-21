@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<script>
+	if ('serviceWorker' in navigator) {
+		window.addEventListener('load', function() {
+			navigator.serviceWorker.register('/classicfootball/worker.js').then(function(registration) {
+				console.log('ServiceWorker registration successful with scope: ', registration.scope);
+			}, function(err) {
+				console.log('ServiceWorker registration failed: ', err);
+			});
+		});
+	}
+	</script>
+	<meta name="theme-color" content="#090"/>
 	<title>Classic Football Game</title>
 	<link rel="shortcut icon" href="fav.png"/>
 	<link rel="stylesheet" href="styles.css"/>
@@ -8,6 +20,7 @@
 	<link rel="stylesheet" href="colors.css"/>
 	<script src="script.js"></script>
 	<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'/>
+	<link rel="manifest" href="manifest.json"/>
 </head>
 <body onload="setup()">
 
@@ -340,7 +353,7 @@
 			<div class="teamInfo" id="playClock" style="background-color:#242424">7</div>
 		</div>
 		<div class="quarter">
-			<div class="teamInfo down blue size1" id="downBox">&#9664; 1st & 10</div><!-- &#9664; -->
+			<div class="teamInfo down blue" id="downBox">&#9664; 1st & 10</div><!-- &#9664; -->
 		</div>
 	</div>
 	<div id="bottom">
@@ -354,8 +367,6 @@
 </div>
 <div id="scoring">2PT CONVERSION</div>
 </div>
-
-<audio id="whistleSound"><source src="whistle.mp3" type="audio/ogg"></audio>
 
 </body>
 </html>
