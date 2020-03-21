@@ -33,9 +33,9 @@
 	line-height: 50px !important;
 	font-size: 40px !important;
 }
-#fieldContMobile {
+.fieldContMobile {
 	height: calc(100vh - 70px) !important;
 }
-#fieldMobile {
+.fieldMobile {
 	height: calc(100% - 81px) !important;
 }
