@@ -1,0 +1,15 @@
+.scoreboardMobile {
+	margin-top: 10px !important;
+	margin-left: 10px !important;
+	width: calc(100% - 40px) !important;
+	height: 70px !important;
+}
+.yardLineMobile {
+	height: 50px !important;
+}
+.fieldMobile {
+	height: calc(100% - 96px) !important;
+}
+.fieldContMobile {
+	height: calc(100vh - 90px) !important;
+}
