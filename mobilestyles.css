@@ -49,25 +49,25 @@
 	left: 0px !important;
 }
 .messageBoxMobile > .congratsTont {
-	height: 30px !important;
-	line-height: 30px !important;
-	font-size: 25px !important;
-}
-.messageBoxMobile > .promptTont {
-	height: 20px !important;
-	line-height: 20px !important;
-	font-size: 16px !important;
-}
-.messageBoxMobile > .optionCont {
-	height: 50px !important;
-}
-.messageBoxMobile > .optionCont > .optionTitle {
 	height: 35px !important;
 	line-height: 35px !important;
 	font-size: 30px !important;
 }
+.messageBoxMobile > .promptTont {
+	height: 30px !important;
+	line-height: 30px !important;
+	font-size: 25px !important;
+}
+.messageBoxMobile > .optionCont {
+	height: 45px !important;
+}
+.messageBoxMobile > .optionCont > .optionTitle {
+	height: 30px !important;
+	line-height: 30px !important;
+	font-size: 25px !important;
+}
 .messageBoxMobile > .optionCont > .optionDesc {
 	height: 15px !important;
 	line-height: 15px !important;
-	font-size: 10px !important;
+	font-size: 12px !important;
 }
