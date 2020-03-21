@@ -71,3 +71,6 @@
 	line-height: 20px !important;
 	font-size: 18px !important;
 }
+.messageBoxMobile > .rules {
+	font-size: 10px !important;
+}
