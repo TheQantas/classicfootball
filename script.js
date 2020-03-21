@@ -179,6 +179,10 @@ function toMobile() {
 	document.getElementById("field").classList.add("fieldMobile");
 	document.getElementById("fieldCont").classList.add("fieldContMobile");
 	document.getElementById("scoring").classList.add("scoringMobile");
+	var list = document.getElementsByClassName("messageBox");
+	for (var i = 0; i < list.length; i++) {
+		list.classList.add("messageBoxMobile");
+	}
 }
 
 function toDesktop() {
@@ -187,6 +191,10 @@ function toDesktop() {
 	document.getElementById("field").classList.remove("fieldMobile");
 	document.getElementById("fieldCont").classList.remove("fieldContMobile");
 	document.getElementById("scoring").classList.remove("scoringMobile");
+	var list = document.getElementsByClassName("messageBox");
+	for (var i = 0; i < list.length; i++) {
+		list.classList.remove("messageBoxMobile");
+	}
 }
 
 function setDifficulty(level) {
