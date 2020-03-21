@@ -139,6 +139,10 @@ function chooseControls(opt) {
 	var dpad = document.getElementById("fullDpad");
 	var away = document.getElementById("awayTimeout");
 	var home = document.getElementById("homeTimeout");
+	var awayCon = document.getElementById("awayControls");
+	var homeCon = document.getElementById("homeControls");
+	var awayMet = document.getElementById("awayMethod");
+	var homeMet = document.getElementById("homeMethod");
 	document.getElementById("controlDiagram").src = diagrams[opt] + ".png";
 	if (opt == 0) {
 		toDesktop();
@@ -147,8 +151,16 @@ function chooseControls(opt) {
 		dpad.style.display = "none";
 		away.style.display = "none";
 		home.style.display = "none";
+		awayCon.innerHTML = "- WASD to move";
+		awayMet.innerHTML = "- T to call a timeout";
+		homeCon.innerHTML = "- IJKL to move";
+		homeMet.innerHTML = "- P to call a timeout";
 	} else {
 		toMobile();
+		awayCon.innerHTML = "- D-pad to move";
+		awayMet.innerHTML = "- Double click TO to call a timeout";
+		homeCon.innerHTML = "- D-pad to move";
+		homeMet.innerHTML = "- Double click TO to call a timeout";
 		univ.style.width = "calc(100vw - 260px)";
 		dpad.style.display = "block";
 		away.style.display = "block";
