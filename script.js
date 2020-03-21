@@ -643,7 +643,6 @@ function fieldGoal() {
 		}
 		
 		if (attempt <= bar) {
-			//console.log('Field Goal');
 			if (poss == "home") {
 				score('h',3,false);
 			} else {
@@ -750,6 +749,7 @@ function changePeriod() {
 		document.getElementById("message").style.display = "none";
 		if (down == 4) {
 			document.getElementById("messFourth").style.display = "none";
+			gameGoing = false;
 		}
 		setTimeout(function() {
 			quarter++;
