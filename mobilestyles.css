@@ -43,8 +43,31 @@
 	height: calc(100% - 76px) !important;
 }
 .messageBoxMobile {
-	height: 262px;
-	width: 100%;
-	top: 20px;
-	left: 0px;
+	height: 262px !important;
+	width: calc(100% - 10px) !important;
+	top: 20px !important;
+	left: 0px !important;
+}
+.messageBoxMobile > .congratsTont {
+	height: 30px !important;
+	line-height: 30px !important;
+	font-size: 25px !important;
+}
+.messageBoxMobile > .promptTont {
+	height: 20px !important;
+	line-height: 20px !important;
+	font-size: 16px !important;
+}
+.messageBoxMobile > .optionCont {
+	height: 50px !important;
+}
+.messageBoxMobile > .optionTitle {
+	height: 35px !important;
+	line-height: 35px !important;
+	font-size: 30px !important;
+}
+.messageBoxMobile > .optionDesc {
+	height: 15px !important;
+	line-height: 15px !important;
+	font-size: 10px !important;
 }
