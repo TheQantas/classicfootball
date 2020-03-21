@@ -547,14 +547,14 @@ body {
 	right: 10px;
 }
 #controlDiagram {
-	width: 80%;
+	width: 70%;
 	display: block;
 	margin: auto;
 	height: auto;
 	border-radius: 5px;
 }
 #explainCont {
-	height: 160px;
+	height: 135px;
 	width: 100%;
 	display: flex;
 }
@@ -572,12 +572,12 @@ body {
 .explainTitle {
 	font-family: inherit;
 	color: inherit;
-	font-size: 40px;
+	font-size: 30px;
 }
 .explainDesc {
 	font-family: inherit;
 	color: inherit;
-	font-size: 28px;
+	font-size: 24px;
 }
 #launchGame {
 	border: none;
