@@ -273,13 +273,13 @@ body {
 	background-color: #eeea;
 }
 #setupCont, #explainControls {
-	height: 390px;
+	height: 340px;
 	width: 790px;
 	background-color: #333;
 	border-radius: 10px;
 	padding: 5px;
 	position: absolute;
-	top: calc(50% - 200px);
+	top: calc(50% - 175px);
 	left: calc(50% - 400px);
 }
 #topSetup {
@@ -288,7 +288,7 @@ body {
 	display: flex;
 }
 #botSetup {
-	height: 140px;
+	height: 90px;
 	width: 100%;
 	display: flex;
 	position: relative;
@@ -454,7 +454,7 @@ body {
 }
 #quarterTime {
 	padding: 5px;
-	width: calc(100% - 15px);
+	width: calc(100% - 5px);
 	margin-left: 5px;
 	background-color: #444;
 	outline: none;
@@ -476,7 +476,7 @@ body {
 	padding: 5px;
 	margin-left: 5px;
 	background-color: #444;
-	width: calc(100% - 15px);
+	width: calc(100% - 5px);
 	border: none;
 	border-radius: 5px;
 	font-size: 20px;
