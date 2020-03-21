@@ -1181,10 +1181,18 @@ function updateDownDisplay() {
 		remain = "GOAL";
 	}
 	if (poss == "home") {
-		elem.innerHTML = decodeEntities("&#9664; " + ordinal(down) + " & " + remain);
+		if (controlStyle == 0) {
+			elem.innerHTML = decodeEntities("&#9664; " + ordinal(down) + " & " + remain);
+		} else {
+			elem.innerHTML = decodeEntities("&#9664;" + ordinal(down) + " & " + remain);
+		}
 		elem.style.backgroundColor = homeColor;
 	} else {
-		elem.innerHTML = decodeEntities(ordinal(down) + " & " + remain + " &#9654;");
+		if (controlStyle == 0) {
+			elem.innerHTML = decodeEntities(ordinal(down) + " & " + remain + " &#9654;");
+		} else {
+			elem.innerHTML = decodeEntities(ordinal(down) + " & " + remain + "&#9654;");
+		}
 		elem.style.backgroundColor = awayColor;
 	}
 }
@@ -1214,9 +1222,17 @@ function coordTocell(x,y) {
 function fieldLine(pos) {
 	var display = 50 - Math.abs(pos);
 	if (pos % 10 == 0 && pos < 0 && pos > -50) {
-		display = "&#9664; " + display;
+		if (controlStyle == 0) {
+			display = "&#9664; " + display;
+		} else {
+			display = "&#9664;" + display;
+		}
 	} else if (pos % 10 == 0 && pos > 0 && pos < 50) {
-		display = display + " &#9654;";
+		if (controlStyle == 0) {
+			display = display + " &#9654;";
+		} else {
+			display = display + "&#9654;";
+		}
 	} else if (pos == -50 || pos == 50) {
 		display = "G";
 	} else if (pos < -50 || pos > 50) {
