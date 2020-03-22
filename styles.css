@@ -492,21 +492,21 @@ body {
 	background-color: #8e8;
 }
 #fullDpad {
-	height: 150px;
-	width: 150px;
-	top: 55px;
+	height: 180px;
+	width: 180px;
+	top: 40px;
 	display: none;
 	position: absolute;
 }
 .buttonDpad {
-	height: 50px;
-	width: 50px;
+	height: 60px;
+	width: 60px;
 	background-color: #333;
 	position: absolute;
 	border-radius: 5%;
-	line-height: 50px;
+	line-height: 60px;
 	text-align: center;
-	font-size: 30px;
+	font-size: 40px;
 	font-family: 'Roboto',sans-serif;
 	color: #eee;
 	-webkit-user-select: none;
@@ -520,18 +520,18 @@ body {
 }
 #topDpad {
 	top: 0;
-	left: 50px;
+	left: 60px;
 }
 #leftDpad {
-	top: 50px;
+	top: 60px;
 	left: 0;
 }
 #botDpad {
 	bottom: 0;
-	left: 50px;
+	left: 60px;
 }
 #rightDpad {
-	top: 50px;
+	top: 60px;
 	right: 0;
 }
 #awayTimeout {
