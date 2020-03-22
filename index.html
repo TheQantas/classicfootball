@@ -40,8 +40,6 @@
 		<div id="topSetup">
 			<div id="splitCont">
 				<div class="veil" style="border-radius:5px 0 0 0;display:none;"></div>
-				<input class="nameInput" placeholder="TEAM NAME (AWAY)" spellcheck="false"/>
-				<div style="height:5px;width:100%;"></div>
 				<div class="colorChoose">
 					<div class="colorRow">
 						<div class="colorCircle maroon" onclick="chooseColor('a',0)"></div>
@@ -66,13 +64,13 @@
 					</div>
 				</div>
 				<div style="height:5px;width:100%;"></div>
+				<input class="nameInput" placeholder="TEAM NAME (AWAY)" spellcheck="false"/>
+				<div style="height:5px;width:100%;"></div>
 				<button class="confirm" onclick="confirmTeam(0)">CONFIRM</button>
 				<div class="error"></div>
 			</div>
 			<div id="splitCont">
 				<div class="veil" style="border-radius:0 5px 0 0"></div>
-				<input class="nameInput" placeholder="TEAM NAME (HOME)" spellcheck="false"/>
-				<div style="height:5px;width:100%;"></div>
 				<div class="colorChoose">
 					<div class="colorRow">
 						<div class="colorCircle maroon" onclick="chooseColor('h',0)"></div>
@@ -96,6 +94,8 @@
 						<div class="colorCircle mystery" onclick="chooseColor('h',Math.floor(Math.random() * 14))">?</div>
 					</div>
 				</div>
+				<div style="height:5px;width:100%;"></div>
+				<input class="nameInput" placeholder="TEAM NAME (HOME)" spellcheck="false"/>
 				<div style="height:5px;width:100%;"></div>
 				<button class="confirm" onclick="confirmTeam(1)">CONFIRM</button>
 				<div class="error"></div>
