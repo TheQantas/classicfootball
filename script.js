@@ -168,18 +168,18 @@ function chooseControls(opt) {
 		if (opt == 1) {
 			away.style.right = "";
 			home.style.right = "";
-			away.style.left = "53px";
-			home.style.left = "157px";
+			away.style.left = "47px";
+			home.style.left = "153px";
 			dpad.style.right = "";
-			dpad.style.left = "55px";
+			dpad.style.left = "40px";
 			univ.style.left = "260px";
 		} else {
 			away.style.left = "";
 			home.style.left = "";
-			away.style.right = "157px";
-			home.style.right = "53px";
+			away.style.right = "153px";
+			home.style.right = "47px";
 			dpad.style.left = "";
-			dpad.style.right = "55px";
+			dpad.style.right = "40px";
 			univ.style.left = "0px";
 		}
 	}
