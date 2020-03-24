@@ -83,17 +83,17 @@
 .messageBoxMobile > .finalBar {
 	height: 47px !important;
 }
-.messageBoxMobile > .finalName, .messageBoxMobile > .finalScore {
+.messageBoxMobile > .finalBar > .finalName, .messageBoxMobile > .finalBar > .finalScore {
 	height: 37px !important;
 	line-height: 37px !important;
 	padding: 5px !important;
 	width: calc((100% - 20px) * 0.8);
 }
-.messageBoxMobile > .finalName {
+.messageBoxMobile > .finalBar > .finalName {
 	width: calc((100% - 20px) * 0.8) !important;
 	font-size: 32px !important;
 }
-.messageBoxMobile > .finalName {
+.messageBoxMobile > .finalBar > .finalScore {
 	width: calc((100% - 20px) * 0.2) !important;
 	font-size: 37px !important;
 }
