@@ -778,7 +778,9 @@ function changePeriod() {
 	if (quarter == 4) {
 		document.getElementById("puntOption").style.display = "none";
 		if (homeScore !== awayScore) {
-			finalScore();
+			setTimeout(function() {
+				finalScore();
+			}, 3000);
 		} else {
 			document.getElementById("message").style.display = "block";
 			document.getElementById("messOvertime").style.display = "block";
