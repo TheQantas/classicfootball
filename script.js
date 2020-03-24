@@ -677,7 +677,8 @@ function fieldGoal() {
 				}
 				gameGoing = true;
 				clearPlayClock();
-				safePlayClock()
+				safePlayClock();
+				updateDownDisplay();
 			}, 3500);
 		} else {
 			downDisplay.innerHTML = "NO GOOD";
