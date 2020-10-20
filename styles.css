@@ -522,6 +522,13 @@ body {
 #scoreTime > span:first-of-type {
   padding-right: 15px;
 }
+.within {
+  font-weight: bold !important;
+  background-color: red !important;
+}
+.within > span {
+  font-size: 1.5em !important;
+}
 @media only screen and (max-width: 1450px) {
   .teamName > span, #playClock > span {
     font-size: 25px;
@@ -647,10 +654,10 @@ body {
   .teamScore > span {
     font-size: 36px;
   }
-  #scoreBoard, #scoreBoard {
+  #scoreBoard, #scoreAni {
     height: 40px;
   }
-  #scoreBoard {
+  #scoreAni {
     line-height: 40px;
   }
   #scoreBoard > div {
