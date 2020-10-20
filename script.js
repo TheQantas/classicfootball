@@ -447,6 +447,7 @@ function mouseup(event) {
 
 function whilemousedown(dir) {
   alert(dir.x+":"+dir.y);
+  alert(gamePrimed);
 	if (gamePrimed == true) {
 		moveRB(rb,{x:dir.x,y:dir.y},offense);
 	}
