@@ -1,501 +1,474 @@
 body {
-	margin: 0;
-	padding: 0;
-	height: 100vh;
-	width: 100vw;
-	background-color: #666;
-}
-#scoreboard {
-	margin-top: 20px;
-	margin-left: 20px;
-	width: calc(100% - 40px);
-	height: 70px;
-	background-color: #333;
-}
-#scoring {
-	position: absolute;
-	left: 20px;
-	bottom: 20px;
-	width: calc(100% - 40px);
-	height: 70px;
-	z-index: 6;
-	letter-spacing: 1px;
-	line-height: 70px;
-	font-family: 'Roboto', sans-serif;
-	text-align: center;
-	font-size: 50px;
-	color: #eee;
-	font-weight: bold;
-	display: none;
-}
-#top {
-	height: 60px;
-	width: 100%;
-	display: flex;
-}
-#bottom {
-	height: 10px;
-	width: 100%;
-	display: flex;
-}
-.quarter {
-	width: 25%;
-	height: 60px;
-	display: flex;
-}
-.teamName {
-	width: calc(80% - 10px);
-	color: #eee;
-	font-size: 35px;
-}
-.teamScore {
-	width: calc(20% - 10px);
-	color: #fff;
-	font-size: 40px;
-}
-.teamInfo {
-	line-height: 50px;
-	padding: 5px;
-	height: 50px;
-	font-family: 'Roboto',sans-serif;
-	text-align: center;
-	font-weight: bold;
-}
-.down {
-	width: calc(100% - 10px);
-	color: #eee;
-	font-size: 40px;
-}
-#period {
-	width: calc(40% - 10px);
-	color: #ffbf27;
-	font-size: 40px;
-}
-#gameClock {
-	width: calc(40% - 10px);
-	color: #eee;
-	font-size: 40px;
-}
-#playClock {
-	width: calc(20% - 10px);
-	color: #ddd;
-	font-size: 35px;
-}
-.timeout {
-	width: calc((25% / 3) - 6px);
-	margin: 3px;
-	height: 4px;
-	background-color: #fff;
-	border-radius: 2px;
-}
-#fieldCont {
-	background-color: #eee;
-	width: 100%;
-	height: calc(100vh - 110px);
-}
-.sideLine {
-	background-color: #fff;
-	height: 3px;
-	width: 100%;
-}
-#yardLine {
-	background-color: #0a0;
-	height: 150px;
-	width: 100%;
-	display: flex;
-}
-#field {
-	height: calc(100% - 156px);
-	width: 100%;
-	background-color: #0a0;
-	display: flex;
-	position: relative;
-}
-.column {
-	width: calc(100% / 12);
-	height: 100%;
-}
-.lineCell {
-	width: calc(100% / 12);
-	height: 150px;
-	line-height: 150px;
-	text-align: center;
-	color: #eee;
-	font-family: 'Roboto', sans-serif;
-	font-size: 30px;
-	font-weight: bold;
-}
-.cell {
-	height: calc((100% - 20px) / 3);
-	width: calc(100% - 10px);
-	margin-top: 5px;
-	margin-left: 5px;
-}
-.redPlay {
-	background-color: #d00 !important;
-}
-#los {
-	background-color: yellow;
-	height: 100%;
-	position: absolute;
-	width: 4px;
-	top: 0;
-	left: calc((100% / 12 * 11) - 2px);
-}
-#ltm {
-	background-color: red;
-	height: 100%;
-	position: absolute;
-	width: 4px;
-	top: 0;
-	left: calc((100% / 12 * 1) - 2px);
-}
-.field { background-color: #090; }
-#message {
-	height: 100%;
-	width: 100%;
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 8;
-	background-color: #eeea;
-	display: none;
-}
-.relConv {
-	height: 100%;
-	width: 100%;
-	position: relative;
-}
-.messageBox {
-	height: 422px;
-	width: 790px;
-	background-color: #333;
-	border-radius: 10px;
-	padding: 5px;
-	position: absolute;
-	top: calc(50% - 216px);
-	left: calc(50% - 400px);
-	display: none;
-}
-.congratsTont {
-	height: 70px;
-	line-height: 70px;
-	color: #ffbf27;
-	font-family: 'Roboto',sans-serif;
-	width: 100%;
-	font-size: 50px;
-}
-.promptTont {
-	height: 60px;
-	line-height: 60px;
-	color: #ccc;
-	font-family: 'Roboto',sans-serif;
-	width: 100%;
-	font-size: 40px;
-}
-.optionCont {
-	height: 80px;
-	width: calc(100% - 14px);
-	padding: 5px;
-	border: 2px solid #ccc;
-	border-radius: 5px;
-	margin-bottom: 5px;
-}
-.optionCont:hover {
-	cursor: pointer;
-	background-color: #444;
-}
-.optionTitle {
-	width: 100%;
-	height: 50px;
-	line-height: 50px;
-	font-family: 'Roboto',sans-serif;
-	color: #ccc;
-	font-size: 40px;
-}
-.optionDesc {
-	width: 100%;
-	height: 30px;
-	line-height: 30px;
-	font-family: 'Roboto',sans-serif;
-	color: #bbb;
-	font-size: 25px;
-}
-.rules {
-	font-family: 'Roboto',sans-serif;
-	color: #bbb;
-	font-size: 20px;
-}
-#final {
-	width: calc(100% - 20px);
-	height: 20px;
-	line-height: 20px;
-	color: #ffbf27;
-	padding: 10px;
-	font-family: 'Roboto', sans-serif;
-	font-size: 20px;
-	font-weight: bold;
-}
-.finalBar {
-	height: 80px;
-	width: 100%;
-	display: flex;
-}
-.finalName {
-	height: 60px;
-	line-height: 60px;
-	width: calc((100% - 40px) * 0.8);
-	color: #eee;
-	padding: 10px;
-	background-color: #008;
-	font-size: 60px;
-	font-family: 'Roboto', sans-serif;
-}
-.finalScore {
-	height: 60px;
-	line-height: 60px;
-	width: calc((100% - 40px) * 0.2);
-	color: #eee;
-	padding: 10px;
-	background-color: #007;
-	font-size: 60px;
-	font-family: 'Roboto', sans-serif;
-	text-align: center;
-	font-weight: bold;
-}
-#initCont {
-	height: 100vh;
-	width: 100vw;
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 12;
-	background-color: #eeea;
-}
-#setupCont, #explainControls {
-	height: 340px;
-	width: 790px;
-	background-color: #333;
-	border-radius: 10px;
-	padding: 5px;
-	position: absolute;
-	top: calc(50% - 175px);
-	left: calc(50% - 400px);
-}
-#topSetup {
-	height: 250px;
-	width: 100%;
-	display: flex;
-}
-#botSetup {
-	height: 90px;
-	width: 100%;
-	display: flex;
-	position: relative;
-}
-#splitCont {
-	width: 50%;
-	height: 100%;
-	position: relative;
-}
-.nameInput {
-	display: block;
-	margin: auto;
-	padding: 5px;
-	background-color: #444;
-	font-family: 'Roboto',sans-serif;
-	height: 40px;
-	width: 290px;
-	font-size: 30px;
-	border-radius: 5px;
-	border: none;
-	text-transform: uppercase;
-	color: #eee;
-}
-.nameInput:hover {
-	background-color: #484848;
-}
-.nameInput:focus {
-	outline: none;
-}
-.colorChoose {
-	height: 120px;
-	width: 300px;
-	background-color: #444;
-	display: block;
-	margin: auto;
-	border-radius: 5px;
-}
-.colorRow {
-	height: 40px;
-	width: 300px;
-	display: flex;
-}
-.colorCircle {
-	height: 30px;
-	width: 30px;
-	border-radius: 25%;
-	margin-top: 5px;
-	margin-left: 25px;
-	cursor: pointer;
-}
-.colorHighlight {
-	height: 24px;
-	width: 24px;
-	border: 3px solid red;
-}
-.mystery {
-	line-height: 30px;
-	text-align: center;
-	background-color: #fff;
-	color: #730974;
-	font-family: 'Roboto', sans-serif;
-	font-size: 28px;
-	font-weight: bold;
-}
-.confirm {
-	height: 50px;
-	padding: 5px;
-	display: block;
-	margin: auto;
-	background-color: #444;
-	width: 300px;
-	border: none;
-	border-radius: 5px;
-	font-size: 30px;
-	color: #eee;
-	font-family: 'Roboto',sans-serif;
-}
-.confirm:hover, #startGame:hover {
-	cursor: pointer;
-	background-color: #484848;
-}
-.confirm:focus, #startGame:focus {
-	outline: none;
-}
-.veil {
-	height: 100%;
-	width: 100%;
-	background-color: #eeea;
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 16;
-}
-#botVeil {
-	height: 100%;
-	width: 100%;
-	background-color: #eeea;
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 15;
-	border-radius: 0 0 5px 5px;
-}
-.error {
-	height: 20px;
-	width: 100%;
-	text-align: center;
-	color: #c00;
-	font-weight: bold;
-	font-family: 'Roboto',sans-serif;
-	font-size: 16px;
-	line-height: 20px;
-}
-#botLeftCont {
-	height: 100%;
-	width: 65%;
-}
-#botRightCont {
-	height: 100%;
-	width: 35%;
-}
-.selectRow {
-	width: 100%;
-	height: 40px;
-	display: flex;
-	background-color: #444;
-	border-radius: 5px;
-}
-.selectBox {
-	height: 40px;
-	line-height: 40px;
-	font-family: 'Roboto',sans-serif;
-	color: #eee;
-	font-size: 20px;
-	text-align: center;
-}
-.boxLevel {
-	width: 25%;
-}
-.boxControl {
-	width: calc(100% /3);
-}
-.selectBox:hover {
-	background-color: #484848;
-	cursor: pointer;
-}
-.selectBox:nth-of-type(1) {
-	border-radius: 5px 0 0 5px;
-}
-.selectBox:last-of-type {
-	border-radius: 0 5px 5px 0;
-}
-.selectedBox {
-	height: 36px;
-	line-height: 36px;
-	border: 2px solid red;
-}
-.selectedBox.boxLevel {
-	width: calc(25% - 4px);
-}
-.selectedBox.boxControl {
-	width: calc((100% / 3) - 4px);
-}
-#quarterTime {
-	padding: 5px;
-	width: calc(100% - 5px);
-	margin-left: 5px;
-	background-color: #444;
-	outline: none;
-	border-radius: 5px;
-	border: none;
-	height: 40px;
-	font-family: 'Roboto',sans-serif;
-	color: #eee;
-	font-size: 20px;
-}
-#quarterTime:hover {
-	background-color: #484848;
-}
-#quarterTime:focus {
-	outline: none;
-}
-#startGame {
-	height: 40px;
-	padding: 5px;
-	margin-left: 5px;
-	background-color: #444;
-	width: calc(100% - 5px);
-	border: none;
-	border-radius: 5px;
-	font-size: 20px;
-	color: #eee;
-	font-family: 'Roboto',sans-serif;
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+  --red: rgb(237,28,36);
+  --red-dark: rgb(190,22,29);
+  --skyblue: rgb(0,162,232);
+  --skyblue-dark: rgb(0,130,186);
+  --orange: rgb(244,98,0);
+  --orange-dark: rgb(195,78,0);
+  --blue: rgb(51,88,200);
+  --blue-dark: rgb(41,70,160);
+  --purple: rgb(120,70,162);
+  --purple-dark: rgb(96,56,130);
+  --black: rgb(20,20,20);
+  --black-dark: rgb(0,0,0);
+  --grey: rgb(128,128,128);
+  --grey-dark: rgb(102,102,102);
+  --maroon: rgb(130,0,21);
+  --maroon-dark: rgb(104,0,17);
+  --fuschia: rgb(219,3,243);
+  --fuschia-dark: rgb(175,2,194);
+  --indigo: rgb(63,17,149);
+  --indigo-dark: rgb(50,14,119);
+  --navy: rgb(0,39,76);
+  --navy-dark: rgb(0,31,61);
+  --maize: rgb(255,203,5);
+  --maize-dark: rgb(217,173,4);
+  --brown: rgb(150,94,63);
+  --brown-dark: rgb(120,75,50);
+  --lime: rgb(168,216,24);
+  --lime-dark: rgb(143,184,20);
+  --aqua: rgb(23,221,102);
+  --aqua-dark: rgb(18,177,82);
+  --raspberry: rgb(185,60,91);
+  --raspberry-dark: rgb(148,48,73);
 }
 #gameCont {
-	height: 100vh;
-	width: 100vw;
-	position: absolute;
-	top: 0;
-	left: 0;
-	background-color: #8e8;
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+#setup {
+  height: 100vh;
+  width: 100%;
+  background-color: #eeea;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#setup > div {
+  width: 50%;
+  padding: 5px;
+  border-radius: 10px;
+  height: auto;
+  min-height: 100px;
+  max-height: calc(100% - 20px);
+  background-color: #444;
+  display: inline-block;
+  overflow-y: auto;
+}
+#teamCont {
+  display: inline-flex;
+  height: auto;
+  width: 100%;
+}
+.teamHalf {
+  width: 50%;
+  height: auto;
+  display: inline-block;
+}
+.teamHalf:first-of-type {
+  margin-right: 5px;
+}
+.title {
+  width: 100%;
+  display: inline-block;
+  font-size: 40px;
+  color: #ccc;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+.description {
+  width: 100%;
+  display: inline-block;
+  font-size: 30px;
+  color: #aaa;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+.teamNameInput, #periodLength, #difficulty, #awayControls, #homeControls {
+  width: calc(100% - 10px);
+  padding: 5px;
+  font-size: 30px;
+  background-color: #666;
+  border-radius: 5px;
+  border: none;
+  color: #ccc;
+  font-family: 'Roboto Condensed', sans-serif;
+  text-transform: uppercase;
+}
+#awayControls, #homeControls {
+  margin-top: 5px;
+}
+.teamNameInput:hover, #periodLength:hover, #difficulty:hover, #awayControls:hover, #homeControls:hover {
+  background-color: #606060 !important;
+}
+.teamNameInput:focus, #periodLength:focus, #difficulty:focus, #awayControls:focus, #homeControls:focus {
+  outline: none;
+}
+#periodLength, #difficulty, #awayControls, #homeControls {
+  width: 100%;
+}
+.teamColorCont {
+  width: 100%;
+  height: 160px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.colorSelect {
+  height: 30px;
+  width: 30px;
+  border-radius: 5px;
+  margin: 5px;
+  flex: 1 0 calc(25% - 10px);
+}
+.colorSelect:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+.colorSelect > svg {
+  height: 24px;
+  width: 24px;
+  padding: 3px;
+  display: none;
+  margin: auto;
+}
+#launchError {
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  background-color: #666;
+  border-radius: 5px;
+  margin-top: 5px;
+  font-family: 'Roboto Condensed', sans-serif;
+  color: red;
+  font-size: 24px;
+  display: none;
+}
+.sideline {
+  height: 5px;
+  width: 100%;
+  background-color: white;
+}
+#field {
+  background-color: rgb(0,127,0);
+  height: calc(100% - 210px);
+  width: 100%;
+  position: relative;
+}
+.fieldSpacer {
+  flex-shrink: 0;
+  height: 10px;
+  width: 100%;
+}
+.fieldRow {
+  height: calc((100% - 40px) / 3);
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+.fieldCell {
+  height: 100%;
+  width: calc((100% / 12));
+  margin-left: 10px;
+  background-color: rgb(20,164,20);
+}
+.fieldCell:last-child {
+  margin-right: 10px;
+}
+#yardlines {
+  height: 100px;
+  width: 100%;
+  background-color: rgb(0,127,0);
+  display: flex;
+}
+.yardLine {
+  width: calc(100% / 12);
+  height: 100px;
+  line-height: 100px;
+  display: flex;
+  justify-content: center;
+  color: white;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 40px;
+}
+.yardLine > img {
+  height: 20px;
+  padding: 40px 10px;
+}
+#scoreCont {
+  width: 100%;
+  height: 100px;
+  background-color: #ccc;
+  position: relative;
+}
+#scoreBoard, #scoreAni {
+  height: 80px;
+  width: calc(100% - 50px);
+  position: absolute;
+  top: 10px;
+  left: 25px;
+  display: flex;
+  transform: skew(-18.4deg);
+}
+#scoreBoard {
+  background: linear-gradient(to right, var(--skyblue) 25%, var(--red) 50%, #333 75%);
+}
+#scoreAni {
+  display: none;
+  z-index: 2;
+  background-color: var(--skyblue);
+  text-align: center;
+  color: white;
+  line-height: 80px;
+}
+#scoreAni > span {
+  display: inline-block;
+  transform: skew(18.4deg);
+  color: white;
+  font-family: 'Roboto', sans-serif;
+  font-size: 45px;
+  letter-spacing: 3px;
+  font-weight: bold;
+}
+.teamName {
+  height: 100%;
+  width: 20%;
+  text-align: center;
+  line-height: 80px;
+}
+.teamScore {
+  height: 100%;
+  width: 8%;
+  min-width: 100px;
+  flex-shrink: 0;
+  text-align: center;
+  line-height: 80px;
+  white-space: nowrap;
+}
+.teamTimeouts {
+  height: 100%;
+  width: 20px;
+  flex-shrink: 0;
+}
+.teamTimeouts > div {
+  margin-top: 5px;
+  height: 20px;
+  width: 10px;
+  margin-left: 5px;
+  background-color: white;
+}
+#scoreTime {
+  width: 260px;
+  height: 100%;
+  line-height: 80px;
+  background-color: #333;
+  display: inline-flex;
+  justify-content: center;
+}
+#playClock {
+  width: 60px;
+  height: 100%;
+  line-height: 80px;
+  background-color: #444;
+  text-align: center;
+}
+#downMarker {
+  width: calc(52% - 360px);
+  height: 100%;
+  line-height: 80px;
+  background-color: var(--skyblue);
+  display: flex;
+  justify-content: center;
+}
+#downMarker > img {
+  display: block;
+  height: 40px;
+  width: auto;
+  transform: skew(18.4deg);
+  padding: 20px;
+}
+#scoreBoard > div > span {
+  display: block;
+  transform: skew(18.4deg);
+  color: white;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+.teamScore > span {
+  font-size: 60px;
+  font-weight: bold;
+  font-family: 'Roboto', sans-serif !important;
+}
+.teamName > span, #playClock > span {
+  font-size: 40px;
+}
+#scoreTime > span, #downMarker > span {
+  font-size: 50px;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: bold;
+}
+.teamName:nth-of-type(1), .teamTimeouts:nth-of-type(2) {
+  background-color: var(--skyblue);
+}
+.teamName:nth-of-type(4), .teamTimeouts:nth-of-type(5) {
+  background-color: var(--red);
+}
+.teamScore:nth-of-type(3) {
+  background-color: var(--skyblue-dark);
+}
+.teamScore:nth-of-type(6) {
+  background-color: var(--red-dark);
+}
+#lineOfScrimm, #lineToConvert {
+  width: 4px;
+  height: 100%;
+  position: absolute;
+  top: 0px;
+  z-index: 3;
+}
+#lineOfScrimm {
+  background-color: yellow;
+  left: calc(((100% - 130px) / 12) + 13px);
+}
+#lineToConvert {
+  background-color: red;
+  left: calc(((100% - 130px) / 12 * 11) + 10px * 11 + 3px);
+}
+#prompt {
+  height: calc(100vh - 100px);
+  width: 100%;
+  background-color: #eeea;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  align-items: center;
+  justify-content: center;
+  display: none;
+}
+#prompt > div {
+  width: 50%;
+  padding: 5px;
+  border-radius: 10px;
+  height: auto;
+  min-height: 100px;
+  background-color: #444;
+  display: inline-block;
+}
+.messageText {
+  color: goldenrod;
+  width: 100%;
+  display: inline-block;
+  font-family: 'Roboto', sans-serif;
+  font-size: 48px;
+  font-weight: bold;
+}
+.promptText, .buttonName {
+  color: #ccc;
+  width: 100%;
+  display: inline-block;
+  font-family: 'Roboto', sans-serif;
+  font-size: 36px;
+}
+.buttonDesc {
+  color: #bbb;
+  width: 100%;
+  display: inline-block;
+  font-family: 'Roboto', sans-serif;
+  font-size: 24px;
+}
+.promptButton {
+  border: 3px solid #ccc;
+  width: 100%;
+  height: 80px;
+  border-radius: 5px;
+  background-color: #444;
+  text-align: left;
+  margin-top: 5px;
+}
+.promptButton:hover {
+  cursor: pointer;
+  background-color: #555;
+}
+.teamFinalCont {
+  height: 80px;
+  width: 100%;
+  color: white;
+  display: flex;
+}
+.teamFinalName {
+  height: 70px;
+  line-height: 70px;
+  padding: 5px;
+  font-size: 40px;
+  width: 100%;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+.teamFinalScore {
+  height: 70px;
+  line-height: 70px;
+  font-size: 60px;
+  width: 120px;
+  padding: 5px;
+  flex-shrink: 0;
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+  font-weight: bold;
+}
+.teamFinalCont:last-of-type > .teamFinalName {
+  border-radius: 0 0 0 5px;
+}
+.teamFinalCont:last-of-type > .teamFinalScore {
+  border-radius: 0 0 5px 0;
+}
+.teamFinalPeriod {
+  background-color: #666;
+  width: calc(100% - 10px);
+  height: 40px;
+  line-height: 40px;
+  font-size: 36px;
+  font-family: 'Roboto', sans-serif;
+  color: gold;
+  padding: 5px;
+  border-radius: 5px 5px 0 0;
+}
+#playAgain, #otBtn, #nextButton, #launchBtn {
+  font-size: 40px;
+  color: #ccc;
+  height: 60px;
+}
+#launchBtn {
+  background-color: #ccc;
+  color: #444;
+  text-align: center;
+  border: none;
+}
+#launchBtn:hover {
+  background-color: goldenrod;
+}
+.gameModeSelected {
+  border: 3px solid goldenrod;
+}
+/*dpad styles*/
+#dpadCont {
+  height: 100vh;
+  width: 260px;
+  display: none;
+  top: 0;
+  background-color: #ccc;
+  position: absolute;
 }
 #fullDpad {
 	height: 180px;
 	width: 180px;
 	top: 40px;
-	display: none;
+  left: 40px;
 	position: absolute;
 }
 .buttonDpad {
@@ -535,78 +508,14 @@ body {
 	right: 0;
 }
 #awayTimeout {
-	top: 260px;
-	right: 10px;
+  top: 260px;
+  left: 40px;
+  position: absolute;
+  background-color: var(--skyblue)
 }
 #homeTimeout {
-	top: 260px;
-	right: 10px;
-}
-#controlDiagram {
-	width: 70%;
-	display: block;
-	margin: auto;
-	height: auto;
-	border-radius: 5px;
-}
-#explainCont {
-	height: 135px;
-	width: 100%;
-	display: flex;
-}
-.explainSplit {
-	width: 50%;
-	height: 100%;
-	font-family: 'Roboto',sans-serif;
-}
-.explainSplit:nth-of-type(1) {
-	color: #3f48cc;
-}
-.explainSplit:nth-of-type(2) {
-	color: #22b14c;
-}
-.explainTitle {
-	font-family: inherit;
-	color: inherit;
-	font-size: 30px;
-}
-.explainDesc {
-	font-family: inherit;
-	color: inherit;
-	font-size: 24px;
-}
-#launchGame {
-	border: none;
-	width: 400px;
-	background-color: #444;
-	font-size: 30px;
-	height: 40px;
-	color: #eee;
-	font-family: 'Roboto',sans-serif;
-	display: block;
-	margin: auto;
-	border-radius: 5px;
-}
-#launchGame:hover {
-	background-color: #484848;
-	cursor: pointer;
-}
-#launchGame:focus {
-	outline: none;
-}
-#countdown {
-	height: 200px;
-	width: 200px;
-	line-height: 200px;
-	top: calc(50vh - 100px);
-	left: calc(50vw - 100px);
-	position: absolute;
-	background-color: #aaa;
-	color: #b00;
-	font-family: 'Roboto',sans-serif;
-	font-size: 120px;
-	display: none;
-	text-align: center;
-	z-index: 16;
-	border-radius: 25%;
+  top: 260px;
+  right: 40px;
+  position: absolute;
+  background-color: var(--red);
 }
