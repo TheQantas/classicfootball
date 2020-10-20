@@ -519,6 +519,9 @@ body {
   position: absolute;
   background-color: var(--red);
 }
+#scoreTime > span:first-of-type {
+  padding-right: 15px;
+}
 @media only screen and (max-width: 1450px) {
   .teamName > span, #playClock > span {
     font-size: 25px;
@@ -612,5 +615,75 @@ body {
   .teamTimeouts > div {
     margin-top: 2px;
     height: 14px;
+  }
+}
+@media only screen and (max-width: 950px) {
+  #scoreBoard {
+    top: 5px;
+  }
+  #scoreCont {
+    height: 60px;
+  }
+  #yardLines {
+    height: 50px;
+  }
+  .yardLine {
+    height: 50px;
+    line-height: 50px;
+    font-size: 24px;
+  }
+  .yardLine > img {
+    padding: 15px 3px;
+  }
+  #field {
+    height: calc(100% - 120px);
+  }
+  .teamScore > span {
+    font-size: 36px;
+  }
+  #scoreBoard {
+    height: 40px;
+  }
+  #scoreBoard > div {
+    height: 40px;
+    line-height: 40px;
+  }
+  #downMarker > img {
+    padding: 8px 3px;
+  }
+  .teamTimeouts > div {
+    margin-top: 1px;
+    height: 12px;
+  }
+  #scoreCont {
+    height: 50px;
+  }
+  #scoreTime > span, #downMarker > span {
+    font-size: 24px;
+  }
+  #downMarker > img {
+    padding: 10px 3px;
+    height: 20px;
+  }
+  .teamName > span {
+    font-size: 20px;
+  }
+  .teamScore > span {
+    font-size: 30px;
+  }
+  #ws {
+    display: none;
+  }
+  #scoreTime > span:first-of-type {
+    padding-right: 8px;
+  }
+  .teamName {
+    width: 15%;
+  }
+  #scoreTime {
+    width: 110px;
+  }
+  #downMarker {
+    width: calc(56% - 250px);
   }
 }
