@@ -5,7 +5,9 @@ const PRECACHE_URLS = [
   '/classicfootball/index.html',
   '/classicfootball/styles.css',
   '/classicfootball/script.js',
-  '/classicfootball/fav.png'
+  '/classicfootball/fav.png',
+  '/classicfootball/left.png',
+  '/classicfootball/right.png'
 ];
 
 self.addEventListener('install', event => {
