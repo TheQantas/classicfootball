@@ -1,372 +1,405 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<script>
-	if ('serviceWorker' in navigator) {
-		window.addEventListener('load', function() {
-			navigator.serviceWorker.register('/classicfootball/worker.js').then(function(registration) {
-				console.log('ServiceWorker registration successful with scope: ', registration.scope);
-			}, function(err) {
-				console.log('ServiceWorker registration failed: ', err);
-			});
-		});
-	}
-	</script>
-	<meta name="theme-color" content="#090"/>
-	<title>Classic Football Game</title>
-	<link rel="shortcut icon" href="fav.png"/>
-	<link rel="stylesheet" href="styles.css"/>
-	<link rel="stylesheet" href="mobilestyles.css"/>
-	<link rel="stylesheet" href="colors.css"/>
-	<script src="script.js"></script>
-	<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'/>
-	<link rel="manifest" href="manifest.json"/>
-</head>
-<body onload="setup()">
-
-<div id="fullDpad"><div class="relConv">
-	<button class="buttonDpad" id="topDpad"></button>
-	<button class="buttonDpad" id="leftDpad"></button>
-	<button class="buttonDpad" id="botDpad"></button>
-	<button class="buttonDpad" id="rightDpad"></button>
-</div></div>
-<button class="buttonDpad" id="awayTimeout" ondblclick="timeout('a')">TO</button>
-<button class="buttonDpad" id="homeTimeout" ondblclick="timeout('h')">TO</button>
-
-<div id="countdown">3</div>
-
-<div id="initCont"><div class="relConv">
-	<div id="setupCont">
-		<div id="topSetup">
-			<div id="splitCont">
-				<div class="veil" style="border-radius:5px 0 0 0;display:none;"></div>
-				<div class="colorChoose">
-					<div class="colorRow">
-						<div class="colorCircle maroon" onclick="chooseColor('a',0)"></div>
-						<div class="colorCircle red" onclick="chooseColor('a',1)"></div>
-						<div class="colorCircle orange" onclick="chooseColor('a',2)"></div>
-						<div class="colorCircle maize" onclick="chooseColor('a',3)"></div>
-						<div class="colorCircle green" onclick="chooseColor('a',4)"></div>
-					</div>
-					<div class="colorRow">
-						<div class="colorCircle lightBlue" onclick="chooseColor('a',5)"></div>
-						<div class="colorCircle blue" onclick="chooseColor('a',6)"></div>
-						<div class="colorCircle indigo" onclick="chooseColor('a',7)"></div>
-						<div class="colorCircle lavender" onclick="chooseColor('a',8)"></div>
-						<div class="colorCircle purple" onclick="chooseColor('a',9)"></div>
-					</div>
-					<div class="colorRow">
-						<div class="colorCircle magenta" onclick="chooseColor('a',10)"></div>
-						<div class="colorCircle brown" onclick="chooseColor('a',11)"></div>
-						<div class="colorCircle grey" onclick="chooseColor('a',12)"></div>
-						<div class="colorCircle black" onclick="chooseColor('a',13)"></div>
-						<div class="colorCircle mystery" onclick="chooseColor('a',Math.floor(Math.random() * 14))">?</div>
-					</div>
-				</div>
-				<div style="height:5px;width:100%;"></div>
-				<input class="nameInput" placeholder="TEAM NAME (AWAY)" spellcheck="false"/>
-				<div style="height:5px;width:100%;"></div>
-				<button class="confirm" onclick="confirmTeam(0)">CONFIRM</button>
-				<div class="error"></div>
-			</div>
-			<div id="splitCont">
-				<div class="veil" style="border-radius:0 5px 0 0"></div>
-				<div class="colorChoose">
-					<div class="colorRow">
-						<div class="colorCircle maroon" onclick="chooseColor('h',0)"></div>
-						<div class="colorCircle red" onclick="chooseColor('h',1)"></div>
-						<div class="colorCircle orange" onclick="chooseColor('h',2)"></div>
-						<div class="colorCircle maize" onclick="chooseColor('h',3)"></div>
-						<div class="colorCircle green" onclick="chooseColor('h',4)"></div>
-					</div>
-					<div class="colorRow">
-						<div class="colorCircle lightBlue" onclick="chooseColor('h',5)"></div>
-						<div class="colorCircle blue" onclick="chooseColor('h',6)"></div>
-						<div class="colorCircle indigo" onclick="chooseColor('h',7)"></div>
-						<div class="colorCircle lavender" onclick="chooseColor('h',8)"></div>
-						<div class="colorCircle purple" onclick="chooseColor('h',9)"></div>
-					</div>
-					<div class="colorRow">
-						<div class="colorCircle magenta" onclick="chooseColor('h',10)"></div>
-						<div class="colorCircle brown" onclick="chooseColor('h',11)"></div>
-						<div class="colorCircle grey" onclick="chooseColor('h',12)"></div>
-						<div class="colorCircle black" onclick="chooseColor('h',13)"></div>
-						<div class="colorCircle mystery" onclick="chooseColor('h',Math.floor(Math.random() * 14))">?</div>
-					</div>
-				</div>
-				<div style="height:5px;width:100%;"></div>
-				<input class="nameInput" placeholder="TEAM NAME (HOME)" spellcheck="false"/>
-				<div style="height:5px;width:100%;"></div>
-				<button class="confirm" onclick="confirmTeam(1)">CONFIRM</button>
-				<div class="error"></div>
-			</div>
-		</div>
-		<div id="botSetup">
-			<div id="botVeil"></div>
-			<div id="botLeftCont">
-				<div style="height:5px;width:100%;"></div>
-				<div class="selectRow">
-					<div class="selectBox boxLevel" onclick="setDifficulty(3)">Easy</div>
-					<div class="selectBox boxLevel selectedBox" onclick="setDifficulty(2)">Medium</div>
-					<div class="selectBox boxLevel" onclick="setDifficulty(1)">Hard</div>
-					<div class="selectBox boxLevel" onclick="setDifficulty(0)">Impossible</div>
-				</div>
-				<div style="height:5px;width:100%;"></div>
-				<div class="selectRow">
-					<div class="selectBox boxControl selectedBox" onclick="chooseControls(0)">Keyboard</div>
-					<div class="selectBox boxControl" onclick="chooseControls(1)">Left D-pad</div>
-					<div class="selectBox boxControl" onclick="chooseControls(2)">Right D-pad</div>
-				</div>
-			</div>
-			<div id="botRightCont">
-				<div style="height:5px;width:100%;"></div>
-				<select id="quarterTime">
-					<option value="60">1:00</option>
-					<option value="90">1:30</option>
-					<option value="120">2:00</option>
-					<option value="150">2:30</option>
-					<option value="180" selected="selected">3:00</option>
-					<option value="240">4:00</option>
-					<option value="300">5:00</option>
-					<option value="420">7:00</option>
-					<option value="540">9:00</option>
-				</select>
-				<div style="height:5px;width:100%;"></div>
-				<button id="startGame" onclick="advance()">NEXT</button>
-			</div>
-		</div>
-	</div>
-	<div id="explainControls" style="display:none">
-		<img id="controlDiagram" src="KeyboardControls.png">
-		<div id="explainCont">
-			<div class="explainSplit">
-				<span class="explainTitle">AWAY TEAM</span><br>
-				<span class="explainDesc" id="awayControls">- WASD to move</span><br>
-				<span class="explainDesc" id="awayMethod">- T to call a timeout</span>
-			</div>
-			<div class="explainSplit">
-				<span class="explainTitle">HOME TEAM</span><br>
-				<span class="explainDesc" id="homeControls">- IJKL to move</span><br>
-				<span class="explainDesc" id="homeMethod">- P to call a timeout</span>
-			</div>
-		</div>
-		<button id="launchGame" onclick="startGame()">Launch Game</button>
-	</div>
-</div></div>
-
-<div id="gameCont">
-<div id="fieldCont">
-	<div class="sideLine"></div>
-	<div id="field">
-		<div class="column">
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-		</div>
-		<div class="column">
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-		</div>
-		<div class="column">
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-		</div>
-		<div class="column">
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-		</div>
-		<div class="column">
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-		</div>
-		<div class="column">
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-		</div>
-		<div class="column">
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-		</div>
-		<div class="column">
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-		</div>
-		<div class="column">
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-		</div>
-		<div class="column">
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-		</div>
-		<div class="column">
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-		</div>
-		<div class="column">
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-			<div class="cell field"></div>
-		</div>
-		<div id="los"></div>
-		<div id="ltm"></div>
-	</div>
-	<div class="sideLine"></div>
-	<div id="yardLine">
-		<div class="lineCell">36</div>
-		<div class="lineCell">35</div>
-		<div class="lineCell">34</div>
-		<div class="lineCell">33</div>
-		<div class="lineCell">32</div>
-		<div class="lineCell">31</div>
-		<div class="lineCell">30 &#9654;</div>
-		<div class="lineCell">29</div>
-		<div class="lineCell">28</div>
-		<div class="lineCell">27</div>
-		<div class="lineCell">26</div>
-		<div class="lineCell">25</div>
-	</div>
-</div>
-
-<div id="message"><div class="relConv">
-	<div class="messageBox" id="messFourth">
-		<div class="congratsTont">It's Fourth Down!</div>
-		<div class="promptTont">Would you like to...</div>
-		<div class="optionCont" id="puntOption" onclick="punt()">
-			<div class="optionTitle">Punt</div>
-			<div class="optionDesc">This pins back your opponent a random amount.</div>
-		</div>
-		<div class="optionCont" id="fieldOption" onclick="fieldGoal()">
-			<div class="optionTitle">Go For a Field Goal</div>
-			<div class="optionDesc" id="fgChance">Your chance is: 0.00%</div>
-		</div>
-		<div class="optionCont" onclick="goforit()">
-			<div class="optionTitle">Go For It</div>
-			<div class="optionDesc">Just hope you convert.</div>
-		</div>
-	</div>
-	<div class="messageBox" id="messTD">
-		<div class="congratsTont">Congrats!</div>
-		<div class="promptTont">Would you like to...</div>
-		<div class="optionCont" id="extraOption" onclick="extrapoint()">
-			<div class="optionTitle">Go For 1</div>
-			<div class="optionDesc">This adds one point to your score.</div>
-		</div>
-		<div class="optionCont" onclick="twoPoint()">
-			<div class="optionTitle">Go For 2</div>
-			<div class="optionDesc" id="fgChance">This is a mini-touchdown from the <b>5</b> yard line.</div>
-		</div>
-	</div>
-	<div class="messageBox" id="messWinner">
-		<div class="congratsTont" id="winnerMessage">Congrats!</div>
-		<div class="promptTont">You won the game!</div>
-		<div id="final">FINAL</div>
-		<div class="finalBar">
-			<div class="finalName">AWAY TEAM</div>
-			<div class="finalScore">10</div>
-		</div>
-		<div class="finalBar">
-			<div class="finalName">HOME TEAM</div>
-			<div class="finalScore">0</div>
-		</div>
-		<div style="height:5px;width:100%"></div>
-		<div class="optionCont" style="height:50px" onclick="location.reload()">
-			<div class="optionTitle">Play Again?</div>
-		</div>
-	</div>
-	
-	<div class="messageBox" id="messOvertime">
-		<div class="congratsTont">We're going to overtime!</div>
-		<div class="promptTont">Here are the rules of overtime.</div>
-		<p class="rules">
-		- Each team will get 2 possessions from the opponent's 25-yard line.<br>
-		- There is no game clock, but there is a play clock.<br>
-		- The home team will start with the ball.<br>
-		- You cannot punt the football.<br>
-		- If after one overtime period the game is still tied, the game goes to double overtime.
-		</p>
-		<div class="optionCont" style="height:50px" onclick="launchOvertime();">
-			<div class="optionTitle">Okay</div>
-		</div>
-	</div>
-	
-	<div class="messageBox" id="messDoubleOvertime">
-		<div class="congratsTont">To double overtime!</div>
-		<div class="promptTont">Here are the rules of double overtime.</div>
-		<p class="rules">
-		- All of the rules of single overtime.<br>
-		- There are no extra points; you must go for 2.
-		</p>
-		<div class="optionCont" style="height:50px" onclick="launchOvertime();">
-			<div class="optionTitle">Okay</div>
-		</div>
-	</div>
-	
-	<div class="messageBox" id="messTripleOvertime">
-		<div class="congratsTont">To triple overtime!</div>
-		<div class="promptTont">Here are the rules of triple overtime.</div>
-		<p class="rules">
-		- All of the rules of single and double overtime.<br>
-		- There are no field goals; you must go for touchdowns.<br>
-		- If the game is still tied after triple overtime, a "coin" will be "flipped" to decide the winner.
-		</p>
-		<div class="optionCont" style="height:50px" onclick="launchOvertime();">
-			<div class="optionTitle">Okay</div>
-		</div>
-	</div>
-	
-	<div class="messageBox" id="messCoinFlip">
-		<div class="congratsTont">Time to flip a coin!</div>
-		<div class="promptTont" id="coinPrompt">What is the away team's call?</div>
-		<div class="optionCont" style="height:50px" onclick="flipCoin(0)">
-			<div class="optionTitle">Heads</div>
-		</div>
-		<div class="optionCont" style="height:50px" onclick="flipCoin(1)">
-			<div class="optionTitle">Tails</div>
-		</div>
-	</div>
-</div></div>
-
-<div id="scoreboard">
-	<div id="top">
-		<div class="quarter">
-			<div class="teamInfo teamName green">AWAY</div>
-			<div class="teamInfo teamScore size1 greens">0</div>
-		</div>
-		<div class="quarter">
-			<div class="teamInfo teamName maroon">HOME</div>
-			<div class="teamInfo teamScore size1 maroons">0</div>
-		</div>
-		<div class="quarter">
-			<div class="teamInfo size1" id="period">1st</div>
-			<div class="teamInfo size1" id="gameClock">5:00</div>
-			<div class="teamInfo" id="playClock" style="background-color:#242424">7</div>
-		</div>
-		<div class="quarter">
-			<div class="teamInfo down blue" id="downBox">1st & 10</div><!-- &#9664; -->
-		</div>
-	</div>
-	<div id="bottom">
-		<div class="timeout"></div>
-		<div class="timeout"></div>
-		<div class="timeout"></div>
-		<div class="timeout"></div>
-		<div class="timeout"></div>
-		<div class="timeout"></div>
-	</div>
-</div>
-<div id="scoring">2PT CONVERSION</div>
-</div>
-
-</body>
+  <head>
+    <script>
+    	if ('serviceWorker' in navigator) {
+    		window.addEventListener('load', function() {
+    			navigator.serviceWorker.register('/classicfootball/worker.js').then(function(registration) {
+    				console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    			}, function(err) {
+    				console.log('ServiceWorker registration failed: ', err);
+    			});
+    		});
+    	}
+  	</script>
+  	<meta name="theme-color" content="#090"/>
+    <link rel="shortcut icon" href="fav.png" />
+    <title>Classic Football Game</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <link rel="manifest" href="manifest.json"/>
+  </head>
+  <body>
+    <div id="setup">
+      <div>
+        <div id="teamCont">
+          <div class="teamHalf">
+            <span class="title">Away Team</span>
+            <input class="teamNameInput" placeholder="TEAM NAME"/>
+            <div class="teamColorCont" data-team="away">
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--raspberry)" data-color="raspberry">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--red)" data-color="red">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--maroon)" data-color="maroon">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--orange)" data-color="orange">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--maize)" data-color="maize">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--lime)" data-color="lime">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--aqua)" data-color="aqua">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--skyblue)" data-color="skyblue">
+                <svg viewBox="0 0 24 24" style="display:block">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--blue)" data-color="blue">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--navy)" data-color="navy">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--indigo)" data-color="indigo">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--purple)" data-color="purple">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--fuschia)" data-color="fuschia">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--brown)" data-color="brown">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--grey)" data-color="grey">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--black)" data-color="black">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+            </div>
+            <select name="difficulty" id="difficulty">
+              <option value="500">Easy</option>
+              <option value="375" selected>Medium</option>
+              <option value="250">Hard</option>
+              <option value="125">Impossbile</option>
+            </select>
+            <select name="awayControls" id="awayControls">
+              <option value="keyboard">WASD</option>
+              <option value="left">Left D-Pad</option>
+              <option value="right">Right D-Pad</option>
+            </select>
+          </div>
+          <div class="teamHalf">
+            <span class="title">Home Team</span>
+            <input class="teamNameInput" placeholder="TEAM NAME"/>
+            <div class="teamColorCont" data-team="home">
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--raspberry)" data-color="raspberry">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--red)" data-color="red">
+                <svg viewBox="0 0 24 24" style="display:block">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--maroon)" data-color="maroon">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--orange)" data-color="orange">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--maize)" data-color="maize">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--lime)" data-color="lime">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--aqua)" data-color="aqua">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--skyblue)" data-color="skyblue">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--blue)" data-color="blue">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--navy)" data-color="navy">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--indigo)" data-color="indigo">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--purple)" data-color="purple">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--fuschia)" data-color="fuschia">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--brown)" data-color="brown">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--grey)" data-color="grey">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+              <div class="colorSelect" onclick="chooseColor(this)"  style="background:var(--black)" data-color="black">
+                <svg viewBox="0 0 24 24">
+                  <path fill="white" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+                </svg>
+              </div>
+            </div>
+            <select name="periodLength" id="periodLength">
+              <option value="60">1:00</option>
+              <option value="90">1:30</option>
+              <option value="120">2:00</option>
+              <option value="150">2:30</option>
+              <option value="180" selected>3:00</option>
+              <option value="240">4:00</option>
+              <option value="300">5:00</option>
+              <option value="420">7:00</option>
+              <option value="540">9:00</option>
+            </select>
+            <select name="homeControls" id="homeControls">
+              <option value="keyboard">IJKL</option>
+              <option value="left">Left D-Pad</option>
+              <option value="right">Right D-Pad</option>
+            </select>
+          </div>
+        </div>
+        <button class="promptButton" id="nextButton" style="text-align:center" onclick="nextScreen()">Next</button>
+        <span id="launchError"></span>
+      </div>
+      <div style="display:none">
+        <span class="messageText">Choose Game Mode</span>
+        <button class="promptButton gameMode gameModeSelected" onclick="changeGameMode(this)" data-mode="classic">
+          <span class="buttonName">Classic</span>
+          <span class="buttonDesc">Just an ordinary game of football</span>
+        </button>
+        <button class="promptButton gameMode" onclick="changeGameMode(this)" data-mode="hardcore">
+          <span class="buttonName">Hardcore</span>
+          <span class="buttonDesc">Only two-point conversions and fourth down attempts</span>
+        </button>
+        <button class="promptButton gameMode" onclick="changeGameMode(this)" data-mode="frenzy">
+          <span class="buttonName">Overtime Frenzy</span>
+          <span class="buttonDesc">An entire game of college overtime rules</span>
+        </button>
+        <button class="promptButton" id="launchBtn" onclick="launch()">Start Game</button>
+      </div>
+    </div>
+    <div id="prompt">
+      <div>
+        <div id="conversionPrompt" style="display:none">
+          <span class="messageText">Congrats!</span>
+          <span class="promptText">Would you like to...</span>
+          <button class="promptButton" id="patButton" onclick="document.getElementById('prompt').style.display='none';updateScore(offense,'pat');touchback();">
+            <span class="buttonName">Go For 1</span>
+            <span class="buttonDesc">This adds one point to your score.</span>
+          </button>
+          <button class="promptButton" onclick="goForTwo()">
+            <span class="buttonName">Go For 2</span>
+            <span class="buttonDesc">This is a mini-touchdown from the <b>5</b> yard line.</span>
+          </button>
+        </div>
+        <div id="fourthDownPrompt" style="display:none">
+          <span class="messageText" id="fourthMessage">It's Fourth Down!</span>
+          <span class="promptText">Would you like to...</span>
+          <button class="promptButton" id="puntButton" onclick="punt()">
+            <span class="buttonName">Punt</span>
+            <span class="buttonDesc">This pins you opponent back a random amount.</span>
+          </button>
+          <button class="promptButton" id="fgButton" onclick="kickFieldGoal()">
+            <span class="buttonName">Go for a Field Goal</span>
+            <span class="buttonDesc" id="fgChance">Your chance is 0.0%.</span>
+          </button>
+          <button class="promptButton" onclick="goForFourth()">
+            <span class="buttonName">Go for It</span>
+            <span class="buttonDesc">Just hope that you convert.</span>
+          </button>
+        </div>
+        <div id="gameFinal" style="display:none">
+          <div class="teamFinalPeriod">Final</div>
+          <div class="teamFinalCont">
+            <div class="teamFinalName">AWAY TEAM</div>
+            <div class="teamFinalScore">0</div>
+          </div>
+          <div class="teamFinalCont">
+            <div class="teamFinalName">HOME TEAM</div>
+            <div class="teamFinalScore">0</div>
+          </div>
+          <button class="promptButton" id="playAgain" onclick="location.reload();return false;">Play Again?</button>
+        </div>
+        <div id="announceOT" style="display:none">
+          <span class="messageText">Overtime</span>
+          <span class="promptText">-College football rules</span><br />
+          <span class="promptText">-Each team will get the ball at their opponent's 25.</span><br />
+          <span class="promptText">-After each pair of possessions, OT will continue if needed.</span><br />
+          <span class="promptText">-You get two timeouts for all OT periods.</span><br />
+          <button class="promptButton" id="otBtn" onclick="document.getElementById('prompt').style.display = 'none';launchOT();">Start OT</button>
+        </div>
+      </div>
+    </div>
+    <div id="dpadCont">
+      <div id="fullDpad">
+        <div class="buttonDpad" id="topDpad"></div>
+        <div class="buttonDpad" id="botDpad"></div>
+        <div class="buttonDpad" id="leftDpad"></div>
+        <div class="buttonDpad" id="rightDpad"></div>
+      </div>
+      <div class="buttonDpad" id="awayTimeout">TO</div>
+      <div class="buttonDpad" id="homeTimeout">TO</div>
+    </div>
+    <div id="gameCont">
+      <div class="sideline"></div>
+      <div id="field">
+        <div id="lineOfScrimm"></div>
+        <div id="lineToConvert"></div>
+        <div class="fieldSpacer"></div>
+        <div class="fieldRow">
+          <div class="fieldCell">0 | (0,0)</div>
+          <div class="fieldCell">1 | (1,0)</div>
+          <div class="fieldCell">2 | (2,0)</div>
+          <div class="fieldCell">3 | (3,0)</div>
+          <div class="fieldCell">4 | (4,0)</div>
+          <div class="fieldCell">5 | (5,0)</div>
+          <div class="fieldCell">6 | (6,0)</div>
+          <div class="fieldCell">7 | (7,0)</div>
+          <div class="fieldCell">8 | (8,0)</div>
+          <div class="fieldCell">9 | (9,0)</div>
+          <div class="fieldCell">10 | (10,0)</div>
+          <div class="fieldCell">11 | (11,0)</div>
+        </div>
+        <div class="fieldSpacer"></div>
+        <div class="fieldRow">
+          <div class="fieldCell">12 | (0,1)</div>
+          <div class="fieldCell">13 | (1,1)</div>
+          <div class="fieldCell">14 | (2,1)</div>
+          <div class="fieldCell">15 | (3,1)</div>
+          <div class="fieldCell">16 | (4,1)</div>
+          <div class="fieldCell">17 | (5,1)</div>
+          <div class="fieldCell">18 | (6,1)</div>
+          <div class="fieldCell">19 | (7,1)</div>
+          <div class="fieldCell">20 | (8,1)</div>
+          <div class="fieldCell">21 | (9,1)</div>
+          <div class="fieldCell">22 | (10,1)</div>
+          <div class="fieldCell">23 | (11,1)</div>
+        </div>
+        <div class="fieldSpacer"></div>
+        <div class="fieldRow">
+          <div class="fieldCell">24 | (0,2)</div>
+          <div class="fieldCell">25 | (1,2)</div>
+          <div class="fieldCell">26 | (2,2)</div>
+          <div class="fieldCell">27 | (3,2)</div>
+          <div class="fieldCell">28 | (4,2)</div>
+          <div class="fieldCell">29 | (5,2)</div>
+          <div class="fieldCell">30 | (6,2)</div>
+          <div class="fieldCell">31 | (7,2)</div>
+          <div class="fieldCell">32 | (8,2)</div>
+          <div class="fieldCell">33 | (9,2)</div>
+          <div class="fieldCell">34 | (10,2)</div>
+          <div class="fieldCell">35 | (11,2)</div>
+        </div>
+        <div class="fieldSpacer"></div>
+      </div>
+      <div class="sideline"></div>
+      <div id="yardlines">
+        <div class="yardLine">25</div>
+        <div class="yardLine">26</div>
+        <div class="yardLine">27</div>
+        <div class="yardLine">28</div>
+        <div class="yardLine">29</div>
+        <div class="yardLine"><img src="left.png"/>30</div>
+        <div class="yardLine">31</div>
+        <div class="yardLine">32</div>
+        <div class="yardLine">33</div>
+        <div class="yardLine">34</div>
+        <div class="yardLine">35</div>
+        <div class="yardLine">36</div>
+      </div>
+      <div id="scoreCont">
+        <div id="scoreBoard">
+          <div class="teamName"><span>AWAY TEAM</span></div>
+          <div class="teamTimeouts">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+          <div class="teamScore" id="awayScore"><span>0</span></div>
+          <div class="teamName"><span>HOME TEAM</span></div>
+          <div class="teamTimeouts">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+          <div class="teamScore" id="homeScore"><span>0</span></div>
+          <div id="scoreTime"><span style="color:goldenrod">1st</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>5:00</span></div>
+          <div id="playClock"><span>7</span></div>
+          <div id="downMarker">
+            <span>1st & 10</span>
+            <img src="right.png" />
+          </div>
+        </div>
+        <div id="scoreAni"><span></span></div>
+      </div>
+    </div>
+  </body>
 </html>
