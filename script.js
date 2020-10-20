@@ -432,7 +432,6 @@ function move(player,dir,team) {
 }
 
 function mousedown(event,dir) {
-  alert(dir.x+":"+dir.y);
 	whilemousedown(dir);
 	if (mousedownID == -1) {
 		mousedownID = setInterval(function() { whilemousedown(dir); }, 100);
@@ -447,14 +446,15 @@ function mouseup(event) {
 }
 
 function whilemousedown(dir) {
-	if (gameGoing == true) {
+  alert(dir.x+":"+dir.y);
+	if (gamePrimed == true) {
 		moveRB(rb,{x:dir.x,y:dir.y},offense);
 	}
 }
 
 function setupDpad() {
   let kids = document.getElementById('fullDpad').children;
-  let dirs = [{x:0,y:-1},{x:0,y:1},{x:1,y:0},{x:-1,y:0}];
+  let dirs = [{x:0,y:-1},{x:0,y:1},{x:-1,y:0},{x:1,y:0}];
 	for (var i = 0; i < kids.length; i++) {
 		(function(i) {
 			kids[i].addEventListener("touchstart",function(){ mousedown(event,dirs[i]); });
