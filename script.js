@@ -1,361 +1,1050 @@
-const colors = ["(109, 16, 20)","(197, 16, 26)","(249, 100, 16)","(255, 203, 5)","(159, 205, 22)","(84, 133, 182)","(0, 39, 76)","(47, 21, 189)","(185, 106, 189)","(117, 42, 117)","(235, 16, 154)","(138, 86, 57)","(136, 136, 136)","(16, 16, 16)"];
-const darkColors = ["(93, 0, 4)","(181, 0, 10)","(233, 84, 0)","(239, 187, 0)","(143, 189, 0)","(68, 117, 166)","(0, 23, 60)","(31, 5, 173)","(169, 90, 173)","(101, 26, 101)","(219, 0, 138)","(122, 70, 41)","(120, 120, 120)","(0, 0, 0)"];
-var down = 1;
-var toGo = 10;
-var lineofScrimm = 25;
-var homeScore = 0;
-var awayScore = 0;
-var poss = "home";
+var awayTeam = {name:"AWAY TEAM",score:0,tol:3,num:0,color:"skyblue",rgb:"rgb(0,162,232)",init:0,controls:'keyboard'};
+var homeTeam = {name:"HOME TEAM",score:0,tol:3,num:1,color:"red",rgb:"rgb(237,28,36)",init:11,controls:'keyboard'};
+var teams = {away:awayTeam,home:homeTeam};
+var gameClock = 180;
+var gameClockReset = 180;
+var gameClockInterval = false;
 var playClock = 7;
-var periodLength = 300;
-var gameClock = 300;
-var updatePlayClock = -1;
-var updateGameClock = -1;
-var audio = false;
-var awayColor = false;
-var homeColor = false;
-const fieldColor = "rgb(0, 153, 0)";
-var gameGoing = false;
+var playClockInterval = false;
+var yardLine = 25;
+var play = {down:1,toGo:10};
+var offense = "away";
+var conversion = false;
+var rb = {x:0,y:1};
+var df = {};
+df["away"] = [{x:3,y:0},{x:3,y:1},{x:3,y:2},{x:6,y:1},{x:9,y:1}];
+df["home"] = [{x:8,y:0},{x:8,y:1},{x:8,y:2},{x:5,y:1},{x:2,y:1}];
+var dfReset = {};
+dfReset["away"] = [{x:3,y:0},{x:3,y:1},{x:3,y:2},{x:6,y:1},{x:9,y:1}];
+dfReset["home"] = [{x:8,y:0},{x:8,y:1},{x:8,y:2},{x:5,y:1},{x:2,y:1}];
+var fieldColor = "rgb(20,164,20)";
+var gamePrimed = false;
 var gameActive = false;
-const awayDefenders = [26,25,24,16,7];
-const homeDefenders = [9,10,11,19,28];
-var awayDefpos = [26,25,24,16,7];
-var homeDefpos = [9,10,11,19,28];
-var rbpos = 34;
-var homeTOL = 3;
-var awayTOL = 3;
-var homeName = "HOME TEAM";
-var awayName = "AWAY TEAM";
-var activeTimeout = false;
-var firstMove = true;
-var amountMoved = 0;
-var moveTackles;
-var adjustment = 0;
-var pat = false;
-var goal = false;
+var defenderInterval = false;
+var defenderFrequency = 500;
 var quarter = 1;
-var overtime = false;
-var defenderInterval = 500;
+var currentTimeout = false;
+var wrap = 0;
+var goalToGo = false;
+var possessions = 0;
+var gameMode = 'classic';
 var mousedownID = -1;
-const dpadElems = ["topDpad","leftDpad","botDpad","rightDpad"];
-const dpadDx = [0,-1,0,1];
-const dpadDy = [-1,0,1,0];
-var controlStyle = 0;
-const diagrams = ["KeyboardControls","LeftControlsMod","RightControlsMod"];
 
-function touchback() {
-	if (poss == "home" && overtime == false) {
-		changePoss(-25);
-	} else if (poss == "away" && overtime == false) {
-		changePoss(25);
-	} else if (poss == "home" && overtime == false) {
-		changePoss(25);
-	} else if (poss == "away" && overtime == false) {
-		changePoss(-25);
-	} else {
-		//console.log('WTF');
-	}
+//setup
+
+function chooseColor(elem) {
+  for (let colors of elem.parentElement.children) {
+    colors.children[0].style.display = 'none';
+  }
+  elem.children[0].style.display = 'block';
+  teams[elem.parentElement.getAttribute('data-team')].rgb = getComputedStyle(elem).backgroundColor.replace(/\s/g, '');
+  teams[elem.parentElement.getAttribute('data-team')].color = elem.getAttribute('data-color');
+  let to = document.getElementById(elem.parentElement.getAttribute('data-team') + "Timeout");
+  to.style.backgroundColor = `var(--${elem.getAttribute('data-color')})`;
 }
 
-function clearPlayClock() {
-	clearInterval(updatePlayClock);
-	updatePlayClock = -1;
+function nextScreen() {
+  var err = document.getElementById('launchError')
+  var nameInp = document.getElementsByClassName('teamNameInput');
+  if (nameInp[0].value.length == 0) {
+    err.style.display = 'inline-block';
+    err.textContent = 'Away Team, please enter a name';
+    return;
+  }
+  if (nameInp[0].value.length > 8) {
+    err.style.display = 'inline-block';
+    err.textContent = 'Away Team, your name must be 8 characters or fewer';
+    return;
+  }
+  if (nameInp[1].value.length == 0) {
+    err.style.display = 'inline-block';
+    err.textContent = 'Home Team, please enter a name';
+    return;
+  }
+  if (nameInp[1].value.length > 8) {
+    err.style.display = 'inline-block';
+    err.textContent = 'Home Team, your name must be 8 characters or fewer';
+    return;
+  }
+  if (nameInp[0].value === nameInp[1].value) {
+    err.style.display = 'inline-block';
+    err.textContent = 'The two teams must have different names';
+    return;
+  }
+  if (teams['away'].rgb == teams['home'].rgb) {
+    err.style.display = 'inline-block';
+    err.textContent = 'The two teams must have different colors';
+    return;
+  }
+  gameClock = Number(document.getElementById('periodLength').value);
+  gameClockReset = Number(document.getElementById('periodLength').value);
+  defenderFrequency = Number(document.getElementById('difficulty').value);
+  document.getElementById('setup').children[0].style.display = 'none';
+  document.getElementById('setup').children[1].style.display = 'block';
 }
 
-function safePlayClock() {
-	if (updatePlayClock == -1) {
-		runPlayClock();
-	}
+function changeGameMode(elem) {
+  var btns = document.getElementsByClassName('gameMode');
+  for (let btn of btns) {
+    if (elem == btn) {
+      btn.classList.add('gameModeSelected');
+    } else {
+      btn.classList.remove('gameModeSelected');
+    }
+  }
+  gameMode = elem.getAttribute('data-mode');
 }
 
-function clearGameClock() {
-	clearInterval(updateGameClock);
-	updateGameClock = -1;
+function launch() {
+  document.getElementById('setup').style.display = 'none';
+  if (gameMode == 'frenzy') {
+    quarter = 5;
+    yardLine = 25;
+    updateYardLines();
+    document.getElementById('prompt').style.display = 'flex';
+    document.getElementById('announceOT').style.display = 'block';
+  } else if (gameMode == 'hardcore') {
+    document.getElementById('puntButton').style.display = 'none';
+    document.getElementById('fgButton').style.display = 'none';
+    document.getElementById('patButton').style.display = 'none';
+  }
+  if (gameMode != 'frenzy') {
+    gamePrimed = true;
+    startGameClock();
+    startPlayClock();
+  }
+  awayTeam.controls = document.getElementById('awayControls').value;
+  homeTeam.controls = document.getElementById('homeControls').value;
+  goToControls(awayTeam.controls);
+  setupDpad();
+  startGame();
 }
 
-function safeGameClock() {
-	if (updateGameClock == -1) {
-		runGameClock();
-	}
+function goToControls(style) {
+  if (style != 'keyboard') {
+    document.getElementById('dpadCont').style.display = 'block';
+    document.getElementById('gameCont').style.width = 'calc(100vw - 260px)';
+    if (style == 'left') {
+      document.getElementById('gameCont').style.left = '260px';
+      document.getElementById('gameCont').style.right = '';
+      document.getElementById('dpadCont').style.left = '0px';
+      document.getElementById('dpadCont').style.right = '';
+    } else {
+      document.getElementById('gameCont').style.right = '260px';
+      document.getElementById('gameCont').style.left = '';
+      document.getElementById('dpadCont').style.right = '0px';
+      document.getElementById('dpadCont').style.left = '';
+    }
+  } else {
+    document.getElementById('dpadCont').style.display = 'none';
+    document.getElementById('gameCont').style.width = '100vw';
+    document.getElementById('gameCont').style.left = '0px';
+    document.getElementById('gameCont').style.right = '';
+  }
 }
 
-function advance() {
-	document.getElementById("setupCont").style.display = "none";
-	document.getElementById("explainControls").style.display = "block";
+//game stuff
+
+function startGame() {
+  resetField();
+  document.getElementById('setup').style.display = 'none';
+  var oppos = ['away','home'];
+  var names = document.getElementsByClassName('teamName');
+  var times = document.getElementsByClassName('teamTimeouts');
+  var score = document.getElementsByClassName('teamScore');
+  var input = document.getElementsByClassName('teamNameInput');
+  var finalRow = document.getElementsByClassName("teamFinalCont");
+  for (let i = 0; i < 2; i++) {
+    teams[oppos[i]].name = input[i].value.toUpperCase();
+    names[i].children[0].textContent = teams[oppos[i]].name;
+    names[i].style.backgroundColor = `var(--${teams[oppos[i]].color})`;
+    times[i].style.backgroundColor = `var(--${teams[oppos[i]].color})`;
+    score[i].style.backgroundColor = `var(--${teams[oppos[i]].color}-dark)`;
+    finalRow[i].children[0].style.backgroundColor = `var(--${teams[oppos[i]].color})`;
+    finalRow[i].children[0].textContent = teams[oppos[i]].name;
+    if (teams[oppos[i]].color != "maize") {
+      finalRow[i].children[1].style.backgroundColor = `var(--${teams[oppos[i]].color}-dark)`;
+    } else {
+      finalRow[i].children[1].style.backgroundColor = 'rgb(152,134,5)';
+    }
+    document.getElementsByClassName('teamFinalName')[i].textContent = teams[oppos[i]].name;
+  }
+  document.getElementById('downMarker').style.backgroundColor = teams['away'].rgb;
+  document.getElementById("scoreTime").children[1].textContent = convertTime(gameClock);
 }
 
-function blink(elem) {
-	var m = 0;
-	var blinking = setInterval(function() {
-		if (m % 2 == 0) {
-			elem.style.backgroundColor = fieldColor;
-		} else if (m % 2 == 1 && poss == "home") {
-			elem.style.backgroundColor = awayColor;
-		} else if (m % 2 == 1 && poss == "away") {
-			elem.style.backgroundColor = homeColor;
-		}
-		if (m == 3) {
-			clearInterval(blinking);
-		}
-		m++;
-	}, 300);
+function callTimeout(team) {
+  if (teams[team].tol > 0 && currentTimeout === false) {
+    currentTimeout = true;
+    stopPlayClock();
+    stopGameClock();
+    teams[team].tol--;
+    document.getElementsByClassName("teamName")[teams[team].num].children[0].textContent = "TIMEOUT";
+    document.getElementsByClassName("teamTimeouts")[teams[team].num].children[teams[team].tol].style.visibility = "hidden";
+    setTimeout(function() {
+      document.getElementsByClassName("teamName")[teams[team].num].children[0].textContent = teams[team].name;
+      startPlayClock();
+      currentTimeout = false;
+    }, 5000);
+  }
 }
 
-function mousedown(event,dx,dy) {
-	whilemousedown(dx,dy);
+function updateScore(team,score) {
+  var points;
+  var fullName;
+  switch(score.toUpperCase()) {
+    case "TD":
+      points = 6;
+      fullName = "TOUCHDOWN";
+      break;
+    case "FG":
+      points = 3;
+      fullName = "FIELD GOAL";
+      break;
+    case "2P":
+      points = 2;
+      fullName = "2PT CONVERSION"
+      break;
+    case "SF":
+      points = 2;
+      fullName = "SAFETY"
+      break;
+    case "DOG":
+      points = 0;
+      fullName = "DELAY OF GAME";
+      break;
+    default:
+      points = 1;
+      fullName = "PAT";
+      break;
+  }
+  teams[team].score += points;
+  if (points === 1) { //no animation for extra point
+    document.getElementById(team + "Score").children[0].textContent = teams[team].score;
+    if (quarter > 4) {
+      console.log('++ extra point');
+      //possessions++;
+      //advanceOT();
+    }
+  } else { //animations for all other scores
+    var div = document.getElementById("scoreAni");
+    if (points !== 0) {
+      div.style.backgroundColor = `var(--${teams[team].color})`;
+    } else {
+      div.style.backgroundColor = "goldenrod";
+      div.children[0].style.color = "#333";
+    }
+    div.children[0].textContent = fullName;
+    div.children[0].style.letterSpacing = "5px";
+    div.style.display = "block";
+    var space = 5;
+    var iter = 1;
+    var scoreAnimation = setInterval(function() {
+      iter++;
+      div.children[0].style.letterSpacing = String(5 + iter * 0.3) + "px";
+      if (iter == 40) {
+        document.getElementById(team + "Score").children[0].textContent = teams[team].score;
+      }
+      if (iter == 80) {
+        clearInterval(scoreAnimation);
+        setTimeout(function() { div.style.display = "none"; div.children[0].style.color = "white"; }, 500);
+      }
+      if (score.toUpperCase() == "DOG" && iter == 80) {
+        resetField();
+        startPlayClock();
+      }
+      if (score.toUpperCase() == "TD" && iter == 80) {
+        document.getElementById("prompt").style.display = "flex";
+        document.getElementById('conversionPrompt').style.display = 'block';
+        document.getElementById('fourthDownPrompt').style.display = 'none';
+        document.getElementById('gameFinal').style.display = 'none';
+        document.getElementById('announceOT').style.display = 'none';
+      }
+      if (score.toUpperCase() == "2P" && iter == 80 && quarter < 5) {
+        conversion = false;
+        touchback();
+      }
+      if (score.toUpperCase() == "FG" && iter == 80 && quarter < 5) {
+        touchback();
+        if (gameClock <= 0) {
+          changeQuarter();
+        }
+      }
+      if (score.toUpperCase() == "SF" && iter == 80) {
+        if (offense == "away") {
+          changePoss(20);
+        } else {
+          changePoss(-20);
+        }
+      }
+      if ((score.toUpperCase() == "2P" || score.toUpperCase() == "FG") && iter == 80) {
+        console.log('++ acutal score');
+        conversion = false;
+        touchback();
+        //advanceOT();
+      }
+    }, 18);
+  }
+}
+
+function updateYardLines() {
+  var index = document.getElementsByClassName("yardLine");
+  for (let i = 0; i < index.length; i++) {
+    index[i].innerHTML = convertYardLine(yardLine + i);
+  }
+}
+
+function resetField() {
+  updateYardLines();
+  document.getElementById("lineOfScrimm").style.display = "block";
+  ltc = document.getElementById('lineToConvert');
+  if (play.toGo > 10) {
+    ltc.style.display = 'none';
+  } else {
+    ltc.style.display = 'block';
+    let distance;
+    if (goalToGo == true && offense == 'away') {
+      distance = 51 - yardLine;
+    } else if (goalToGo == true && offense == 'home') {
+      distance = Math.abs(39 + yardLine);
+    } else if (offense == 'away') {
+      distance = play.toGo + 1;
+    } else {
+      distance = 11 - play.toGo;
+    }
+    ltc.style.left = `calc(((100% - 130px) / 12 * ${distance}) + 10px * ${distance} + 3px)`;
+  }
+  gamePrimed = true;
+  var cells = document.getElementsByClassName("fieldCell");
+  for (let x = 0; x < 12; x++) {
+    for (let y = 0; y < 3; y++) {
+      let cell = cells[convCoordToNum(x,y)];
+      var isDefense = false;
+      for (let pos of dfReset[offense]) {
+        if (pos.x == x && pos.y == y) { //there is a defender
+          isDefense = true;
+          break;
+        }
+      }
+      if (isDefense) {
+        cell.style.backgroundColor = teams[getDefense()].rgb;
+      } else if (rb.x == x && rb.y == y) {
+        cell.style.backgroundColor = teams[offense].rgb;
+      } else {
+        cell.style.backgroundColor = fieldColor;
+      }
+    }
+  }
+  resetPositions();
+}
+
+function move(player,dir,team) {
+  if (!gamePrimed) {
+    return;
+  }
+  if (gameActive == false) {
+    gameActive = true;
+    moveDefenders();
+    stopPlayClock();
+    if (!conversion) {
+      startGameClock();
+    }
+  }
+  var cells = document.getElementsByClassName("fieldCell");
+  var newPos = {};
+  newPos.x = player.x + dir.x;
+  newPos.y = player.y + dir.y;
+  if (newPos.x < 0 && team == offense && team != "away") {
+    newPos.x = 11;
+    yardLine -= 12;
+    wrap += 11;
+    if (play.toGo <= 10 || wrap - play.toGo >= 11) {
+      document.getElementById("lineToConvert").style.display = 'none';
+    } else if (wrap - play.toGo != 0) {
+      let ltc = document.getElementById("lineToConvert");
+      ltc.style.display = 'block';
+      ltc.style.left = `calc(((100%-130px)/12* ${11-play.toGo+wrap}) +10px* ${11-play.toGo+wrap} +3px)`;
+    }
+    document.getElementById("lineOfScrimm").style.display = "none";
+    updateYardLines();
+  } else if (newPos.x < 0 && ((team == offense && team == "away") || team != offense)) {
+    newPos.x = 0;
+  } else if (newPos.x > 11 && team == offense && team != "home") {
+    newPos.x = 0;
+    yardLine += 12;
+    wrap += 11;
+    if (play.toGo <= 10 || wrap - play.toGo >= 11) {
+      document.getElementById("lineToConvert").style.display = 'none';
+    } else if (wrap - play.toGo != 0) {
+      let ltc = document.getElementById("lineToConvert");
+      ltc.style.display = 'block';
+      ltc.style.left = `calc(((100% - 130px) / 12 * ${play.toGo-wrap}) + 10px * ${play.toGo-wrap} + 3px)`;
+    }
+    document.getElementById("lineOfScrimm").style.display = "none";
+    updateYardLines();
+  } else if (newPos.x > 11 && ((team == offense && team == "home") || team != offense)) {
+    newPos.x = 11;
+  }
+  if (newPos.y < 0) {
+    newPos.y = 0;
+  } else if (newPos.y > 2) {
+    newPos.y = 2;
+  }
+  //check for conflicts
+  var newCell = cells[convCoordToNum(newPos.x,newPos.y)];
+  var newSpotColor = getComputedStyle(newCell).backgroundColor.replace(/\s/g, '');
+  if (newSpotColor == teams[team].rgb) { //defender moved into own man
+    cells[convCoordToNum(player.x,player.y)].style.backgroundColor = teams[team].rgb;
+    return; //do nothing more
+  } else if (newSpotColor == teams[getOpponent(team)].rgb) { //rb runs into defense
+    playerTackled();
+    gameActive = false;
+    gamePrimed = false;
+  } else { //no conflicts
+    cells[convCoordToNum(player.x,player.y)].style.backgroundColor = fieldColor;
+    newCell.style.backgroundColor = `var(--${teams[team].color})`;
+    if (offense == "away") {
+      var currentLine = yardLine + getDistance(newPos.x);
+    } else {
+      var currentLine = yardLine - getDistance(newPos.x);
+    }
+    if ((currentLine >= 50 && offense == "away" && team == offense) || (currentLine <= -50 && offense == "home" && team == offense)) {
+      console.log('scored');
+      playEndedAfterScore();
+      if (conversion) {
+        updateScore(offense,'2p');
+      } else {
+        updateScore(offense,'td');
+      }
+    }
+    //update position of players
+    if (team === offense) {
+      rb = newPos; //update rb
+    } else {
+      for (let defend of df[getOpponent(team)]) { //loop through & update defenders
+        if (player.x === defend.x && player.y === defend.y) {
+          defend.x = newPos.x;
+          defend.y = newPos.y;
+        }
+      }
+    }
+  }
+}
+
+function mousedown(event,dir) {
+	whilemousedown(dir);
 	if (mousedownID == -1) {
-		mousedownID = setInterval(function() { whilemousedown(dx,dy); }, 100);
+		mousedownID = setInterval(function() { whilemousedown(dir); }, 100);
 	}
 }
 
-function mouseup(event,dx,dy) {
-	if(mousedownID != -1) {
+function mouseup(event) {
+	if (mousedownID != -1) {
 		clearInterval(mousedownID);
-		mousedownID=-1;
+		mousedownID = -1;
 	}
 }
 
-function whilemousedown(dx,dy) {
+function whilemousedown(dir) {
 	if (gameGoing == true) {
-		moveRB(dx,dy);
+		moveRB(rb,{x:dir.x,y:dir.y},offense);
 	}
 }
 
-function setup() {
-	for (var i = 0; i < dpadElems.length; i++) {
+function setupDpad() {
+  let kids = document.getElementById('fullDpad').children;
+  let dirs = [{x:0,y:-1},{x:0,y:1},{x:1,y:0},{x:-1,y:0}];
+	for (var i = 0; i < kids.length; i++) {
 		(function(i) {
-			document.getElementById(dpadElems[i]).addEventListener("touchstart",function(){ mousedown(event,dpadDx[i],dpadDy[i]); });
-			document.getElementById(dpadElems[i]).addEventListener("touchend",function(){ mouseup(event,dpadDx[i],dpadDy[i]); });
+			kids[i].addEventListener("touchstart",function(){ mousedown(event,dirs[i]); });
+			kids[i].addEventListener("touchend",function(){ mouseup(event,dirs[i]); });
 		}(i));
 	}
 }
 
-function chooseControls(opt) {
-	var list = document.getElementsByClassName("boxControl");
-	list[controlStyle].classList.remove("selectedBox");
-	list[opt].classList.add("selectedBox");
-	controlStyle = opt;
-	var univ = document.getElementById("gameCont");
-	var dpad = document.getElementById("fullDpad");
-	var away = document.getElementById("awayTimeout");
-	var home = document.getElementById("homeTimeout");
-	var awayCon = document.getElementById("awayControls");
-	var homeCon = document.getElementById("homeControls");
-	var awayMet = document.getElementById("awayMethod");
-	var homeMet = document.getElementById("homeMethod");
-	document.getElementById("controlDiagram").src = diagrams[opt] + ".png";
-	if (opt == 0) {
-		toDesktop();
-		univ.style.width = "100vw";
-		univ.style.left = "0px";
-		dpad.style.display = "none";
-		away.style.display = "none";
-		home.style.display = "none";
-		awayCon.innerHTML = "- WASD to move";
-		awayMet.innerHTML = "- T to call a timeout";
-		homeCon.innerHTML = "- IJKL to move";
-		homeMet.innerHTML = "- P to call a timeout";
+function playerTackled() {
+  stopDefenders();
+  stopGameClock();
+  gamePrimed = false;
+  gameActive = false;
+  var counter = 0;
+  var cell = document.getElementsByClassName("fieldCell")[convCoordToNum(rb.x,rb.y)];
+  var animation = setInterval(function() {
+    if (counter % 2 == 0) {
+      cell.style.backgroundColor = fieldColor;
+    } else {
+      cell.style.backgroundColor = teams[offense].rgb;
+    }
+    counter++;
+    if (counter == 4) {
+      clearInterval(animation);
+      playerTackledCallback(rb.x);
+    }
+  },500);
+}
+
+function playerTackledCallback(x) {
+  if (gameClock <= 0) {
+    gameActive = false;
+    gamePrimed = false;
+    changeQuarter();
+  } else {
+    nextPlay();
+  }
+}
+
+function nextPlay() {
+  if (conversion) {
+    console.log('failed 2pt');
+    conversion = false;
+    touchback();
+    return;
+  }
+  var leftToGo;
+  if (offense == "away") {
+    leftToGo = play.toGo - getDistance(rb.x) - wrap * 12/11;
+  } else {
+    leftToGo = play.toGo - getDistance(rb.x) - wrap * 12/11;
+  }
+  if (offense == "away") {
+    yardLine = yardLine + getDistance(rb.x);
+  } else {
+    yardLine = yardLine - getDistance(rb.x);
+  }
+  if (leftToGo <= 0) {
+    play.down = 1;
+    play.toGo = 10;
+  } else if (play.down < 3) {
+    play.down++;
+    play.toGo = leftToGo;
+  } else if (play.down == 3) {
+    play.toGo = leftToGo;
+    play.down = 4;
+    updateDownMarker();
+    stopPlayClock();
+    document.getElementById("prompt").style.display = "flex";
+    document.getElementById('conversionPrompt').style.display = 'none';
+    document.getElementById('fourthDownPrompt').style.display = 'block';
+    document.getElementById('gameFinal').style.display = 'none';
+    document.getElementById('announceOT').style.display = 'none';
+    document.getElementById("fourthMessage").textContent = `It's 4th & ${play.toGo}!`;
+    document.getElementById("fgChance").textContent = `Your chance is ${fieldGoalChance(yardLine)}%.`;
+    return;
+  } else {
+    if (quarter < 5) {
+      if (offense == "away") {
+        changePoss(yardLine + getDistance(rb.x) + wrap);
+      } else {
+        changePoss(yardLine - getDistance(rb.x) - wrap);
+      }
+    } else {
+      //console.log('++ tackled');
+      //possessions++;
+      touchback();
+      //advanceOT();
+    }
+  }
+  if (play.down == 1 && (yardLine - 10 <= -50 || yardLine + 10 >= 50)) {
+    goalToGo = true;
+  }
+  updateDownMarker();
+  startGameClock();
+  startPlayClock();
+  gamePrimed = true;
+  rb.y = 1;
+  rb.x = teams[offense].init;
+  resetField();
+  //DO LAST
+  wrap = 0;
+}
+
+function playEndedAfterScore() {
+  rb.y = 1;
+  rb.x = teams[offense].init;
+  stopGameClock();
+  stopDefenders();
+  gamePrimed = false;
+  gameActive = false;
+  wrap = 0;
+}
+
+function moveDefenders() {
+  if (defenderInterval === false) {
+    var counter = 0;
+    var which = 3;
+    var directions = [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}];
+    defenderInterval = setInterval(function() {
+      if (counter >= 5) {
+        var dir = directions[Math.floor(Math.random() * 4)];
+      } else if (offense == "away") {
+        var dir = {x:-1,y:0};
+      } else {
+        var dir = {x:1,y:0};
+      }
+      var def = df[offense][Math.floor(Math.random() * which)];
+      move(def,dir,getDefense());
+      if (counter == 5) {
+        which = 5;
+      }
+      counter++;
+    }, defenderFrequency);
+  }
+}
+
+function stopDefenders() {
+  clearInterval(defenderInterval);
+  defenderInterval = false;
+}
+
+function updateDownMarker() {
+  if (goalToGo) {
+    var down = `<span>${ordinal(play.down)} & Goal</span>`;
+  } else {
+    var down = `<span>${ordinal(play.down)} & ${play.toGo}</span>`;
+  }
+  var format = down;
+  if (offense == "away" && !conversion) {
+    format = down + "<img src='right.png'>";
+  } else if (!conversion) {
+    format =  "<img src='left.png'>" + down;
+  } else if (offense == "away" && conversion) {
+    format = "<span>2PT ATT</span> <img src='right.png'>";
+  } else {
+    format =  "<img src='left.png'> <span>2PT ATT</span>";
+  }
+  var div = document.getElementById("downMarker");
+  div.style.backgroundColor = teams[offense].rgb;
+  div.innerHTML = format;
+}
+
+function changePoss(yard) {
+  if (quarter > 4) {
+    var advance = advanceOT();
+  }
+  if (quarter > 4 && advance) {
+    console.log('++ poss');
+    //possessions++;
+    if (offense == "away") {
+      yard = -25;
+    } else {
+      yard = 25;
+    }
+  } else if (quarter > 4 && !advance) {
+    return;
+  }
+  goalToGo = false;
+  yardLine = yard;
+  var los = document.getElementById("lineOfScrimm");
+  var ltc = document.getElementById("lineToConvert");
+  if (offense == "away") {
+    offense = "home";
+    los.style.left = `calc(((100% - 130px) / 12 * 11) + 10px * 11 + 3px)`;
+    ltc.style.left = `calc(((100% - 130px) / 12 * 1) + 10px * 1 + 3px)`;
+  } else {
+    offense = "away";
+    ltc.style.left = `calc(((100% - 130px) / 12 * 11) + 10px * 11 + 3px)`;
+    los.style.left = `calc(((100% - 130px) / 12 * 1) + 10px * 1 + 3px)`;
+  }
+  goToControls(teams[offense].controls);
+  play = {down:1,toGo:10};
+  rb.y = 1;
+  rb.x = teams[offense].init;
+  stopPlayClock();
+  stopGameClock();
+  updateDownMarker();
+  updateYardLines();
+  resetField();
+  setTimeout(function() {
+    playClock = 7;
+    startPlayClock();
+    if (quarter < 5) {
+      startGameClock();
+    }
+  }, 500);
+}
+
+function touchback() {
+  if ((offense == "away" && quarter < 5) || (offense == "home" && quarter > 4)) {
+    changePoss(25);
+  } else {
+    changePoss(-25);
+  }
+}
+
+function punt() {
+  document.getElementById("prompt").style.display = "none";
+  gameClock -= 3;
+  var puntLength = Math.floor(Math.random() * 25) + 35;
+  if (offense == "away") {
+    var newYardLine = yardLine + puntLength;
+  } else {
+    var newYardLine = yardLine - puntLength;
+  }
+  if (newYardLine <= -50) {
+    newYardLine = -30;
+  } else if (newYardLine >= 50) {
+    newYardLine = 30;
+  }
+  changePoss(newYardLine);
+  if (gameClock <= 0) {
+    changeQuarter();
+  }
+}
+
+function kickFieldGoal() {
+  document.getElementById("prompt").style.display = "none";
+  var threshold = Number(fieldGoalChance(yardLine));
+  var kick = Math.random() * 100;
+  gameClock -= 3;
+  if (kick <= threshold) {
+    updateScore(offense,'fg');
+  } else {
+    document.getElementById("downMarker").innerHTML = "<span>No Good</span>";
+    setTimeout(function() {
+      changePoss(yardLine);
+      if (gameClock <= 0) {
+        changeQuarter();
+      } else if (quarter > 4) {
+        //possessions++;
+        //advanceOT();
+      }
+    }, 1500);
+  }
+}
+
+function goForTwo() {
+  stopGameClock();
+  var los = document.getElementById("lineOfScrimm");
+  var ltc = document.getElementById("lineToConvert");
+  los.style.display = "block";
+  los.style.left = "calc(((100% - 130px) / 12) + 13px)";
+  ltc.style.display = "block";
+  ltc.style.left = "calc(((100% - 130px) / 2) + 63px)";
+  resetPositions();
+  conversion = true;
+  document.getElementById("prompt").style.display = "none";
+  if (offense == "away") {
+    yardLine = 45;
+  } else {
+    yardLine = -45;
+  }
+  updateYardLines();
+  resetField();
+  updateDownMarker();
+  startPlayClock();
+}
+
+function resetPositions() {
+  rb.x = teams[offense].init;
+  rb.y = 1;
+  for (var i = 0; i < dfReset[offense].length; i++) {
+    df[offense][i].x = dfReset[offense][i].x;
+    df[offense][i].y = dfReset[offense][i].y;
+  }
+}
+
+function goForFourth() {
+  document.getElementById("prompt").style.display = "none";
+  resetPositions();
+  startGameClock();
+  startPlayClock();
+  resetField();
+}
+
+//clock management
+
+function startGameClock() {
+  if (quarter > 4) {
+    return;
+  }
+  document.getElementById("scoreTime").children[1].textContent = convertTime(gameClock);
+  if (gameClockInterval === false) {
+    gameClockInterval = setInterval(function() {
+      gameClock--;
+      document.getElementById("scoreTime").children[1].textContent = convertTime(gameClock);
+      if (gameClock <= 0) {
+        if (!gameActive) {
+          stopPlayClock();
+          changeQuarter();
+        }
+        stopGameClock();
+      }
+    }, 1000);
+  }
+}
+
+function stopGameClock() {
+  clearInterval(gameClockInterval);
+  gameClockInterval = false;
+}
+
+function startPlayClock() {
+  gamePrimed = true;
+  var playCounter = document.getElementById("playClock").children[0];
+  playCounter.textContent = playClock;
+  playCounter.parentElement.style.backgroundColor = "#444";
+  playCounter.style.fontSize = "40px";
+  playCounter.style.fontWeight = "normal";
+  if (playClockInterval === false) {
+    playClockInterval = setInterval(function() {
+      playClock--;
+      playCounter.textContent = playClock;
+      if (playClock == 2) {
+        playCounter.parentElement.style.backgroundColor = "red";
+        playCounter.style.fontSize = "50px";
+        playCounter.style.fontWeight = "bold";
+      }
+      if (playClock <= 0) { //delay of game
+        stopPlayClock();
+        stopGameClock();
+        if ((yardLine - 5 <= -50 && offense == "away") || (yardLine + 5 >= 50 && offense == "home")) {
+          updateScore(getDefense(),'sf');
+        } else {
+          gamePrimed = false;
+          if (offense == "away") {
+            yardLine -= 5;
+          } else {
+            yardLine += 5;
+          }
+          play.toGo += 5;
+          setTimeout(function() {
+            updateYardLines();
+            updateDownMarker();
+            updateScore(offense,'dog');
+          }, 750);
+        }
+      }
+    }, 1000);
+  }
+}
+
+function stopPlayClock() {
+  clearInterval(playClockInterval);
+  playClockInterval = false;
+  playClock = 7;
+}
+
+function changeQuarter() {
+  gamePrimed = false;
+  gameActive = false;
+  quarter++;
+  var div = document.getElementById("scoreTime");
+  if (quarter < 5) {
+    div.children[0].textContent = `End ${ordinal(quarter - 1)}`;
+  } else {
+    if (awayTeam.score == homeTeam.score) {
+      if (quarter == 5) {
+        div.children[0].textContent = "End Reg";
+        document.getElementById('prompt').style.display = 'flex';
+        document.getElementById('conversionPrompt').style.display = 'none';
+        document.getElementById('fourthDownPrompt').style.display = 'none';
+        document.getElementById('gameFinal').style.display = 'none';
+        document.getElementById('announceOT').style.display = 'block';
+      } else {
+        div.children[0].textContent = `End ${ordinal(quarter - 1)}`;
+      }
+    } else {
+      endGame();
+    }
+  }
+  div.children[1].textContent = "";
+  if (quarter % 2 == 0) {
+    setTimeout(function() {
+      gameClock = gameClockReset;
+      div.children[0].textContent = ordinal(quarter);
+      div.children[1].textContent = convertTime(gameClock);
+      startGameClock();
+      startPlayClock();
+      nextPlay();
+    }, 2000);
+  }
+  if (quarter == 3) {
+    setTimeout(function() {
+      if (offense == "home") {
+        offense = "away";
+      }
+      changePoss(25);
+      gameClock = gameClockReset;
+      div.children[0].textContent = ordinal(quarter);
+      div.children[1].textContent = convertTime(gameClock);
+      awayTeam.tol = 3;
+      homeTeam.tol = 3;
+      var timeouts = document.getElementsByClassName('teamTimeouts');
+      for (let div of timeouts) {
+        let kids = div.children;
+        for (let bars of kids) {
+          bars.style.visibility = "visible";
+        }
+      }
+      startGameClock();
+      startPlayClock();
+    }, 2000);
+  }
+}
+
+function endGame() {
+  stopGameClock();
+  document.getElementById('prompt').style.display = 'flex';
+  document.getElementById('prompt').style.height = '100vh';
+  document.getElementById('conversionPrompt').style.display = 'none';
+  document.getElementById('fourthDownPrompt').style.display = 'none';
+  document.getElementById('gameFinal').style.display = 'block';
+  document.getElementById('announceOT').style.display = 'none';
+  var finalRow = document.getElementsByClassName("teamFinalCont");
+  finalRow[0].children[1].textContent = teams['away'].score;
+  finalRow[1].children[1].textContent = teams['home'].score;
+  if (teams['away'].score > teams['home'].score) {
+    finalRow[0].children[1].style.color = 'gold';
+  } else {
+    finalRow[1].children[1].style.color = 'gold';
+  }
+}
+
+function launchOT() {
+  document.getElementById("puntButton").remove();
+  teams['away'].tol = 2;
+  teams['home'].tol = 2;
+  var parents = document.getElementsByClassName('teamTimeouts');
+  for (let div of parents) {
+    for (let i = 0; i < div.children.length; i++) {
+      if (i !== 2) {
+        div.children[i].style.visibility = "visible";
+      } else {
+        div.children[i].style.visibility = "hidden";
+      }
+    }
+  }
+  offense = 'home';
+  touchback();
+  gameClock = 100;
+  possessions = 0;
+  document.getElementById("scoreTime").children[1].style.display = 'none';
+  document.getElementById("scoreTime").children[0].textContent = 'OT';
+}
+
+function advanceOT() {
+  possessions++;
+  console.log('advance:' + possessions);
+  if (possessions % 2 == 0) {
+    if (teams['away'].score == teams['home'].score) {
+      //possessions++;
+      quarter++;
+      if (quarter == 7) {
+        document.getElementById("patButton").remove();
+      } else if (quarter == 9) {
+        document.getElementById("fgButton").remove();
+      }
+      document.getElementById('scoreTime').children[0].textContent = ordinal(quarter);
+      return true;
+    } else {
+      gameActive = false;
+      gamePrimed = false;
+      setTimeout(function() {stopPlayClock();}, 1000);
+      document.getElementsByClassName('teamFinalPeriod')[0].textContent = `Final-${ordinal(quarter)}`;
+      endGame();
+      return false;
+    }
+  } else {
+    return true;
+    //possessions++;
+  }
+}
+
+//resources
+
+function getDistance(x) {
+  if (offense == "away") {
+    return x;
+  } else {
+    return 11 - x;
+  }
+}
+
+function convertTime(time) {
+  var secs = time % 60;
+  var mins = (time - secs) / 60;
+  if (secs < 10 && secs > -1) {
+    secs = "0" + secs;
+  } else if (secs < 0) {
+    secs = "00";
+  }
+  return mins + ":" + secs;
+}
+
+function ordinal(num) {
+  switch (num) {
+    case 1:
+      return "1st";
+    case 2:
+      return "2nd";
+    case 3:
+      return "3rd";
+    case 4:
+      return "4th";
+    case 5:
+      return "OT";
+    default:
+      return `${num - 4}OT`;
+  }
+}
+
+function convertYardLine(yard) {
+  if (offense == "home") {
+    yard -= 11;
+  }
+  if (yard < -50 || yard > 50) {
+    return "-";
+  } else if (yard == 50 || yard == -50) {
+    return "G";
+  } else if (yard === 0) {
+    return "50";
+  } else if (yard % 10 === 0 && yard < 0) { //arrow on left
+    return "<img src='left.png'>" + String(50 - Math.abs(yard));
+  } else if (yard % 10 === 0 && yard > 0) { //arrow on left
+    return String(Math.abs(50 - Math.abs(yard))) + "<img src='right.png'>";
+  } else if (yard > 0) {
+    return String(Math.abs(50 - Math.abs(yard)));
+  } else if (yard < 0) {
+    return String(Math.abs(50 - Math.abs(yard)));
+  } else {
+    return "ERR";
+  }
+}
+
+function convCoordToNum(x,y) {
+  return y * 12 + x;
+}
+
+function convNumToCoord(num) {
+  return {
+    x: num % 12,
+    y: ((num - (num % 12)) / 12)
+  }
+}
+
+function getDefense() {
+  if (offense == "away") {
+    return "home";
+  } else {
+    return "away";
+  }
+}
+
+function getOpponent(team) {
+  if (team == "away") {
+    return "home";
+  } else {
+    return "away";
+  }
+}
+
+function fieldGoalChance(yl) {
+	var yardage;
+	if (offense == "home") {
+		yardage = Math.abs(50 + yl);
 	} else {
-		toMobile();
-		awayCon.innerHTML = "- D-pad to move";
-		awayMet.innerHTML = "- Double click TO to call a timeout";
-		homeCon.innerHTML = "- D-pad to move";
-		homeMet.innerHTML = "- Double click TO to call a timeout";
-		univ.style.width = "calc(100vw - 260px)";
-		dpad.style.display = "block";
-		away.style.display = "block";
-		home.style.display = "block";
-		if (opt == 1) {
-			away.style.right = "";
-			home.style.right = "";
-			away.style.left = "47px";
-			home.style.left = "153px";
-			dpad.style.right = "";
-			dpad.style.left = "40px";
-			univ.style.left = "260px";
-		} else {
-			away.style.left = "";
-			home.style.left = "";
-			away.style.right = "153px";
-			home.style.right = "47px";
-			dpad.style.left = "";
-			dpad.style.right = "40px";
-			univ.style.left = "0px";
-		}
+		yardage = Math.abs(50 - yl);
 	}
-}
-
-function toMobile() {
-	document.getElementById("scoreboard").classList.add("scoreboardMobile");
-	document.getElementById("yardLine").classList.add("yardLineMobile");
-	document.getElementById("field").classList.add("fieldMobile");
-	document.getElementById("fieldCont").classList.add("fieldContMobile");
-	document.getElementById("scoring").classList.add("scoringMobile");
-	var list = document.getElementsByClassName("messageBox");
-	for (var i = 0; i < list.length; i++) {
-		list[i].classList.add("messageBoxMobile");
-	}
-}
-
-function toDesktop() {
-	document.getElementById("scoreboard").classList.remove("scoreboardMobile");
-	document.getElementById("yardLine").classList.remove("yardLineMobile");
-	document.getElementById("field").classList.remove("fieldMobile");
-	document.getElementById("fieldCont").classList.remove("fieldContMobile");
-	document.getElementById("scoring").classList.remove("scoringMobile");
-	var list = document.getElementsByClassName("messageBox");
-	for (var i = 0; i < list.length; i++) {
-		list[i].classList.remove("messageBoxMobile");
-	}
-}
-
-function setDifficulty(level) {
-	var list = document.getElementsByClassName("boxLevel");
-	for (var i = 0; i < list.length; i++) {
-		list[i].classList.remove("selectedBox");
-	}
-	list[3 - level].classList.add("selectedBox");
-	defenderInterval = 250 * level;
-	if (defenderInterval == 0) {
-		defenderInterval = 125;
-	}
-}
-
-function confirmTeam(team) {
-	var inputs = document.getElementsByClassName("nameInput");
-	var errors = document.getElementsByClassName("error");
-	var veils = document.getElementsByClassName("veil");
-	var names = document.getElementsByClassName("teamName");
-	var potName = inputs[team].value;
-	if (potName.length > 8) {
-		errors[team].innerHTML = "Team name cannot be longer than 8 characters.";
-		return;
-	} else if (potName == 0) {
-		errors[team].innerHTML = "Please enter a team name.";
-		return;
-	} else if ((team == 0 && awayColor == false) || (team == 1 && homeColor == false)) {
-		errors[team].innerHTML = "Please choose a color.";
-		return;
-	} else if (homeColor == awayColor) {
-		errors[team].innerHTML = "Please pick a different color.";
-		return;
-	} else if (inputs[0].value.toUpperCase() == inputs[1].value.toUpperCase()) {
-		errors[team].innerHTML = "Please choose a different name.";
-		return;
-	} else {
-		errors[team].innerHTML = "";
-		names[team].innerHTML = inputs[team].value.toUpperCase();
-		if (team == 0) {
-			//set away
-			veils[0].style.display = "block";
-			veils[1].style.display = "none";
-			awayName = inputs[team].value.toUpperCase();
-		} else if (team == 1) {
-			//set home
-			veils[1].style.display = "block";
-			document.getElementById("botVeil").style.display = "none";
-			homeName = inputs[team].value.toUpperCase();
-		}
-	}
-}
-
-function chooseColor(team,color) {
-	var list = document.getElementsByClassName("colorCircle");
-	var scores = document.getElementsByClassName("teamScore");
-	var finals = document.getElementsByClassName("finalScore");
-	var names = document.getElementsByClassName("teamName");
-	var offset;
-	if (team == 'a') {
-		offset = 0;
-		awayColor = "rgb" + colors[color];
-		document.getElementById("awayTimeout").style.backgroundColor = awayColor;
-	} else {
-		offset = 1;
-		homeColor = "rgb" + colors[color];
-		document.getElementById("homeTimeout").style.backgroundColor = homeColor;
-	}
-	scores[offset].style.backgroundColor = "rgb" + darkColors[color];
-	finals[offset].style.backgroundColor = "rgb" + darkColors[color];
-	names[offset].style.backgroundColor = "rgb" + colors[color];
-	for (var i = 0; i < 15; i++) {
-		list[i + offset * 15].classList.remove("colorHighlight");
-	}
-	list[offset * 15 + color].classList.add("colorHighlight");
-}
-
-function launchOvertime() {
-	//console.log('OT');
-	quarter++;
-	down = 1;
-	toGo = 10;
-	document.getElementById("message").style.display = "none";
-	document.getElementById("messOvertime").style.display = "none";
-	document.getElementById("messDoubleOvertime").style.display = "none";
-	document.getElementById("messTripleOvertime").style.display = "none";
-	document.getElementById("period").innerHTML = ordinal(quarter);
-	document.getElementById("gameClock").innerHTML = "";
-	poss = "away";
-	overtime = true;
-	changePoss(-25);
-	gameGoing = true;
-	gameClock = 4;
-	updateDownDisplay();
-	safePlayClock()
-}
-
-function twoPoint() {
-	document.getElementById("message").style.display = "none";
-	document.getElementById("messTD").style.display = "none";
-	document.getElementById("downBox").innerHTML = "2 PT ATT";
-	//console.log('2PT CONVERSION');
-	if (poss == "home") {
-		lineofScrimm = -45;
-	} else {
-		lineofScrimm = 45;
-	}
-	pat = true;
-	resetField();
-	gameGoing = true;
-}
-
-function extrapoint() {
-	document.getElementById("message").style.display = "none";
-	document.getElementById("messTD").style.display = "none";
-	if (poss == "home" && overtime == false) {
-		score('h',1,false);
-	} else if (poss == "away" && overtime == false) {
-		score('a',1,false);
-	} else if (poss == "home" && overtime == true) {
-		score('h',1,false);
-	} else if (poss == "away" && overtime == true) {
-		score('a',1,false);
-	}
-	touchback();
-	gameGoing = true;
-	clearPlayClock();
-	clearGameClock()
-	safeGameClock();
-	safePlayClock()
-	updateDownDisplay();
-}
-
-function goforit() {
-	//console.log('Going for it');
-	document.getElementById("message").style.display = "none";
-	document.getElementById("messFourth").style.display = "none";
-	resetforFourth();
-	safeGameClock();
-	safePlayClock()
-}
-
-function fieldGoalChance(dist) {
-	var yardage
-	if (poss == "home") {
-		yardage = Math.abs(50 + dist);
-	} else {
-		yardage = Math.abs(50 - dist);
-	}
-	//var yardage = (50 - dist);
 	var chance = (-0.04 * Math.pow(yardage,2) + 100);
 	if (chance < 0) {
 		chance = 0;
@@ -363,938 +1052,23 @@ function fieldGoalChance(dist) {
 	return chance.toFixed(1);
 }
 
-function moveDefenders() {
-	//console.log('Moving defenders');
-	moveTackles = setInterval(function() {
-		var list = document.getElementsByClassName("cell");
-		var randomDefender;
-		var direction;
-		if (amountMoved <= 6) {
-			randomDefender = Math.floor(Math.random() * 3);
-			if (poss == "home") {
-				direction = 2;
-			} else {
-				direction = 3;
-			}
-		} else {
-			randomDefender = Math.floor(Math.random() * 5);
-			direction = Math.floor(Math.random() * 4);
-		}
-		var dx;
-		var dy;
-		if (direction == 0) {
-			dx = 0;
-			dy = 1;
-		} else if (direction == 1) {
-			dx = 0;
-			dy = -1;
-		} else if (direction == 2) {
-			dx = 1;
-			dy = 0;
-		} else if (direction == 3) {
-			dx = -1;
-			dy = 0;
-		}
-		var tacklePos;
-		if (poss == "home") {
-			tacklePos = awayDefpos[randomDefender];
-		} else {
-			tacklePos = homeDefpos[randomDefender];
-		}
-		var newXPos = cellTocoord(tacklePos).x + dx;
-		if (newXPos < 0 || newXPos > 11) {
-			newXPos = cellTocoord(tacklePos).x - dx;
-		}
-		var newYPos = cellTocoord(tacklePos).y + dy;
-		if (newYPos < 0 || newYPos > 2) {
-			newYPos = cellTocoord(tacklePos).y - dy;
-		}
-		var moveTo = coordTocell(newXPos,newYPos);
-		var moveTostate = list[moveTo].style.backgroundColor;
-		if ((moveTostate == awayColor && poss == "home") || (moveTostate == homeColor && poss == "away")) {
-			//console.log('Buttfumble');
-		} else if ((moveTostate == awayColor && poss == "away") || (moveTostate == homeColor && poss == "home")) {
-			if (pat == false) {
-				tackled();
-				blink(list[tacklePos]);
-			} else {
-				//console.log('Failed two point Def');
-				blink(list[tacklePos]);
-				firstMove = true;
-				gameGoing = false;
-				clearInterval(moveTackles);
-				document.getElementById("downBox").innerHTML = "NO GOOD";
-				setTimeout(function() {
-					touchback();
-					gameGoing = true;
-					pat = false;
-					clearPlayClock();
-					resetPlayClock();
-					updateDownDisplay();
-				}, 2000);
-			}
-		} else {
-			list[tacklePos].style.backgroundColor = fieldColor;
-			if (poss == "home") {
-				list[moveTo].style.backgroundColor = awayColor;
-				awayDefpos[randomDefender] = moveTo;
-			} else {
-				list[moveTo].style.backgroundColor = homeColor;
-				homeDefpos[randomDefender] = moveTo;
-			}
-		}
-		amountMoved++;
-	}, defenderInterval);
-}
-
-function timeout(team) {
-	if (gameClock > 0) {
-		clearGameClock();
-		clearPlayClock();
-		activeTimeout = true;
-		gameGoing = false;
-		var list = document.getElementsByClassName("timeout");
-		var names = document.getElementsByClassName("teamName");
-		if (team == 'h') {
-			list[2 + homeTOL].style.visibility = "hidden";
-			names[1].innerHTML = "TIMEOUT";
-			setTimeout(function() { names[1].innerHTML = homeName; }, 5000);
-			homeTOL--;
-		} else {
-			list[awayTOL - 1].style.visibility = "hidden";
-			names[0].innerHTML = "TIMEOUT";
-			setTimeout(function() { names[0].innerHTML = awayName; }, 5000);
-			awayTOL--;
-		}
-		setTimeout(function() {
-			playClock = 7;
-			document.getElementById("playClock").innerHTML = "7";
-			safePlayClock()
-			//safeGameClock();
-			gameGoing = true;
-			activeTimeout = false;
-		}, 5000);
-	}
-}
-
-function moveRB(dx,dy) {
-	if (firstMove == true) {
-		clearGameClock()
-		if (overtime == false) {
-			safeGameClock();
-		}
-		moveDefenders();
-		firstMove = false;
-	}
-	gameActive = true;
-	clearPlayClock();
-	var list = document.getElementsByClassName("cell");
-	var xPos = cellTocoord(rbpos).x + dx;
-	if (xPos < 0 && poss == "home") {
-		xPos = 11;
-		lineofScrimm -= 12;
-		adjustment += 12;
-		if (list[coordTocell(11,cellTocoord(rbpos).y)].style.backgroundColor == fieldColor) {
-			updateFieldPos();
-		}
-	} else if (xPos > 11 && poss == "away") {
-		xPos = 0;
-		lineofScrimm += 12;
-		adjustment += 12;
-		if (list[coordTocell(0,cellTocoord(rbpos).y)].style.backgroundColor == fieldColor) {
-			updateFieldPos();
-		}
-	}
-	var yPos;
-	if (cellTocoord(rbpos).y + dy <= 2 && cellTocoord(rbpos).y + dy >= 0) {
-		yPos = cellTocoord(rbpos).y + dy;
-	} else {
-		return;
-	}
-	var moveTo = coordTocell(xPos,yPos);
-	var toCond = list[moveTo].style.backgroundColor;
-	var yardLines = document.getElementsByClassName("lineCell");
-	if (poss == "home" && toCond == fieldColor) {
-		list[moveTo].style.backgroundColor = homeColor;
-		list[rbpos].style.backgroundColor = fieldColor;
-		rbpos = moveTo;
-		if (yardLines[cellTocoord(rbpos).x].innerHTML == "G" && pat == false) {
-			//console.log('TOUCHDOWN');
-			score('h',6,false);
-			rbpos = 34;
-			onScore();
-		} else if (yardLines[cellTocoord(rbpos).x].innerHTML == "G" && pat == true) {
-			c//onsole.log('2PT CONVERSION');
-			score('h',2,false);
-			clearInterval(moveTackles);
-			gameGoing = false;
-			firstMove = true;
-			pat = false;
-			setTimeout(function() {
-				/*if (overtime == false) {
-					changePoss(-25);
-				} else {
-					changePoss(25);
-				}*/
-				touchback();
-				gameGoing = true;
-				clearPlayClock();
-				resetPlayClock();
-				updateDownDisplay();
-			}, 3500);
-		}
-	} else if (poss == "away" && toCond == fieldColor) {
-		list[moveTo].style.backgroundColor = awayColor;
-		list[rbpos].style.backgroundColor = fieldColor;
-		rbpos = moveTo;
-		if (yardLines[cellTocoord(rbpos).x].innerHTML == "G" && pat == false) {
-			//console.log('TOUCHDOWN');
-			score('a',6,false);
-			rbpos = 1;
-			onScore();
-		} else if (yardLines[cellTocoord(rbpos).x].innerHTML == "G" && pat == true) {
-			//console.log('2PT CONVERSION');
-			score('a',2,false);
-			clearInterval(moveTackles);
-			pat = false;
-			gameGoing = false;
-			firstMove = true;
-			setTimeout(function() {
-				/*if (overtime == false) {
-					changePoss(25);
-				} else {
-					changePoss(-25);
-				}*/
-				touchback();
-				gameGoing = true;
-				clearPlayClock();
-				resetPlayClock();
-				updateDownDisplay();
-			}, 3500);
-		}
-	} else {
-		//if tackled
-		if (pat == false) {
-			tackled();
-		} else {
-			//console.log('Failed two point');
-			gameGoing = false;
-			firstMove = true;
-			clearInterval(moveTackles);
-			document.getElementById("downBox").innerHTML = "NO GOOD";
-			setTimeout(function() {
-				touchback();
-				gameGoing = true;
-				pat = false;
-				clearPlayClock();
-				resetPlayClock();
-				updateDownDisplay();
-			}, 2000);
-		}
-		blink(list[moveTo]);
-	}
-}
-
-function onScore() {
-	gameGoing = false;
-	gameActive = false;
-	firstMove = true;
-	awayDefpos = awayDefenders.slice(0);
-	homeDefpos = homeDefenders.slice(0);
-	clearInterval(moveTackles);
-	clearGameClock()
-	amountMoved = 0;
-	adjustment = 0;
-	setTimeout(function() {
-		document.getElementById("message").style.display = "block";
-		document.getElementById("messTD").style.display = "block";
-	}, 3000);
-}
-
-function tackled() {
-	if (poss == "home" && cellTocoord(rbpos).x == 0) {
-		lineofScrimm += 12;
-	} else if (poss == "away" && cellTocoord(rbpos).x == 11) {
-		lineofScrimm -= 12;
-	}
-	gameActive = false;
-	gameGoing = false;
-	firstMove = true;
-	awayDefpos = awayDefenders.slice(0);
-	homeDefpos = homeDefenders.slice(0);
-	clearInterval(moveTackles);
-	amountMoved = 0;
-	if (gameClock > 0) {
-		setTimeout(function() {
-			resetPlay();
-			if (down !== 4) {
-				resetPlayClock();
-			}
-			//adjustment = 0;
-		}, 1500);
-	}
-}
-
-function fieldGoal() {
-	document.getElementById("message").style.display = "none";
-	document.getElementById("messFourth").style.display = "none";
-	var downDisplay = document.getElementById("downBox");
-	downDisplay.innerHTML = String(50 - Math.abs(lineofScrimm) + 17) + " YD ATT";
-	var bar = fieldGoalChance(lineofScrimm);
-	var attempt = (Math.floor(Math.random() * 1000)) / 10;
-	setTimeout(function() {
-		//run 3 seconds off game clock
-		if (overtime == false) {
-			gameClock -= 3;
-			if (gameClock < 3) {
-				gameClock = 0;
-				changePeriod();
-			} else {
-				safeGameClock();
-			}
-		}
-		
-		if (attempt <= bar) {
-			if (poss == "home") {
-				score('h',3,false);
-			} else {
-				score('a',3,false);
-			}
-			setTimeout(function() {
-				touchback();
-				if (poss == "home" && overtime == false) {
-					downDisplay.innerHTML = decodeEntities("1st & 10 &#9654;");
-					downDisplay.style.backgroundColor = awayColor;
-				} else if (poss == "away" && overtime == false) {
-					downDisplay.innerHTML = decodeEntities("&#9664; 1st & 10");
-					downDisplay.style.backgroundColor = homeColor;
-				} else if (poss == "home" && overtime == false) {
-					downDisplay.innerHTML = decodeEntities("1st & 10 &#9654;");
-					downDisplay.style.backgroundColor = awayColor;
-				} else if (poss == "away" && overtime == false) {
-					downDisplay.innerHTML = decodeEntities("&#9664; 1st & 10");
-					downDisplay.style.backgroundColor = homeColor;
-				}
-				gameGoing = true;
-				clearPlayClock();
-				safePlayClock();
-				updateDownDisplay();
-			}, 3500);
-		} else {
-			downDisplay.innerHTML = "NO GOOD";
-			setTimeout(function() {
-				if (poss == "home") {
-					downDisplay.innerHTML = decodeEntities("1st & 10 &#9654;");
-					downDisplay.style.backgroundColor = awayColor;
-				} else {
-					downDisplay.innerHTML = decodeEntities("&#9664; 1st & 10");
-					downDisplay.style.backgroundColor = homeColor;
-				}
-				changePoss(lineofScrimm);
-				gameGoing = true;
-			}, 1000);
-		}
-	}, 1500);
-}
-
-function punt() {
-	document.getElementById("message").style.display = "none";
-	document.getElementById("messFourth").style.display = "none";
-	var distance = Math.floor(Math.random() * 20) + 35;
-	if (poss == "home") {
-		var newPos = lineofScrimm - distance;
-	} else {
-		var newPos = lineofScrimm + distance;
-	}
-	if (newPos <= -50) {
-		newPos = -30;
-	} else if (newPos >= 50) {
-		newPos = 30;
-	}
-	changePoss(newPos);
-	clearGameClock()
-	if (overtime == false) {
-		gameClock -= 3;
-		if (gameClock < 3) {
-			gameClock = 0;
-			changePeriod();
-		} else {
-			safeGameClock();
-		}
-	}
-	gameGoing = true;
-	updateDownDisplay();
-}
-
-function changePeriod() {
-	playClock = 7;
-	firstMove = true;
-	document.getElementById("playClock").innerHTML = "7";
-	document.getElementById("playClock").classList.remove("redPlay");
-	clearPlayClock();
-	var display = document.getElementById("period");
-	var downDisplay = document.getElementById("downBox");
-	document.getElementById("gameClock").innerHTML = "0:00";
-	gameGoing = false;
-	if (quarter == 1 || quarter == 3) {
-		if (quarter == 1) {
-			downDisplay.innerHTML = "END OF Q1";
-		} else {
-			downDisplay.innerHTML = "END OF Q3";
-		}
-		setTimeout(function() {
-			quarter++;
-			document.getElementById("gameClock").innerHTML = toMins(gameClock);
-			display.innerHTML = ordinal(quarter);
-			gameClock = periodLength;
-			clearInterval(runPlayClock);
-			resetPlayClock();
-			if (down !== 4) {
-				safeGameClock();
-			}
-			updateDownDisplay();
-			resetField();
-			gameGoing = true;
-		}, 1000);
-	}
-	if (quarter == 2) {
-		downDisplay.innerHTML = "HALFTIME";
-		document.getElementById("message").style.display = "none";
-		if (down == 4) {
-			document.getElementById("messFourth").style.display = "none";
-			gameGoing = false;
-		}
-		setTimeout(function() {
-			quarter++;
-			display.innerHTML = ordinal(quarter);
-			gameClock = periodLength;
-			gameGoing = true;
-			poss = "home";
-			changePoss(-25);
-			safeGameClock();
-			updateDownDisplay();
-		}, 2000);
-	}
-	if (quarter == 4) {
-		document.getElementById("puntOption").style.display = "none";
-		if (homeScore !== awayScore) {
-			setTimeout(function() {
-				finalScore();
-			}, 3000);
-		} else {
-			document.getElementById("message").style.display = "block";
-			document.getElementById("messOvertime").style.display = "block";
-		}
-	}
-	if (quarter == 5) {
-		document.getElementById("extraOption").style.display = "none";
-		if (homeScore !== awayScore) {
-			finalScore();
-		} else {
-			document.getElementById("message").style.display = "block";
-			document.getElementById("messDoubleOvertime").style.display = "block";
-		}
-	}
-	if (quarter == 6) {
-		document.getElementById("fieldOption").style.display = "none";
-		if (homeScore !== awayScore) {
-			finalScore();
-		} else {
-			document.getElementById("message").style.display = "block";
-			document.getElementById("messTripleOvertime").style.display = "block";
-		}
-	}
-	if (quarter == 7) {
-		if (homeScore !== awayScore) {
-			finalScore();
-		} else {
-			document.getElementById("message").style.display = "block";
-			document.getElementById("messCoinFlip").style.display = "block";
-			document.getElementById("coinPrompt").innerHTML = awayName + ", what is your call?";
-		}
-	}
-}
-
-function flipCoin(call) {
-	var flip = Math.floor(Math.random() * 2);
-	if (flip == call) {
-		awayScore++;
-	} else {
-		homeScore++;
-	}
-	document.getElementById("messCoinFlip").style.display = "none";
-	finalScore();
-}
-
-function finalScore() {
-	document.getElementById("message").style.display = "block";
-	document.getElementById("messWinner").style.display = "block";
-	var scores = document.getElementsByClassName("finalScore");
-	var names = document.getElementsByClassName("finalName");
-	//scores[1].style.backgroundColor = homeColor;
-	//scores[0].style.backgroundColor = awayColor;
-	names[1].style.backgroundColor = homeColor;
-	names[0].style.backgroundColor = awayColor;
-	names[1].innerHTML = homeName;
-	names[0].innerHTML = awayName;
-	scores[1].innerHTML = homeScore;
-	scores[0].innerHTML = awayScore;
-	if (homeScore > awayScore) {
-		document.getElementById("winnerMessage").innerHTML = "Congrats " + homeName + "!";
-		scores[1].style.color = "#ffbf27";
-	} else {
-		document.getElementById("winnerMessage").innerHTML = "Congrats " + awayName + "!";
-		scores[0].style.color = "#ffbf27";
-	}
-	
-}
-
-function resetforFourth() {
-	if (poss == "home") {
-		rbpos = 34;
-	} else {
-		rbpos = 1;
-	}
-	down = 4;
-	gameGoing = true;
-	updateDownDisplay();
-	resetField();
-}
-
-function resetPlay() {
-	var forwardProgress;
-	if (poss == "home") {
-		forwardProgress = (11 - cellTocoord(rbpos).x) + adjustment;
-		lineofScrimm = lineofScrimm - (11 - cellTocoord(rbpos).x);
-	} else {
-		forwardProgress = cellTocoord(rbpos).x + adjustment;
-		lineofScrimm = lineofScrimm + cellTocoord(rbpos).x;
-	}
-	adjustment = 0;
-	toGo = toGo - forwardProgress;
-	if (toGo <= 0) {
-		toGo = 10;
-		down = 1;
-		if ((poss == "home" && lineofScrimm <= -40) || (poss == "away" && lineofScrimm >= 40)) {
-			goal = true;
-			var goalLine;
-			if (poss == "home") {
-				goalLine = -50;
-			} else {
-				goalLine = 50;
-			}
-			toGo = Math.abs(goalLine - lineofScrimm);
-		}
-	} else {
-		down++;
-	}
-	if (down == 4) {
-		document.getElementById("message").style.display = "block";
-		document.getElementById("messFourth").style.display = "block";
-		document.getElementById("fgChance").innerHTML = "Your chance is: " + fieldGoalChance(lineofScrimm) + "%";
-		clearGameClock()
-		clearPlayClock();
-	} else if (down > 4) {
-		//console.log('Turnover on Downs');
-		changePoss(lineofScrimm);
-		gameGoing = true;
-	} else {
-		document.getElementById("playClock").innerHTML = "7";
-		playClock = 7;
-		gameGoing = true;
-		if (poss == "home") {
-			rbpos = 34;
-		} else {
-			rbpos = 1;
-		}
-	}
-	if (down !== 4) {
-		updateDownDisplay();
-		resetField();
-	}
-}
-
-function changePoss(line) {
-	if (overtime == true) {
-		gameClock--;
-		if (gameClock == 0) {
-			changePeriod();
-		}
-	}
-	toGo = 10;
-	down = 1;
-	goal = false;
-	var scrim = document.getElementById("los");
-	var toMak = document.getElementById("ltm");
-	if (poss == "home") {
-		poss = "away";
-		scrim.style.left = "calc((100% / 12 * 1) - 2px)";
-		toMak.style.left = "calc((100% / 12 * 11) - 2px)";
-		rbpos = 1;
-	} else {
-		poss = "home";
-		scrim.style.left = "calc((100% / 12 * 11) - 2px)";
-		toMak.style.left = "calc((100% / 12 * 1) - 2px)";
-		rbpos = 34;
-	}
-	lineofScrimm = line;
-	resetField();
-}
-
-function resetField() {
-	//resets colors
-	var list = document.getElementsByClassName("cell");
-	for (var j = 0; j < list.length; j++) {
-		list[j].style.backgroundColor = fieldColor;
-	}
-	if (poss == 'home') {
-		for (var i = 0; i < homeDefenders.length; i++) {
-			list[awayDefenders[i]].style.backgroundColor = awayColor;
-		}
-		list[34].style.backgroundColor = homeColor;
-	} else if (poss == 'away') {
-		for (var k = 0; k < homeDefenders.length; k++) {
-			list[homeDefenders[k]].style.backgroundColor = homeColor;
-		}
-		list[1].style.backgroundColor = awayColor;
-	}
-	if (poss == "home") {
-		rbpos = 34;
-	} else {
-		rbpos = 1;
-	}
-	updateFieldPos();
-}
-
-function startGame() {
-	document.getElementById("initCont").style.display = "none";
-	var signal = document.getElementById("countdown");
-	signal.style.display = "block";
-	periodLength = document.getElementById('quarterTime').value;
-	gameClock = periodLength;
-	document.getElementById("gameClock").innerHTML = toMins(gameClock);
-	resetField();
-	updateDownDisplay();
-	var counter = 3;
-	var counting = setInterval(function() {
-		counter--;
-		signal.innerHTML = counter;
-		if (counter == 0) {
-			signal.innerHTML = "GO";
-		} else if (counter == -1) {
-			safeGameClock();
-			safePlayClock()
-			clearInterval(counting);
-			gameGoing = true;
-			signal.style.display = "none";
-		}
-	}, 1000);
-}
-
-function updateFieldPos() {
-	//moves yard lines
-	var startPos = lineofScrimm;
-	if (poss == "home") {
-		startPos = startPos - 11;
-	}
-	var index = document.getElementsByClassName("lineCell");
-	for (var i = 0; i < index.length; i++) {
-		index[i].innerHTML = fieldLine(startPos + i);
-	}
-	var scrim = document.getElementById("los");
-	var toMak = document.getElementById("ltm");
-	var leftToShow;
-	if (adjustment == 0) {
-		los.style.display = "block";
-		toMak.style.display = "block";
-		if (poss == "home") {
-			scrim.style.left = "calc((100% / 12 * 11) - 2px)";
-			if ((11 - toGo) >= 1) {
-				toMak.style.left = "calc((100% / 12 * " + String(11 - toGo) + ") - 2px)";
-			} else {
-				toMak.style.display = "none";
-			}
-		} else {
-			scrim.style.left = "calc((100% / 12) - 2px)";
-			if ((toGo + 1) <= 11) {
-				toMak.style.left = "calc((100% / 12 * " + String(toGo + 1) + ") - 2px)";
-			} else {
-				toMak.style.display = "none";
-			}
-		}
-	} else {
-		scrim.style.display = "none";
-		leftToShow = toGo - adjustment;
-		if (leftToShow > 0) {
-			toMak.style.display = "block";
-			if (poss == "home") {
-				toMak.style.left = "calc((100% / 12 * " + String(11 - leftToShow) + ") - 2px)";
-			} else {
-				toMak.style.left = "calc((100% / 12 * " + String(leftToShow + 1) + ") - 2px)";
-			}
-		} else {
-			toMak.style.display = "none";
-		}
-	}
-	
-	//check for safety
-	if (poss == "home" && lineofScrimm >= 50) {
-		//console.log('Safety');
-		score('a',2,true);
-		gameGoing = false;
-		changePoss(-20);
-		updateDownDisplay();
-		clearGameClock()
-		clearPlayClock();
-		setTimeout(function() {
-			safeGameClock();
-			safePlayClock()
-			gameGoing = true;
-		}, 3000);
-	} else if (poss == "away" && lineofScrimm <= -50) {
-		//console.log('Safety');
-		score('h',2,true);
-		gameGoing = false;
-		changePoss(20);
-		updateDownDisplay();
-		clearGameClock()
-		clearPlayClock();
-		setTimeout(function() {
-			safeGameClock();
-			safePlayClock()
-			gameGoing = true;
-		}, 3000);
-	}
-}
-
-function score(team,point,issafety) {
-	//console.log("team " + team + " scored " + point + " point(s)");
-	var list = document.getElementsByClassName("teamScore");
-	//animation
-	if (point !== 1) {
-		var text;
-		if (point == 2 && issafety == false) {
-			text = "2PT CONVERSION";
-		} else if (point == 2 && issafety == true) {
-			text = "SAFETY";
-		} else if (point == 3) {
-			text = "FIELD GOAL";
-		} else if (point == 6) {
-			text = "TOUCHDOWN";
-		}
-		var elem = document.getElementById("scoring");
-		elem.innerHTML = text;
-		elem.style.display = "block";
-		var scoreClass;
-		if (team == 'h') {
-			elem.style.backgroundColor = homeColor;
-		} else if (team == 'a') {
-			elem.style.backgroundColor = awayColor;
-		}
-		var j = 0;
-		var ani = setInterval(function() {
-			elem.style.letterSpacing = String(Number(j / 2) + 1) + "px";
-			j++;
-			if (j == 20) {
-				//update scoreboard
-				if (team == 'h') {
-					homeScore += point;
-					list[1].innerHTML = homeScore;
-				} else if (team == 'a') {
-					awayScore += point;
-					list[0].innerHTML = awayScore;
-				}
-			}
-			if (j >= 40) {
-				clearInterval(ani);
-			}
-		}, 50);
-		setTimeout(function() {
-			elem.style.display = "none";
-			elem.classList.remove(scoreClass);
-		}, 3000);
-	} else {
-		if (team == 'h') {
-			homeScore++;
-			list[1].innerHTML = homeScore;
-		} else {
-			awayScore++;
-			list[0].innerHTML = awayScore;
-		}
-	}
-}
-
-function resetPlayClock() {
-	document.getElementById("playClock").innerHTML = "7";
-	playClock = 7;
-	safePlayClock()
-}
-
-function runGameClock() {
-	var gameClockDisplay = document.getElementById("gameClock");
-	if (overtime == false) {
-		updateGameClock = setInterval(function() {
-			gameClock--;
-			if (gameClock <= 0 && gameActive == false) {
-				changePeriod();
-				clearGameClock()
-				gameClock = 0;
-			} else if (gameClock <= 0 && gameActive == true) {
-				gameClock = 0;
-			}
-			gameClockDisplay.innerHTML = toMins(gameClock);
-		}, 1000);
-	} else {
-	}
-}
-
-function runPlayClock() {
-	var playClockDisplay = document.getElementById("playClock");
-	playClockDisplay.classList.remove("redPlay");
-	updatePlayClock = setInterval(function() {
-		if (gameClock <= 0) {
-			clearPlayClock();
-		}
-		playClock--;
-		if (playClock >= 0) {
-			playClockDisplay.innerHTML = playClock;
-		}
-		if (playClock == 2) {
-			playClockDisplay.classList.add("redPlay");
-		}
-		if (playClock == 0) {
-			//console.log('Delay of Game');
-			gameGoing = false;
-			clearPlayClock();
-			clearGameClock()
-			if (audio == true) {
-				document.getElementById("whistleSound").play();
-			}
-			if (poss == "home") {
-				lineofScrimm += 5;
-			} else {
-				lineofScrimm -= 5;
-			}
-			//still delay of game
-			setTimeout(function() { 
-				gameGoing = true;
-				resetPlayClock();
-				toGo += 5;
-				resetField();
-				if (pat == false) {
-					updateDownDisplay();
-				}
-			}, 3000);
-		}
-	}, 1000);
-}
-
-function updateDownDisplay() {
-	var elem = document.getElementById("downBox");
-	var remain = toGo;
-	if (goal == true) {
-		remain = "GOAL";
-	}
-	if (poss == "home") {
-		if (controlStyle == 0) {
-			elem.innerHTML = decodeEntities("&#9664; " + ordinal(down) + " & " + remain);
-		} else {
-			elem.innerHTML = decodeEntities("&#9664;" + ordinal(down) + " & " + remain);
-		}
-		elem.style.backgroundColor = homeColor;
-	} else {
-		if (controlStyle == 0) {
-			elem.innerHTML = decodeEntities(ordinal(down) + " & " + remain + " &#9654;");
-		} else {
-			elem.innerHTML = decodeEntities(ordinal(down) + " & " + remain + "&#9654;");
-		}
-		elem.style.backgroundColor = awayColor;
-	}
-}
-
-function toMins(time) {
-	var secs = time % 60;
-	if (secs < 10) {
-		secs = "0" + secs;
-	}
-	var mins = (time - secs) / 60;
-	return mins + ":" + secs;
-}
-
-function cellTocoord(cellNum) {
-	var col = cellNum % 3;
-	var row = (cellNum - col) / 3;
-	return {
-		x: row,
-		y: col
-	};
-}
-
-function coordTocell(x,y) {
-	return x * 3 + y;
-}
-
-function fieldLine(pos) {
-	var display = 50 - Math.abs(pos);
-	if (pos % 10 == 0 && pos < 0 && pos > -50) {
-		if (controlStyle == 0) {
-			display = "&#9664; " + display;
-		} else {
-			display = "&#9664;" + display;
-		}
-	} else if (pos % 10 == 0 && pos > 0 && pos < 50) {
-		if (controlStyle == 0) {
-			display = display + " &#9654;";
-		} else {
-			display = display + "&#9654;";
-		}
-	} else if (pos == -50 || pos == 50) {
-		display = "G";
-	} else if (pos < -50 || pos > 50) {
-		display = "-";
-	}
-	return decodeEntities(display);
-}
-
-function ordinal(num) {
-	if (num == 1) { return "1st"; }
-	if (num == 2) { return "2nd"; }
-	if (num == 3) { return "3rd"; }
-	if (num == 4) { return "4th"; }
-	if (num == 5) { return "OT"; }
-	if (num == 6) { return "2OT"; }
-	if (num == 7) { return "3OT"; }
-}
+//key press
 
 window.onkeydown = function(event) {
-	if (gameGoing == true) {
-		if (poss == "away") {
-			if (event.keyCode == 87) { moveRB(0,-1); }
-			if (event.keyCode == 83) { moveRB(0,1); }
-			if (event.keyCode == 65) { moveRB(-1,0); }
-			if (event.keyCode == 68) { moveRB(1,-0); }
-		} else {
-			if (event.keyCode == 73) { moveRB(0,-1); }
-			if (event.keyCode == 75) { moveRB(0,1); }
-			if (event.keyCode == 74) { moveRB(-1,0); }
-			if (event.keyCode == 76) { moveRB(1,-0); }
-		}
-		if (event.keyCode == 84 && gameActive == false && activeTimeout == false) { timeout('a'); }
-		if (event.keyCode == 80 && gameActive == false && activeTimeout == false) { timeout('h'); }
+	if (offense == 'away' && gamePrimed == true) {
+		if (event.keyCode == 87) { move(rb,{x:0,y:-1},'away');} //w
+		if (event.keyCode == 83) { move(rb,{x:0,y:1},'away'); } //s
+		if (event.keyCode == 65) { move(rb,{x:-1,y:0},'away'); } //a
+		if (event.keyCode == 68) { move(rb,{x:1,y:0},'away'); } //d
+	} else if (offense == 'home' && gamePrimed == true) {
+		if (event.keyCode == 73) { move(rb,{x:0,y:-1},'home'); } //i
+		if (event.keyCode == 75) { move(rb,{x:0,y:1},'home'); } //k
+		if (event.keyCode == 74) { move(rb,{x:-1,y:0},'home'); } //j
+		if (event.keyCode == 76) { move(rb,{x:1,y:0},'home'); } //l
 	}
+  if (gamePrimed === true && gameActive === false && event.keyCode === 84) {
+    callTimeout('away');
+  } else if (gamePrimed === true && gameActive === false && event.keyCode === 80) {
+    callTimeout('home');
+  }
 }
-
-var decodeEntities = (function() {
-	var element = document.createElement('div');
-	function decodeHTMLEntities (str) {
-		if(str && typeof str === 'string') {
-			str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
-			str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
-			element.innerHTML = str;
-			str = element.textContent;
-			element.textContent = '';
-		}
-		return str;
-	}
-	return decodeHTMLEntities;
-})();
