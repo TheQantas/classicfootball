@@ -4,12 +4,7 @@ const RUNTIME = 'runtime';
 const PRECACHE_URLS = [
   '/classicfootball/index.html',
   '/classicfootball/styles.css',
-  '/classicfootball/mobilestyles.css',
-  '/classicfootball/code.min.js',
-  '/classicfootball/colors.css',
-  '/classicfootball/KeyboardControls.png',
-  '/classicfootball/LeftControlsMod.png',
-  '/classicfootball/RightControlsMod.png',
+  '/classicfootball/script.js',
   '/classicfootball/fav.png'
 ];
 
