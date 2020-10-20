@@ -529,11 +529,14 @@ body {
   .teamScore > span {
     font-size: 45px;
   }
-  #scoreTime > span, #downMarker > span {
+  #scoreTime > span, #downMarker > span, #scoreAni {
     font-size: 35px;
   }
-  #scoreBoard {
+  #scoreBoard, #scoreAni {
     height: 60px;
+  }
+  #scoreAni {
+    line-height: 60px;
   }
   .teamName {
     width: 18%;
@@ -569,11 +572,14 @@ body {
   .teamScore > span {
     font-size: 40px;
   }
-  #scoreTime > span, #downMarker > span {
+  #scoreTime > span, #downMarker > span, #playClock > span, #socreAni {
     font-size: 30px;
   }
-  #scoreBoard {
+  #scoreBoard, #scoreAni {
     height: 50px;
+  }
+  #scoreAni {
+    line-height: 50px;
   }
   #scoreBoard > div {
     line-height: 50px;
@@ -618,7 +624,7 @@ body {
   }
 }
 @media only screen and (max-width: 950px) {
-  #scoreBoard {
+  #scoreBoard, #scoreAni {
     top: 5px;
   }
   #scoreCont {
@@ -641,8 +647,11 @@ body {
   .teamScore > span {
     font-size: 36px;
   }
-  #scoreBoard {
+  #scoreBoard, #scoreBoard {
     height: 40px;
+  }
+  #scoreBoard {
+    line-height: 40px;
   }
   #scoreBoard > div {
     height: 40px;
@@ -658,7 +667,7 @@ body {
   #scoreCont {
     height: 50px;
   }
-  #scoreTime > span, #downMarker > span {
+  #scoreTime > span, #downMarker > span, #scoreAni > span {
     font-size: 24px;
   }
   #downMarker > img {
@@ -670,9 +679,6 @@ body {
   }
   .teamScore > span {
     font-size: 30px;
-  }
-  #ws {
-    display: none;
   }
   #scoreTime > span:first-of-type {
     padding-right: 8px;
