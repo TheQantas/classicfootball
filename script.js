@@ -432,7 +432,7 @@ function move(player,dir,team) {
 }
 
 function mousedown(event,dir) {
-  alert(dir);
+  alert(dir.x+":"+dir.y);
 	whilemousedown(dir);
 	if (mousedownID == -1) {
 		mousedownID = setInterval(function() { whilemousedown(dir); }, 100);
