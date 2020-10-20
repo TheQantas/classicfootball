@@ -1,4 +1,4 @@
-const PRECACHE = 'retrofootball-cache-v22';
+const PRECACHE = 'retrofootball-cache-v23';
 const RUNTIME = 'runtime';
 
 const PRECACHE_URLS = [
