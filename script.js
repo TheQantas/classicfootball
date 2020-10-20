@@ -6,7 +6,7 @@ var gameClockReset = 180;
 var gameClockInterval = false;
 var playClock = 7;
 var playClockInterval = false;
-var yardLine = 25;
+var yardLine = -25;
 var play = {down:1,toGo:10};
 var offense = "away";
 var conversion = false;
@@ -51,9 +51,9 @@ function nextScreen() {
     err.textContent = 'Away Team, please enter a name';
     return;
   }
-  if (nameInp[0].value.length > 8) {
+  if (nameInp[0].value.length > 10) {
     err.style.display = 'inline-block';
-    err.textContent = 'Away Team, your name must be 8 characters or fewer';
+    err.textContent = 'Away Team, your name must be 10 characters or fewer';
     return;
   }
   if (nameInp[1].value.length == 0) {
@@ -61,9 +61,9 @@ function nextScreen() {
     err.textContent = 'Home Team, please enter a name';
     return;
   }
-  if (nameInp[1].value.length > 8) {
+  if (nameInp[1].value.length > 10) {
     err.style.display = 'inline-block';
-    err.textContent = 'Home Team, your name must be 8 characters or fewer';
+    err.textContent = 'Home Team, your name must be 10 characters or fewer';
     return;
   }
   if (nameInp[0].value === nameInp[1].value) {
@@ -432,6 +432,7 @@ function move(player,dir,team) {
 }
 
 function mousedown(event,dir) {
+  alert(dir);
 	whilemousedown(dir);
 	if (mousedownID == -1) {
 		mousedownID = setInterval(function() { whilemousedown(dir); }, 100);
@@ -782,17 +783,13 @@ function startPlayClock() {
   gamePrimed = true;
   var playCounter = document.getElementById("playClock").children[0];
   playCounter.textContent = playClock;
-  playCounter.parentElement.style.backgroundColor = "#444";
-  playCounter.style.fontSize = "40px";
-  playCounter.style.fontWeight = "normal";
+  playCounter.parentElement.classList.remove('within');
   if (playClockInterval === false) {
     playClockInterval = setInterval(function() {
       playClock--;
       playCounter.textContent = playClock;
       if (playClock == 2) {
-        playCounter.parentElement.style.backgroundColor = "red";
-        playCounter.style.fontSize = "50px";
-        playCounter.style.fontWeight = "bold";
+        playCounter.parentElement.classList.add('within');
       }
       if (playClock <= 0) { //delay of game
         stopPlayClock();
@@ -1070,5 +1067,11 @@ window.onkeydown = function(event) {
     callTimeout('away');
   } else if (gamePrimed === true && gameActive === false && event.keyCode === 80) {
     callTimeout('home');
+  }
+}
+
+function dpadTimeout(team) {
+  if (gamePrimed === true && gameActive === false) {
+    callTimeout(team);
   }
 }
