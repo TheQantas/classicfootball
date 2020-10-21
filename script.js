@@ -32,6 +32,12 @@ var mousedownID = -1;
 
 //setup
 
+function test() {
+  document.getElementById('setup').remove();
+  document.getElementById('downMarker').children[0].textContent = "2nd & Goal";
+  goToControls('left');
+}
+
 function chooseColor(elem) {
   for (let colors of elem.parentElement.children) {
     colors.children[0].style.display = 'none';
@@ -51,9 +57,9 @@ function nextScreen() {
     err.textContent = 'Away Team, please enter a name';
     return;
   }
-  if (nameInp[0].value.length > 10) {
+  if (nameInp[0].value.length > 8) {
     err.style.display = 'inline-block';
-    err.textContent = 'Away Team, your name must be 10 characters or fewer';
+    err.textContent = 'Away Team, your name must be 8 characters or fewer';
     return;
   }
   if (nameInp[1].value.length == 0) {
@@ -61,9 +67,9 @@ function nextScreen() {
     err.textContent = 'Home Team, please enter a name';
     return;
   }
-  if (nameInp[1].value.length > 10) {
+  if (nameInp[1].value.length > 8) {
     err.style.display = 'inline-block';
-    err.textContent = 'Home Team, your name must be 10 characters or fewer';
+    err.textContent = 'Home Team, your name must be 8 characters or fewer';
     return;
   }
   if (nameInp[0].value === nameInp[1].value) {
@@ -447,10 +453,7 @@ function mouseup(event) {
 
 function whilemousedown(dir) {
 	if (gamePrimed == true) {
-    alert(rb.x+":"+rb.y);
-    alert(dir.x+":"+dir.y);
-    alert(offense);
-		moveRB(rb,dir,offense);
+		move(rb,dir,offense);
 	}
 }
 
