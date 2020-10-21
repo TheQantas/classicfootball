@@ -607,6 +607,9 @@ body {
   #scoreCont {
     height: 80px;
   }
+  #prompt {
+    height: calc(100vh - 80px);
+  }
   #field {
     height: calc(100% - 140px);
   }
@@ -615,6 +618,9 @@ body {
   #scoreCont {
     height: 60px;
     line-height: 60px;
+  }
+  #prompt {
+    height: calc(100vh - 60px);
   }
   #scoreBoard, #scoreAni {
     top: 5px;
@@ -684,6 +690,9 @@ body {
   #scoreCont {
     height: 50px;
   }
+  #prompt {
+    height: calc(100vh - 50px);
+  }
   .teamTimeouts > div {
     margin-top: 1px;
     height: 12px;
@@ -751,6 +760,9 @@ body {
   }
   #scoreCont {
     height: 42px;
+  }
+  #prompt {
+    height: calc(100vh - 42px);
   }
   #playClock > span {
     font-size: 16px;
