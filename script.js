@@ -32,12 +32,6 @@ var mousedownID = -1;
 
 //setup
 
-function test() {
-  document.getElementById('setup').remove();
-  document.getElementById('downMarker').children[0].textContent = "2nd & Goal";
-  goToControls('left');
-}
-
 function chooseColor(elem) {
   for (let colors of elem.parentElement.children) {
     colors.children[0].style.display = 'none';
@@ -440,7 +434,7 @@ function move(player,dir,team) {
 function mousedown(event,dir) {
 	whilemousedown(dir);
 	if (mousedownID == -1) {
-		mousedownID = setInterval(function() { whilemousedown(dir); }, 100);
+		mousedownID = setInterval(function() { whilemousedown(dir); }, 80);
 	}
 }
 
