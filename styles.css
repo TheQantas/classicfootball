@@ -869,4 +869,26 @@ body {
   .promptButton {
     height: 64px;
   }
+  .teamNameInput, #periodLength, #difficulty, #awayControls, #homeControls {
+    font-size: 20px;
+  }
+  .title {
+    font-size: 30px;
+  }
+  #playAgain, #otBtn, #nextButton, #launchBtn {
+    font-size: 30px;
+    height: 48px;
+  }
+  .colorSelect {
+    height: 20px;
+    border-radius: 3px;
+  }
+  .colorSelect > svg {
+    height: 18px;
+    width: 18px;
+    padding: 1px;
+  }
+  .teamColorCont {
+    height:  120px;
+  }
 }
