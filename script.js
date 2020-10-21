@@ -96,6 +96,8 @@ function changeGameMode(elem) {
 }
 
 function launch() {
+  let sb = document.getElementById('scoreBoard');
+  sb.style.background = `background: linear-gradient(to right, ${teams['away'].rgb} 25%, ${teams['home'].rgb} 50%, #333 75%)`;
   document.getElementById('setup').style.display = 'none';
   if (gameMode == 'frenzy') {
     quarter = 5;
