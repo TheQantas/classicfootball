@@ -197,6 +197,7 @@ body {
   color: white;
   font-family: 'Roboto Condensed', sans-serif;
   font-size: 40px;
+  user-select: none;
 }
 .yardLine > img {
   height: 20px;
