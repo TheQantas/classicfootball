@@ -239,13 +239,14 @@ body {
 }
 .teamName {
   height: 100%;
-  width: 20%;
+  width: 280px;
+  flex-shrink: 0;
   text-align: center;
   line-height: 80px;
 }
 .teamScore {
   height: 100%;
-  width: 8%;
+  width: 120px;
   min-width: 100px;
   flex-shrink: 0;
   text-align: center;
@@ -265,7 +266,8 @@ body {
   background-color: white;
 }
 #scoreTime {
-  width: 260px;
+  width: 230px;
+  flex-shrink: 0;
   height: 100%;
   line-height: 80px;
   background-color: #333;
@@ -273,14 +275,15 @@ body {
   justify-content: center;
 }
 #playClock {
-  width: 60px;
+  width: 50px;
+  flex-shrink: 0;
   height: 100%;
   line-height: 80px;
   background-color: #444;
   text-align: center;
 }
 #downMarker {
-  width: calc(52% - 360px);
+  width: 100%;
   height: 100%;
   line-height: 80px;
   background-color: var(--skyblue);
@@ -526,189 +529,318 @@ body {
   font-weight: bold !important;
   background-color: red !important;
 }
-.within > span {
-  font-size: 1.5em !important;
-}
 @media only screen and (max-width: 1450px) {
-  #prompt {
-    height: calc(100vh - 80px);
+  #scoreTime > span, #downMarker > span {
+    font-size: 42px;
   }
-  .teamName > span, #playClock > span {
-    font-size: 25px;
+  #downMarker > img {
+    padding: 20px 10px;
+  }
+  #scoreTime {
+    width: 190px;
+  }
+  .teamName > span {
+    font-size: 35px;
+  }
+  .teamName {
+    width: 240px;
+  }
+  #scoreAni > span {
+    font-size: 40px;
+  }
+  .teamScore > span {
+    font-size: 55px;
+  }
+  .teamScore {
+    width: 110px;
+  }
+}
+@media only screen and (max-width: 1300px) {
+  #scoreBoard, #scoreAni {
+    height: 60px;
+    line-height: 60px;
+  }
+  #scoreBoard > div {
+    height: 60px;
+    line-height: 60px;
+  }
+  #downMarker > img {
+    height: 30px;
+    padding: 15px 10px;
+  }
+  .teamTimeouts > div {
+    height: 16px;
+    margin-top: 3px;
+  }
+  #scoreTime > span, #downMarker > span {
+    font-size: 36px;
+  }
+  #scoreTime {
+    width: 170px;
+  }
+  .teamName > span {
+    font-size: 30px;
+  }
+  .teamName {
+    width: 200px;
+  }
+  #scoreAni > span {
+    font-size: 35px;
   }
   .teamScore > span {
     font-size: 45px;
   }
-  #scoreTime > span, #downMarker > span, #scoreAni {
-    font-size: 35px;
+  .teamScore {
+    width: 90px;
   }
-  #scoreBoard, #scoreAni {
-    height: 60px;
+  #playClock > span {
+    font-size: 30px;
   }
-  #scoreAni {
-    line-height: 60px;
+  #yardlines, .yardLine {
+    height: 50px;
+    line-height: 50px;
+    font-size: 28px;
   }
-  .teamName {
-    width: 18%;
-  }
-  #playClock {
-    width: 40px;
-  }
-  #downMarker {
-    width: calc(56% - 320px);
-  }
-  #scoreTime {
-    width: 180px;
-  }
-  #scoreBoard > div {
-    line-height: 60px;
-  }
-  .teamTimeouts > div {
-    margin-top: 3px;
-    height: 16px;
-  }
-  #downMarker > img {
-    height: 32px;
-    padding: 14px;
+  .yardLine > img {
+    padding: 15px 5px;
   }
   #scoreCont {
     height: 80px;
   }
   #field {
-    height: calc(100% - 190px);
+    height: calc(100% - 140px);
   }
 }
-@media only screen and (max-width: 1360px) {
-  #prompt {
-    height: calc(100vh - 70px);
-  }
-  #prompt > div, #setup > div {
-    width: 70%;
-  }
-  .teamScore > span {
-    font-size: 40px;
-  }
-  #scoreTime > span, #downMarker > span, #playClock > span, #socreAni {
-    font-size: 30px;
+@media only screen and (max-width: 1200px) {
+  #scoreCont {
+    height: 60px;
+    line-height: 60px;
   }
   #scoreBoard, #scoreAni {
+    top: 5px;
     height: 50px;
-  }
-  #scoreAni {
     line-height: 50px;
   }
   #scoreBoard > div {
+    height: 50px;
     line-height: 50px;
-  }
-  .teamTimeouts > div {
-    width: 7px;
-    margin-left: 3px;
   }
   .teamTimeouts {
     width: 13px;
   }
-  .yardLine {
-    height: 60px;
-    line-height: 60px;
+  .teamTimeouts > div {
+    height: 14px;
+    margin-top: 2px;
+    width: 7px;
+    margin-left: 3px;
+  }
+  #scoreTime > span, #downMarker > span {
     font-size: 30px;
   }
-  .yardLine > img {
-    padding: 20px 5px;
-  }
-  #yardlines {
-    height: 60px;
-  }
-  #field {
-    height: calc(100% - 140px);
-  }
-  #downMarker {
-    width: calc(56% - 330px);
-  }
   #scoreTime {
-    width: 150px;
+    width: 140px;
   }
-  #downMarker > img {
-    height: 24px;
-    padding: 13px 3px;
-  }
-  #scoreCont {
-    height: 70px;
-  }
-  .teamTimeouts > div {
-    margin-top: 2px;
-    height: 14px;
-  }
-}
-@media only screen and (max-width: 1210px) {
-  #prompt {
-    height: calc(100vh - 50px);
-  }
-  #scoreBoard, #scoreAni {
-    top: 5px;
-  }
-  #scoreCont {
-    height: 60px;
-  }
-  #yardLines {
-    height: 50px;
-  }
-  .yardLine {
-    height: 50px;
-    line-height: 50px;
+  .teamName > span {
     font-size: 24px;
   }
-  .yardLine > img {
-    padding: 15px 3px;
+  .teamName {
+    width: 160px;
+  }
+  #scoreAni > span {
+    font-size: 30px;
+  }
+  .teamScore > span {
+    font-size: 35px;
+  }
+  .teamScore {
+    width: 70px;
+    min-width: 0px;
+  }
+  #playClock > span {
+    font-size: 24px;
+  }
+  #playClock {
+    width: 30px;
+  }
+  #downMarker > img {
+    height: 20px;
   }
   #field {
     height: calc(100% - 120px);
   }
-  .teamScore > span {
-    font-size: 36px;
+}
+@media only screen and (max-width: 1150px) {
+  #setup > div, #prompt > div {
+    width: 70%;
   }
   #scoreBoard, #scoreAni {
     height: 40px;
-  }
-  #scoreAni {
     line-height: 40px;
   }
   #scoreBoard > div {
     height: 40px;
     line-height: 40px;
   }
-  #downMarker > img {
-    padding: 8px 3px;
+  #scoreCont {
+    height: 50px;
   }
   .teamTimeouts > div {
     margin-top: 1px;
     height: 12px;
   }
-  #scoreCont {
-    height: 50px;
-  }
-  #scoreTime > span, #downMarker > span, #scoreAni > span {
+
+  #scoreTime > span, #downMarker > span {
     font-size: 24px;
   }
-  #downMarker > img {
-    padding: 10px 3px;
-    height: 20px;
+  #scoreTime {
+    width: 120px;
   }
   .teamName > span {
     font-size: 20px;
   }
+  .teamName {
+    width: 130px;
+  }
+  #scoreAni > span {
+    font-size: 24px;
+  }
   .teamScore > span {
     font-size: 30px;
   }
-  #scoreTime > span:first-of-type {
-    padding-right: 8px;
+  .teamScore {
+    width: 60px;
   }
-  .teamName {
-    width: 15%;
+  #playClock > span {
+    font-size: 24px;
+  }
+  #playClock {
+    width: 30px;
+  }
+  #downMarker > img {
+    padding: 10px 3px;
+  }
+  #yardlines, .yardLine {
+    height: 40px;
+    line-height: 40px;
+    font-size: 20px;
+  }
+  .yardLine > img {
+    padding: 12px 3px;
+    height: 16px;
+  }
+  #field {
+    height: calc(100% - 100px);
+  }
+}
+@media only screen and (max-width: 1000px) {
+  .teamTimeouts > div {
+    margin-left: 2px;
+    width: 6px;
+    height: calc((100% - 4px) / 3);
+  }
+  .teamTimeouts {
+    width: 10px;
+  }
+  #scoreBoard, #scoreAni {
+    height: 32px;
+    line-height: 32px;
+  }
+  #scoreBoard > div {
+    height: 32px;
+    line-height: 32px;
+  }
+  #scoreCont {
+    height: 42px;
+  }
+  #playClock > span {
+    font-size: 16px;
+  }
+  #sideline {
+    height: 3px;
+  }
+  #field {
+    height: calc(100% - 92px);
+  }
+
+  #scoreTime > span, #downMarker > span {
+    font-size: 20px;
   }
   #scoreTime {
-    width: 110px;
+    width: 100px;
   }
-  #downMarker {
-    width: calc(56% - 250px);
+  .teamName > span {
+    font-size: 16px;
+  }
+  .teamName {
+    width: 100px;
+  }
+  #scoreAni > span {
+    font-size: 20px;
+  }
+  .teamScore > span {
+    font-size: 24px;
+  }
+  .teamScore {
+    width: 50px;
+  }
+  #playClock > span {
+    font-size: 16px;
+  }
+  #playClock {
+    width: 20px;
+  }
+  #downMarker > img {
+    padding: 8px 3px;
+    height: 16px;
+  }
+}
+@media only screen and (max-width: 870px) {
+  #scoreTime > span, #downMarker > span {
+    font-size: 16px;
+  }
+  #scoreTime {
+    width: 80px;
+  }
+  .teamName > span {
+    font-size: 12px;
+  }
+  .teamName {
+    width: 80px;
+  }
+  #scoreAni > span {
+    font-size: 16px;
+  }
+  .teamScore > span {
+    font-size: 20px;
+  }
+  .teamScore {
+    width: 40px;
+  }
+  #playClock > span {
+    font-size: 16px;
+  }
+  #playClock {
+    width: 20px;
+  }
+
+  .sideline {
+    height: 3px;
+  }
+  #downMarker > img {
+    padding: 10px 3px;
+    height: 12px;
+  }
+  #scoreTime > span:first-of-type {
+    padding-right: 7px;
+  }
+  .teamTimeouts > div {
+    margin-left: 1px;
+    width: 5px;
+  }
+  .teamTimeouts {
+    width: 7px;
+  }
+  #field {
+    height: calc(100% - 88px);
   }
 }
