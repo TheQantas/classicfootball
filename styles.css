@@ -856,3 +856,17 @@ body {
     height: calc(100% - 88px);
   }
 }
+@media only screen and (max-height: 600px) {
+  .messageText {
+    font-size: 32px;
+  }
+  .promptText, .buttonName {
+    font-size: 24px;
+  }
+  .buttonDesc {
+    font-size: 16px;
+  }
+  .promptButton {
+    height: 64px;
+  }
+}
