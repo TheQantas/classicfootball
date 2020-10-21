@@ -267,7 +267,6 @@ function updateScore(team,score) {
         touchback();
       }
       if (score.toUpperCase() == "FG" && iter == 80 && quarter < 5) {
-        touchback();
         if (gameClock <= 0) {
           changeQuarter();
         }
